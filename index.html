@@ -1,0 +1,2814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgenIT — An AI co-pilot that grows with you</title>
+  <meta name="description" content="AgenIT remembers your code style, decisions, and project context. One agent that learns once and never asks twice." />
+  <meta property="og:title" content="AgenIT — An AI co-pilot that grows with you" />
+  <meta property="og:description" content="Persistent soul + per-project memory. Skills that auto-activate. A disciplined pipeline you can trust." />
+  <meta property="og:image" content="logo.png" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css?v=2026-05-17b" />
+  <link rel="stylesheet" href="doc.css?v=2026-05-17b" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="doc-body">
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <defs>
+      <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2.4" result="b1"/>
+        <feMerge><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glow-orange" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2.4" result="b2"/>
+        <feMerge><feMergeNode in="b2"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <symbol id="agenit-icon" viewBox="0 0 200 200">
+        <g stroke="#2ad6ff" stroke-width="2.4" fill="none" stroke-linecap="round" filter="url(#glow-cyan)">
+          <line x1="55"  y1="40" x2="100" y2="18"/>
+          <line x1="100" y1="18" x2="145" y2="40"/>
+          <line x1="55"  y1="40" x2="145" y2="40"/>
+          <line x1="55"  y1="40" x2="100" y2="78"/>
+          <line x1="145" y1="40" x2="100" y2="78"/>
+          <line x1="100" y1="18" x2="100" y2="78"/>
+        </g>
+        <g fill="#2ad6ff" filter="url(#glow-cyan)">
+          <circle cx="55"  cy="40" r="5.4"/>
+          <circle cx="100" cy="18" r="5.4"/>
+          <circle cx="145" cy="40" r="5.4"/>
+          <circle cx="100" cy="78" r="5.4"/>
+        </g>
+        <path d="M 42 178 L 100 64 L 158 178"
+              stroke="#2ad6ff" stroke-width="3.6" fill="none"
+              stroke-linejoin="round" stroke-linecap="round" filter="url(#glow-cyan)"/>
+        <line x1="68" y1="142" x2="132" y2="142"
+              stroke="#2ad6ff" stroke-width="3.4" stroke-linecap="round" filter="url(#glow-cyan)"/>
+        <text x="100" y="170" text-anchor="middle"
+              font-family="'JetBrains Mono', monospace" font-weight="700" font-size="22"
+              fill="#ff7a18" filter="url(#glow-orange)">{&#160;&lt;/&gt;&#160;}</text>
+      </symbol>
+      <symbol id="agenit-full" viewBox="0 0 360 320">
+        <use href="#agenit-icon" x="80" y="0" width="200" height="200"/>
+        <text x="180" y="252" text-anchor="middle"
+              font-family="'Orbitron', sans-serif" font-weight="900" font-size="58"
+              letter-spacing="2" fill="#ffffff">Agen<tspan fill="#ff7a18">IT</tspan></text>
+        <text x="180" y="288" text-anchor="middle"
+              font-family="'JetBrains Mono', monospace" font-weight="500" font-size="14"
+              letter-spacing="6" fill="#9aa4b2">INTELLIGENT&#160;&#160;DEVELOPMENT</text>
+      </symbol>
+
+      <!-- Agent Squad illustration — SVG fallback while pixel-art PNGs land -->
+      <symbol id="agent-squad" viewBox="0 0 760 260">
+        <!-- CLI window chrome -->
+        <rect x="2" y="2" width="756" height="256" rx="8" fill="#0b0f15" stroke="#2a3340" stroke-width="1.5"/>
+        <rect x="2" y="2" width="756" height="22" rx="8" fill="#1a2230"/>
+        <text x="14" y="18" font-family="'JetBrains Mono', monospace" font-size="11" fill="#8aa0b8">CLI</text>
+        <text x="744" y="18" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="11" fill="#5a6a7a">_ □ X</text>
+
+        <!-- 5 squad members (Archie / Developer / Tester / Analyzer / Debugger) -->
+        <!-- Each tile: glow border, abstract pixel silhouette, glyph, name -->
+
+        <!-- Archie (architect — cyan + purple cape) -->
+        <g transform="translate(18,40)">
+          <rect x="0" y="0" width="138" height="180" rx="4" fill="#0f1620" stroke="#2ad6ff" stroke-width="1.5" filter="url(#glow-cyan)"/>
+          <!-- cape -->
+          <path d="M 38 64 L 30 134 L 50 134 Z M 100 64 L 108 134 L 88 134 Z" fill="#7a3ab0" opacity="0.85"/>
+          <!-- body -->
+          <rect x="50" y="64" width="38" height="56" fill="#8aa0b8" stroke="#cfe9ff"/>
+          <!-- head -->
+          <rect x="56" y="36" width="26" height="26" fill="#3a4a5a" stroke="#2ad6ff" stroke-width="1.2"/>
+          <!-- visor pixels -->
+          <rect x="60" y="44" width="4" height="4" fill="#2ad6ff"/>
+          <rect x="68" y="44" width="4" height="4" fill="#2ad6ff"/>
+          <rect x="76" y="44" width="4" height="4" fill="#2ad6ff"/>
+          <!-- wand + sparkles -->
+          <line x1="34" y1="60" x2="20" y2="40" stroke="#cfe9ff" stroke-width="2"/>
+          <circle cx="18" cy="38" r="2" fill="#2ad6ff"/>
+          <circle cx="14" cy="30" r="1.5" fill="#2ad6ff"/>
+          <circle cx="26" cy="28" r="1.2" fill="#2ad6ff"/>
+          <text x="69" y="156" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="14" fill="#2ad6ff" filter="url(#glow-cyan)">ARCHIE</text>
+        </g>
+
+        <!-- Developer (green hoodie) -->
+        <g transform="translate(166,40)">
+          <rect x="0" y="0" width="138" height="180" rx="4" fill="#0f1620" stroke="#5cf07a" stroke-width="1.5"/>
+          <!-- hoodie -->
+          <path d="M 48 38 Q 69 22 90 38 L 100 124 L 38 124 Z" fill="#1e8a3a" stroke="#5cf07a" stroke-width="1.2"/>
+          <!-- face hole -->
+          <rect x="58" y="44" width="22" height="20" fill="#0a1018"/>
+          <rect x="62" y="50" width="4" height="4" fill="#5cf07a"/>
+          <rect x="72" y="50" width="4" height="4" fill="#5cf07a"/>
+          <!-- laptop -->
+          <rect x="30" y="100" width="78" height="24" fill="#1a2230" stroke="#5cf07a" stroke-width="1"/>
+          <rect x="36" y="104" width="66" height="16" fill="#0a1018"/>
+          <text x="69" y="116" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" fill="#5cf07a">&gt;_ npm test</text>
+          <text x="69" y="156" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="14" fill="#5cf07a">DEVELOPER</text>
+        </g>
+
+        <!-- Tester (yellow hardhat + magnifier) -->
+        <g transform="translate(314,40)">
+          <rect x="0" y="0" width="138" height="180" rx="4" fill="#0f1620" stroke="#ffd83b" stroke-width="1.5"/>
+          <!-- hardhat -->
+          <path d="M 48 38 Q 69 22 90 38 L 92 44 L 46 44 Z" fill="#ffb000"/>
+          <rect x="46" y="42" width="46" height="4" fill="#ffd83b"/>
+          <!-- headlamp beam -->
+          <path d="M 92 38 L 124 30 L 124 50 Z" fill="#fff2a0" opacity="0.4"/>
+          <circle cx="92" cy="42" r="3" fill="#fff2a0"/>
+          <!-- body -->
+          <rect x="50" y="48" width="38" height="56" fill="#ffb000" stroke="#ffd83b"/>
+          <rect x="50" y="62" width="38" height="4" fill="#fff2a0"/>
+          <!-- magnifier -->
+          <circle cx="30" cy="100" r="14" fill="none" stroke="#cfe9ff" stroke-width="3"/>
+          <line x1="40" y1="110" x2="50" y2="120" stroke="#cfe9ff" stroke-width="3"/>
+          <!-- bug -->
+          <circle cx="100" cy="118" r="3" fill="#1a1a1a"/>
+          <line x1="100" y1="111" x2="100" y2="100" stroke="#1a1a1a" stroke-width="1"/>
+          <text x="69" y="156" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="14" fill="#ffd83b">TESTER</text>
+        </g>
+
+        <!-- Analyzer (blue robe + charts) -->
+        <g transform="translate(462,40)">
+          <rect x="0" y="0" width="138" height="180" rx="4" fill="#0f1620" stroke="#5cb8ff" stroke-width="1.5"/>
+          <!-- robe -->
+          <path d="M 48 38 Q 69 22 90 38 L 102 130 L 36 130 Z" fill="#1a4a80" stroke="#5cb8ff"/>
+          <!-- face -->
+          <rect x="58" y="42" width="22" height="22" fill="#d9c0a0"/>
+          <rect x="60" y="50" width="6" height="3" fill="#5cb8ff"/>
+          <rect x="72" y="50" width="6" height="3" fill="#5cb8ff"/>
+          <!-- chart in hand -->
+          <rect x="86" y="74" width="34" height="38" fill="#0a1018" stroke="#5cb8ff"/>
+          <polyline points="90,108 96,98 102,102 108,90 116,94" fill="none" stroke="#ff7a18" stroke-width="1.5"/>
+          <rect x="90" y="106" width="3" height="4" fill="#5cf07a"/>
+          <rect x="96" y="100" width="3" height="10" fill="#5cf07a"/>
+          <rect x="102" y="104" width="3" height="6" fill="#5cf07a"/>
+          <text x="69" y="156" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="14" fill="#5cb8ff">ANALYZER</text>
+        </g>
+
+        <!-- Debugging (red welder + hammer) -->
+        <g transform="translate(610,40)">
+          <rect x="0" y="0" width="138" height="180" rx="4" fill="#0f1620" stroke="#ff4a4a" stroke-width="1.5"/>
+          <!-- helmet -->
+          <rect x="48" y="32" width="42" height="30" fill="#8a1a1a" stroke="#ff4a4a"/>
+          <rect x="52" y="44" width="34" height="6" fill="#1a1a1a"/>
+          <!-- body -->
+          <rect x="46" y="60" width="46" height="62" fill="#c02020" stroke="#ff4a4a"/>
+          <!-- hammer -->
+          <rect x="92" y="34" width="26" height="14" fill="#c02020" stroke="#ff4a4a"/>
+          <line x1="92" y1="48" x2="76" y2="62" stroke="#8a5a3a" stroke-width="4"/>
+          <!-- bang glyph -->
+          <text x="122" y="100" font-family="'Orbitron', sans-serif" font-weight="900" font-size="22" fill="#ff4a4a">!</text>
+          <text x="69" y="156" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="14" fill="#ff4a4a">DEBUGGING</text>
+        </g>
+
+        <text x="380" y="244" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" letter-spacing="3" fill="#7a8a9a">AGENIT&#160;&#160;AGENT&#160;&#160;SQUAD</text>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ───── Side nav (left) ───── -->
+  <button class="doc-nav-toggle" type="button" aria-label="Toggle navigation"
+          aria-expanded="false" aria-controls="doc-side-nav">☰</button>
+  <header class="doc-topbar" id="doc-side-nav">
+    <a class="doc-brand" href="#top" aria-label="AgenIT — home">
+      <svg class="brand-icon" viewBox="0 0 200 200" aria-hidden="true"><use href="#agenit-icon"/></svg>
+      <span>agen<em>IT</em></span>
+    </a>
+    <nav class="doc-nav" aria-label="Primary">
+      <a href="#updates">What's New</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#pm-engine">PM Engine</a>
+      <a href="#harness">Harness</a>
+      <a href="#features">Features</a>
+      <a href="#extend">Marketplace</a>
+      <a href="#commands">Commands</a>
+      <a href="#usecases">Use Cases</a>
+      <a href="#install">Install</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="wiki.html">Wiki ↗</a>
+      <a href="https://github.com/muhammed-eldabea/AgenIT" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+  <span id="top" class="anchor-offset" aria-hidden="true"></span>
+
+  <main class="doc" id="content">
+
+    <!-- ───── Hero ───── -->
+    <section class="doc-hero">
+      <svg class="hero-logo" viewBox="0 0 360 320" role="img" aria-label="AgenIT"><use href="#agenit-full"/></svg>
+      <h1 class="hero-title">An agent that <span class="accent">grows with you.</span></h1>
+      <p class="hero-tag">
+        AgenIT remembers your code style, project decisions, tooling preferences,
+        and past mistakes. A persistent <em>soul</em> + per-project <em>memory</em>
+        turn one-shot prompts into a working relationship.
+      </p>
+      <div class="hero-install" data-copy>
+        <span class="ins-label">$</span>
+        <code class="ins-cmd">npm i -g @agenit/cli</code>
+        <button class="copy-btn" type="button" aria-label="Copy install command"
+                data-copy-target="npm i -g @agenit/cli">copy</button>
+      </div>
+      <ul class="hero-stats">
+        <li><strong>33</strong> features</li>
+        <li><strong>~80</strong> auto-skills</li>
+        <li><strong>5</strong> profiles</li>
+        <li><strong>17</strong> packages</li>
+        <li><strong>3</strong> backends</li>
+      </ul>
+    </section>
+
+    <!-- ───── Pillars: the qualified-delivery story ───── -->
+    <section class="doc-section pillars-section">
+      <h2 class="section-title"><span>// 00</span> Not an MVP factory</h2>
+      <p class="section-sub pillars-lede">
+        Most AI coding tools optimise for the first working demo. AgenIT optimises
+        for the <strong>second-to-last commit</strong> &mdash; the one where every
+        line traces to a spec, every change is critiqued, and the audit report
+        renders green. <em>Spec-Driven Development on rails, with a paper trail.</em>
+      </p>
+      <div class="pillars">
+
+        <a class="pillar pillar-sdd" href="#speckit-flow">
+          <div class="pillar-glyph" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="10" y="6"  width="32" height="44" rx="2"/>
+              <path d="M16 16 h20 M16 24 h20 M16 32 h14 M16 40 h16"/>
+              <path d="M44 26 l8 8 l-14 14 l-8 0 l0 -8 z"/>
+            </g></svg>
+          </div>
+          <span class="pillar-badge">spec-driven</span>
+          <h3>SDD before a single line is written</h3>
+          <p>
+            <code>/speckit run &lt;idea&gt;</code> produces <code>spec.md</code>
+            &rarr; <code>plan.md</code> &rarr; <code>tasks.md</code> with
+            acceptance criteria. <code>/speckit critique</code> hunts vague verbs,
+            contradictions, untestable claims <em>before</em> implementation.
+            No code lands without a referenced requirement.
+          </p>
+          <span class="pillar-link">See the spec flow →</span>
+        </a>
+
+        <a class="pillar pillar-vmodel" href="#pipeline">
+          <div class="pillar-glyph" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 12 L 32 52 L 56 12"/>
+              <path d="M14 22 L 50 22"/>
+              <circle cx="8"  cy="12" r="2.5"/>
+              <circle cx="20" cy="32" r="2.5"/>
+              <circle cx="32" cy="52" r="2.5"/>
+              <circle cx="44" cy="32" r="2.5"/>
+              <circle cx="56" cy="12" r="2.5"/>
+            </g></svg>
+          </div>
+          <span class="pillar-badge">v-model</span>
+          <h3>Req &rarr; Arch &rarr; Impl &rarr; Test &rarr; Critic &rarr; Audit</h3>
+          <p>
+            Five gated stages, every one a real artefact. EARS requirements with
+            <code>SWR-NNN</code> ids, PlantUML HLDs, MISRA-aware C/C++, Unity /
+            CppUTest / vitest / HIL test rigs &mdash; then the <strong>Critic</strong>
+            phase (<code>swe6-critic</code>) stress-tests each stage's output before
+            the next one begins.
+          </p>
+          <span class="pillar-link">Walk the V-Model →</span>
+        </a>
+
+        <a class="pillar pillar-trace" href="#audit-traceability">
+          <div class="pillar-glyph" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="14" cy="14" r="6"/>
+              <circle cx="50" cy="14" r="6"/>
+              <circle cx="14" cy="50" r="6"/>
+              <circle cx="50" cy="50" r="6"/>
+              <circle cx="32" cy="32" r="6"/>
+              <path d="M20 14 H 44 M14 20 V 44 M50 20 V 44 M20 50 H 44 M19 19 L 27 27 M45 19 L 37 27 M19 45 L 27 37 M45 45 L 37 37"/>
+            </g></svg>
+          </div>
+          <span class="pillar-badge">audited</span>
+          <h3>Every line traces, every audit is a report</h3>
+          <p>
+            <code>@req SWR-042</code> tags wire code, tests, and docs to their
+            requirements. <code>/audit</code> regenerates
+            <code>traceability.json</code>, flags orphan tests, prints coverage,
+            and emits an <strong>ASPICE checklist</strong> for automotive
+            projects. The release is the report &mdash; not a separate exercise.
+          </p>
+          <span class="pillar-link">Open the audit story →</span>
+        </a>
+
+        <a class="pillar pillar-verify" href="#verification-layers">
+          <div class="pillar-glyph" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M32 6 L 54 16 V 32 C 54 44 44 54 32 58 C 20 54 10 44 10 32 V 16 Z"/>
+              <path d="M22 32 L 30 40 L 44 24"/>
+            </g></svg>
+          </div>
+          <span class="pillar-badge">verified</span>
+          <h3>Trust, but verify &mdash; in layers</h3>
+          <p>
+            <code>/qa</code> evaluates acceptance criteria with the LLM and
+            writes <code>qa-report.md</code>. <code>/diff-walk</code> runs the
+            critic per <code>git diff</code> hunk. <code>/pr-autofix</code>
+            applies deterministic patches with a backup branch. <strong>Citation
+            guard</strong>, <strong>MISRA gate</strong>, and
+            <strong>slopsquatting hooks</strong> block the unsafe outputs the
+            model would otherwise ship.
+          </p>
+          <span class="pillar-link">See the verification layers →</span>
+        </a>
+      </div>
+
+      <!-- Supporting infrastructure (smaller chips, not the headline) -->
+      <p class="pillars-foot">
+        Underpinning all of the above:
+        <a href="#memory">persistent soul &amp; project memory</a> so context survives across sessions ·
+        <a href="#harness">the Harness widget</a> to extend any of it without leaving the REPL ·
+        <a href="#features">built-in hardware &amp; tool sidecars</a> for JLink, CAN/LIN, Saleae, codedigest.
+      </p>
+    </section>
+
+    <!-- ───── Architecture ───── -->
+<section id="updates" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 01</span> What's New &mdash; Announcements &amp; Updates</h2>
+      <p class="section-sub">Highlights from the AgenIT engineering log.</p>
+
+      <article class="announce">
+        <header class="announce-head">
+          <span class="announce-tag">JUST SHIPPED · MAY 2026</span>
+          <h3 class="announce-title">Agile ceremonies · Pixel-character sprites · REPL polish · Goal checkpoints</h3>
+        </header>
+        <figure class="agent-squad-figure">
+          <svg class="agent-squad" viewBox="0 0 760 260" role="img" aria-label="AgenIT Agent Squad — Archie, Developer, Tester, Analyzer, Debugging">
+            <use href="#agent-squad"/>
+          </svg>
+          <figcaption>The new pixel-character squad — each AgenIT persona has its own avatar in the REPL, VS Code TreeView, and webview.</figcaption>
+        </figure>
+        <p>
+          A wave of follow-ups closed the last ten Agile / OPA / QA gaps,
+          introduced a brand-new sprite system that gives every V-Model
+          stage, persona, and stakeholder its own animated pixel character,
+          and tightened the REPL into a flat, keyboard-pageable
+          chat surface. The Goal loop gained interactive launching and
+          per-tick checkpoints, and the release pipeline itself got a
+          SIGPIPE fix that was tripping the CHANGELOG generator.
+        </p>
+        <ul class="announce-list">
+          <li><strong>Agile / OPA / QA ceremonies, fully wired</strong> &mdash;
+            blocker detection, PM budget tracking, OPA policy templates,
+            QA Definition-of-Done evaluation, ceremony-gate modal,
+            change-request flow, PMO standards, and a speckit queue. Plus
+            LLM-driven acceptance-criteria evaluation in <code>/qa</code>
+            and ceremony triggers wired to persona actions.</li>
+          <li><strong>Information radiators</strong> &mdash; burndown writer,
+            TUI health widget, and the new <code>/agile digest</code> +
+            <code>/agile burndown</code> slash commands. Velocity is now
+            recorded at retrospective time with deterministic CI behaviour.</li>
+          <li><strong><code>@flow/sprites</code> package</strong> &mdash; a
+            new typed sprite catalog with per-character SVGs and a
+            <code>catalog.json</code> shipped to the webview. V-Model
+            stages, personas, and stakeholders each have their own
+            pixel-art avatar.</li>
+          <li><strong>Sprites everywhere</strong> &mdash; chat avatars in
+            the REPL, <code>JobRow</code> + <code>GoalProgress</code>
+            indicators, V-Model stage characters, per-helper Squad
+            avatars in the VS Code TreeView, per-agent and per-skill
+            avatars in the Customizations panel, and a phase-transition
+            wave/wake animation across the pipeline.</li>
+          <li><strong>Flat Claude/Gemini-style chat layout</strong> in the
+            REPL &mdash; avatar in the left gutter, no nested bubbles,
+            with a streaming bubble that pins to the tail-view instead
+            of growing past the viewport.</li>
+          <li><strong>Less/vim-style pager</strong> in chat &mdash;
+            <kbd>m</kbd> / <kbd>l</kbd> / <kbd>g</kbd> / <kbd>G</kbd>
+            scroll within a bubble, <kbd>Ctrl+E</kbd> collapses /
+            expands long messages, and a new landing splash greets
+            you with a hacker character. <kbd>Ctrl+D</kbd> conflict
+            (debug vs catch-up) resolved.</li>
+          <li><strong>Speckit pipeline streaming</strong> now renders
+            inline in the chat scroll, and the chat-input no longer
+            overlaps the sprite row. The goal pipeline only animates
+            when a runner is attached.</li>
+          <li><strong>Goal loop &mdash; checkpoints &amp; interactive
+            launch</strong> &mdash; <code>/goal start --interactive</code>
+            plus a per-tick checkpoint API, with cadence control via
+            <code>checkpoint_every_turns</code>. Live cost surfaced
+            in the UI; scope-relative SONA reward landed alongside.</li>
+          <li><strong><code>/migrate gemini-plan</code></strong> &mdash;
+            recover raw Gemini plan-mode artefacts into the AgenIT
+            pipeline. Traceability gained profile-aware IDs and
+            sensible language defaults.</li>
+          <li><strong>Scope-vs-spec complexity-band linter</strong> in the
+            Goal loop, catching scope drift before it compounds.</li>
+          <li><strong>Release workflow SIGPIPE (141) fix</strong> &mdash;
+            the CHANGELOG-generation step under <code>set -euo pipefail</code>
+            was failing because <code>git log | head</code> sent SIGPIPE
+            to upstream. Now uses <code>git log -n 50</code> directly.</li>
+        </ul>
+        <p class="announce-meta">
+          PRs:
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/138" target="_blank" rel="noopener">#138</a> (Agile/OPA/QA radiators) ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/139" target="_blank" rel="noopener">#139</a> (pixel characters) ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/140" target="_blank" rel="noopener">#140</a> (speckit) ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/141" target="_blank" rel="noopener">#141</a> (release fix).
+        </p>
+      </article>
+
+      <article class="announce">
+        <header class="announce-head">
+          <span class="announce-tag">MAY 2026</span>
+          <h3 class="announce-title">VS Code extension &mdash; the AgenIT experience inside your editor</h3>
+        </header>
+        <p>
+          AgenIT now ships as a <strong>Visual Studio Code extension</strong>
+          (<code>packages/vscode-extension/</code>) that surfaces the full
+          terminal experience inside the editor &mdash; V-Model pipeline,
+          Mission Squad, Goal loop, 50+ slash commands, <code>@req</code>
+          CodeLens, and a brand-aligned chat surface &mdash; without
+          duplicating any backend logic.
+        </p>
+        <ul class="announce-list">
+          <li><strong>Compact panel</strong> (<kbd>Ctrl+Alt+A</kbd> / <kbd>⌘⌥A</kbd>) &mdash; embedded web UI with Chat, V-Model, Squad, Goal, Jobs, Memory, Design.</li>
+          <li><strong>Immersive view</strong> (<kbd>Ctrl+Alt+Shift+A</kbd> / <kbd>⌘⌥⇧A</kbd>) &mdash; full-screen webview reproducing the AgenIT design chrome (brand activity bar, right-rail widgets, status pill).</li>
+          <li><strong>Slash command palette</strong> (<kbd>Ctrl+Alt+/</kbd> / <kbd>⌘⌥/</kbd>) &mdash; fuzzy-find any of the 50+ commands; arguments are prompted via QuickPick / InputBox.</li>
+          <li><strong>Six sidebar TreeViews</strong> &mdash; V-Model Pipeline, Mission Squad, Goal, Background Jobs, Memory, and Debug Mode (with pending-gate click-to-release).</li>
+          <li><strong>CodeLens for <code>@req SWR-NNN</code></strong> in C / C++ / H &mdash; click to jump to the requirement; coverage badge from <code>traceability.json</code>.</li>
+          <li><strong>Native cppcheck diagnostics</strong> on save / open for C/C++ files (silent when cppcheck isn't installed).</li>
+          <li><strong>Live events stream</strong> &mdash; <code>/ws/events</code> subscription refreshes trees on squad / goal / agent ticks without waiting the 2 s poll.</li>
+          <li><strong>Thin-client architecture</strong> &mdash; the <code>.vsix</code> ships zero orchestrator runtime code. It spawns <code>agenit serve</code> per workspace and talks HTTP + WebSocket. Fix once in <code>@flow/orchestrator</code>, restart the daemon, and the change is live in the extension &mdash; no extension rebuild required.</li>
+        </ul>
+        <p class="announce-meta">
+          Docs:
+          <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/vscode-extension.md" target="_blank" rel="noopener"><code>docs/vscode-extension.md</code></a> ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/packages/vscode-extension/README.md" target="_blank" rel="noopener">extension README</a> ·
+          built and released via <code>vscode-v*</code> tags.
+          PR <a href="https://github.com/muhammed-eldabea/AgenIT/pull/113" target="_blank" rel="noopener">#113</a>.
+        </p>
+      </article>
+
+      <article class="announce">
+        <header class="announce-head">
+          <span class="announce-tag">JUST SHIPPED · MAY 2026</span>
+          <h3 class="announce-title">Claude CLI support &mdash; multi-backend with automatic failover</h3>
+        </header>
+        <p>
+          AgenIT is no longer single-backend. The <strong>Claude CLI subprocess
+          backend</strong> (<code>packages/gemini-client/src/claude-cli.ts</code>)
+          plugs the locally-installed <code>claude</code> binary into the same
+          pipeline as Gemini CLI &mdash; with its own OAuth credentials
+          (Pro / Max / Team / Enterprise subscriptions) and the same hook
+          contract.
+        </p>
+        <ul class="announce-list">
+          <li><strong><code>agenit init --target claude|gemini</code></strong> &mdash; seeds <code>.claude/</code> assets alongside (or instead of) <code>.gemini/</code>. Both targets share <code>.flow/hooks/*.py</code>.</li>
+          <li><strong>Unified hook layer</strong> &mdash; every <code>.flow/hooks/*.py</code> script now works for both Gemini and Claude CLI. Slopsquatting, citation guard, MISRA gate, undo snapshots &mdash; all of it, both backends.</li>
+          <li><strong>Cross-backend fallback chain</strong> &mdash; on cost-tier exhaustion or hard error, the router auto-falls-back Gemini → Claude → OpenAI. Configurable per tier.</li>
+          <li><strong>Interactive backend picker</strong> &mdash; <code>agenit init</code> probes which backends you have installed and lets you pick when stdin is a TTY.</li>
+          <li><strong><code>/backend</code> slash command</strong> &mdash; diagnostic table of detected / installed / active backends; <code>/backend models &lt;provider&gt;</code> lists available models; <code>/backend chain &lt;tier&gt;</code> shows the failover chain.</li>
+          <li><strong>Status-bar indicator</strong> &mdash; the REPL footer shows the active backend and current model so you always know who's answering.</li>
+        </ul>
+        <p class="announce-meta">
+          Modules:
+          <code>gemini-client/src/backend.ts</code> (selector) ·
+          <code>orchestrator/src/backend-detector.ts</code> (probe) ·
+          <code>orchestrator/src/commands/backend.ts</code> (slash).
+          PR <a href="https://github.com/muhammed-eldabea/AgenIT/pull/116" target="_blank" rel="noopener">#116</a>.
+        </p>
+      </article>
+
+      <article class="announce">
+        <header class="announce-head">
+          <span class="announce-tag">MAY 2026</span>
+          <h3 class="announce-title">Debug Mode · Harnesses widget · Widget navigation · <code>/serve</code></h3>
+        </header>
+        <p>
+          AgenIT is now fully observable and keyboard-driven. Every chat, LLM,
+          tool, and agent call becomes a typed Run in a debuggable tree; risky
+          steps can pause for human review; the whole TUI is navigable with
+          <kbd>Ctrl+W</kbd> and the control SPA runs <em>inside</em> the REPL.
+        </p>
+        <ul class="announce-list">
+          <li><strong>Debug Mode</strong> — <code>/debug on</code> turns every
+            chat / LLM / tool / agent call into a typed Run in a tree.
+            Right-rail widget in the TUI, dedicated tab in the Web UI,
+            pause-before gates for stepping, replayable tool runs.</li>
+          <li><strong>Harnesses widget</strong> — one-stop add for Skills /
+            MCP / Agents / Tools. Empty template or scaffolding-agent
+            generated, edited in an in-TUI vim editor, installed to the
+            canonical path with MCP-JSON merge + AGENTS.md de-dup.</li>
+          <li><strong>Widget navigation</strong> — <kbd>Ctrl+W</kbd> enters a
+            keyboard-driven nav layer over the rail widgets. Each widget can
+            expand into a full-pane interactive view (tasks, hardware probes,
+            agents dashboard, recipes). Legacy <kbd>Ctrl+T</kbd> /
+            <kbd>Ctrl+]</kbd> / <kbd>Ctrl+G</kbd> shortcuts preserved.</li>
+          <li><strong>Agents dashboard</strong> — new right-rail widget
+            showing every active agent with live activity (<code>reading X</code>,
+            <code>running Y</code>), per-agent token-cost sparkline, session
+            spend total.</li>
+          <li><strong>Recipes</strong> — TOML-defined cross-widget
+            orchestration. Fire actions when a <code>tuiBus</code> event
+            matches. Default recipes log goal failures + notify on agent
+            failures; opt-in escalation recipe for hardware probe failures.</li>
+          <li><strong><code>/serve</code> slash command</strong> — start the
+            full control SPA <em>inside</em> the running REPL (same process →
+            shared run-registry → Debug tab sees your live traces). Replaces
+            the need to launch <code>agenit serve</code> in a second
+            terminal.</li>
+        </ul>
+        <p class="announce-meta">
+          Docs:
+          <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/debug-mode.md" target="_blank" rel="noopener"><code>docs/debug-mode.md</code></a> ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/harnesses.md" target="_blank" rel="noopener"><code>docs/harnesses.md</code></a> ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/widget-navigation.md" target="_blank" rel="noopener"><code>docs/widget-navigation.md</code></a>.
+        </p>
+      </article>
+
+      <article class="announce">
+        <header class="announce-head">
+          <span class="announce-tag">MAY 2026 · 2026-GAP-CLOSURE</span>
+          <h3 class="announce-title">Critic phase · <code>/pr-autofix</code> · <code>/pr-metrics</code> · LSP call graph · codedigest graph mode</h3>
+        </header>
+        <p>
+          Twelve issues (#82–#93) plus follow-ups closed the gap to the 2026
+          agentic-tooling baseline — security hardening, deterministic PR
+          repair, AI-vs-human telemetry, and DKB-style retrieval over a real
+          call graph.
+        </p>
+        <ul class="announce-list">
+          <li><strong><code>swe6-critic</code> skill + Critic phase</strong> —
+            new V-Model stage that stress-tests the output of every other
+            stage for vague verbs, contradictions, untestable claims.</li>
+          <li><strong><code>/diff-walk</code></strong> — walks
+            <code>git diff</code> hunks, runs <code>swe6-critic</code> on
+            each, prints a severity-sorted report.</li>
+          <li><strong><code>/speckit critique</code></strong> — stress-test a
+            spec; writes <code>critique.md</code>.</li>
+          <li><strong><code>/pr-autofix &lt;pr#&gt;</code></strong> — Critic
+            per hunk + apply deterministic patches
+            (<code>lint</code> / <code>format</code> /
+            <code>import-order</code> / <code>trailing-whitespace</code>)
+            with backup branch + telemetry.</li>
+          <li><strong><code>/pr-metrics</code></strong> — AI-vs-human cohort
+            report from <code>events.jsonl</code>
+            (writes / cost / tool calls / autofix activity).</li>
+          <li><strong>LSP-driven workspace call graph</strong> —
+            Crabviz-style, clangd / pyright / rust-analyzer, daemon-mode
+            reuse. Export to Graphviz / SVG / interactive HTML via
+            <code>/codedigest graph --use-lsp</code>.</li>
+          <li><strong>Codedigest graph mode</strong> — auto-injects each
+            search seed's direct callers + callees into the prompt
+            (DKB-style retrieval). <code>--graph</code> flag, broker, squad
+            helper, MCP tools.</li>
+          <li><strong>Hardware tools over MCP</strong> — JLink, CAN/LIN,
+            Saleae exposed as MCP tools so external agents can drive the
+            bench.</li>
+          <li><strong>Security hardening</strong> — slopsquatting hook
+            (rejects suspicious package names pre-install), MCP server
+            pinning + skill audit, <code>--air-gapped</code> runtime mode,
+            per-session / per-command token ceiling.</li>
+          <li><strong>AST chunker scaffold</strong> + bidirectional symbol
+            graph for the next-gen retriever.</li>
+          <li><strong>Agent companion stance</strong> in
+            <code>soul.md</code> — the tool feels like a teammate, not a
+            terminal.</li>
+        </ul>
+        <p class="announce-meta">
+          See
+          <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/upstream-coverage-audit.md" target="_blank" rel="noopener"><code>docs/upstream-coverage-audit.md</code></a>,
+          the <code>docs/codedigest/</code> tree, and
+          <code>docs/security/</code> for the full 2026 work.
+        </p>
+      </article>
+
+      <article class="announce">
+        <header class="announce-head">
+          <span class="announce-tag">EARLIER · MAY 2026</span>
+          <h3 class="announce-title">Web UI · Design domain · <code>/overnight</code> loop</h3>
+        </header>
+        <p>
+          AgenIT now drives entire UI/UX prototyping sessions and unattended
+          overnight engineering loops &mdash; from the same REPL you already
+          know, or from a new browser control SPA.
+        </p>
+        <ul class="announce-list">
+          <li><strong>Browser control UI</strong> with seven panels: Chat ·
+            Pipeline · Squad · Goal · <strong>Design</strong> · Memory · Jobs.
+            Auth-token + origin gated.</li>
+          <li><strong><code>design</code> profile</strong> + 7 design skills
+            (landing · dashboard · pricing · chat-ui · SVG illustration ·
+            single component · comment-mode editing) + sandboxed iframe preview.</li>
+          <li><strong>HTML / PDF / PPTX export</strong> via the new
+            <code>@flow/exporter</code> package — puppeteer + pptxgenjs as
+            optional peer deps.</li>
+          <li><strong><code>/overnight</code> loop</strong> — per-iteration
+            git commits, rollback on failure, worktree-isolated parallel runs,
+            permanent markdown summary. Agent-agnostic. Inspired by
+            <a href="https://github.com/kunchenguid/gnhf" target="_blank" rel="noopener">gnhf</a>.</li>
+          <li><strong>10 engineering skills</strong> (<code>diagnose</code>,
+            <code>tdd</code>, <code>prototype</code>, <code>grill-with-docs</code>,
+            <code>triage</code>, <code>to-prd</code>, …) imported under MIT
+            from <a href="https://github.com/mattpocock/skills" target="_blank" rel="noopener">mattpocock/skills</a>.</li>
+          <li><strong>Skill traceability</strong> — <code>@req REQ-SKILL-NNN</code>
+            tags inventoried by the scanner.</li>
+        </ul>
+        <p class="announce-meta">
+          22 new vitest cases · 773 tests passing · build green across 17
+          packages · full end-to-end checklist at
+          <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/doc/testing-checklist.md" target="_blank" rel="noopener">doc/testing-checklist.md</a>.
+        </p>
+      </article>
+
+    </section>
+
+</section>
+    <section id="architecture" class="doc-section arch-section">
+      <h2 class="section-title"><span>// 00a</span> Architecture &mdash; how the pieces fit</h2>
+      <p class="section-sub">
+        Three layers, one OAuth login. The TypeScript orchestrator never
+        speaks to the LLM directly &mdash; it shells out to a backend
+        subprocess (Gemini CLI by default), which calls a Python sidecar
+        for hardware &amp; traceability work. Memory, hooks, MCP, and the
+        marketplace plug into the same canonical paths regardless of which
+        backend is active.
+      </p>
+
+      <figure class="arch-figure">
+        <a href="agenit_detailed_arch.png" target="_blank" rel="noopener">
+          <img class="arch-img" src="agenit_overall_arch.png"
+               alt="AgenIT architecture diagram — REPL/TUI/web UI talk to the orchestrator, which spawns a Gemini/Claude/OpenAI/Ollama backend, with Python hooks and tools as a sidecar; memory + soul + MCP registry are persisted on disk."
+               loading="lazy" />
+        </a>
+        <figcaption>
+          High-level architecture &mdash; click for the detailed diagram.
+          Source files: <code>ARCHITECTURE.md</code> · <code>docs/architecture/</code>.
+        </figcaption>
+      </figure>
+
+      <div class="arch-layers">
+        <article class="arch-layer">
+          <span class="arch-tag">Layer 1</span>
+          <h3>TypeScript orchestrator</h3>
+          <p>
+            17 pnpm packages &mdash; the Ink REPL, V-Model state machine,
+            Mission Squad, Goal loop, MCP client/server, federation,
+            sandbox, web UI, VS Code extension. Loads soul + project
+            memory into every prompt; routes free-text turns through the
+            active backend; enforces budgets and approval gates.
+          </p>
+        </article>
+        <article class="arch-layer">
+          <span class="arch-tag">Layer 2</span>
+          <h3>LLM backend subprocess</h3>
+          <p>
+            One of <strong>Gemini CLI</strong> (OAuth, default),
+            <strong>Claude CLI</strong> (OAuth via the local
+            <code>claude</code> binary), <strong>Anthropic SDK</strong>,
+            <strong>OpenAI</strong>, or <strong>Ollama</strong>. The
+            orchestrator never holds an API key itself unless the chosen
+            backend needs one.
+          </p>
+        </article>
+        <article class="arch-layer">
+          <span class="arch-tag">Layer 3</span>
+          <h3>Python sidecar &amp; hooks</h3>
+          <p>
+            <code>.flow/tools/</code> Python scripts drive JLink, CAN/LIN,
+            Saleae, traceability, codedigest, marketplace install, and the
+            memory index. <code>.flow/hooks/</code> Python scripts gate
+            tool calls (citation guard, MISRA, slopsquatting, undo
+            snapshot, shell deny-list). Same hooks run under either CLI.
+          </p>
+        </article>
+      </div>
+
+      <h3 class="arch-h3">Outside-world connections</h3>
+      <ul class="arch-outside">
+        <li><strong>Google OAuth</strong> via Gemini CLI &mdash; no API key required for the default path. Token cached in <code>~/.gemini/</code>.</li>
+        <li><strong>Anthropic OAuth</strong> via Claude CLI &mdash; same idea, uses Pro / Max / Team / Enterprise subscription if you already have it.</li>
+        <li><strong>MCP Registry</strong> &mdash; live search across the public Model Context Protocol registry; <code>/marketplace mcp</code>.</li>
+        <li><strong>Claude Code marketplace</strong> &mdash; browse and install any Claude Code plugin from GitHub; translated into Gemini-compatible artefacts at install time.</li>
+        <li><strong>GitHub MCP</strong> &mdash; first-class for issues / PRs / commits / CI when wired into <code>.mcp.json</code>.</li>
+        <li><strong>Hardware</strong> &mdash; JLink (SEGGER) over USB, SocketCAN / PCAN, Saleae Logic, all through <code>.flow/tools/*.py</code>.</li>
+        <li><strong>Peer instances</strong> &mdash; the <code>@flow/federation</code> package syncs memory + decisions between AgenIT instances over mTLS for team workflows.</li>
+      </ul>
+
+      <p class="arch-foot">
+        Deep references:
+        <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener"><code>ARCHITECTURE.md</code></a> ·
+        <a href="https://github.com/muhammed-eldabea/AgenIT/tree/main/docs/architecture" target="_blank" rel="noopener"><code>docs/architecture/</code></a> ·
+        <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/architecture/package-map.md" target="_blank" rel="noopener">package map</a>.
+      </p>
+    </section>
+
+    <!-- ───── Project Management Engine ───── -->
+    <section id="pm-engine" class="doc-section pm-section">
+      <h2 class="section-title"><span>// 00b</span> Project Management Engine</h2>
+      <p class="section-sub">
+        AgenIT runs a real Agile process, not a vibes-only chat thread.
+        A background <strong>Ceremony Engine</strong> fires standup,
+        planning, review, retro &amp; backlog-grooming on cadence; OPA
+        memory feeds policies and templates into every prompt; <code>/qa</code>
+        evaluates acceptance criteria with the LLM; <code>/pmo</code> rolls
+        everything up into a portfolio RAG dashboard.
+        <em>Largely engineered by <strong>Abram Alfred</strong>.</em>
+      </p>
+
+      <div class="pm-grid">
+        <article class="pm-card pm-card-engine">
+          <header><span class="pm-tag">engine</span><h3>Ceremony Engine</h3></header>
+          <p>
+            A background worker that fires the right Scrum ceremony at the
+            right time. Cadence-driven (configurable per project),
+            trigger-aware (goal stall, budget breach, QA failure, change
+            request), token-budgeted (won't burn the sprint on a single
+            retrospective).
+          </p>
+          <ul class="pm-list">
+            <li>Triggers wired to persona actions &mdash; the standup persona drafts the standup, the retro persona drafts the retro, &hellip;</li>
+            <li>Ceremony Gate Modal &mdash; blocks a turn if a required ceremony hasn't run.</li>
+            <li>Goal-runner integration &mdash; ceremonies share the active goal handle, observe stalls, and inject blockers back into the loop.</li>
+          </ul>
+          <code class="ex">/agile enable · /agile sprint start · /agile next-sprint</code>
+        </article>
+
+        <article class="pm-card pm-card-opa">
+          <header><span class="pm-tag">policy</span><h3>OPA &mdash; Organizational Process Assets</h3></header>
+          <p>
+            Policies, templates, lessons-learned, and standards stored as
+            categorised Markdown and <strong>auto-injected into matching
+            ceremonies and stages</strong>. The retro reads from the
+            <em>lessons</em> category; QA reads from the
+            <em>definition-of-done</em> category; the planner reads from
+            the <em>estimation</em> templates.
+          </p>
+          <ul class="pm-list">
+            <li>Upload any markdown file: <code>/opa upload &lt;path&gt;</code></li>
+            <li>Categories toggle individually: <code>/opa enable &lt;cat&gt;</code></li>
+            <li>Reset to the bundled defaults: <code>/opa reset &lt;cat&gt;</code></li>
+          </ul>
+          <code class="ex">/opa init · /opa status · /opa upload ./standards/sec-checklist.md</code>
+        </article>
+
+        <article class="pm-card pm-card-qa">
+          <header><span class="pm-tag">gate</span><h3><code>/qa</code> &mdash; verified deliverables</h3></header>
+          <p>
+            The acceptance gate. Reads the spec's acceptance criteria,
+            asks the LLM to evaluate each one against the current code
+            and tests, and writes <code>qa-report.md</code>. Picks up
+            Definition-of-Done policies from OPA. Detects QA failures
+            robustly enough to be a PMO signal.
+          </p>
+          <ul class="pm-list">
+            <li>LLM-driven AC evaluation (not regex matching)</li>
+            <li><code>--fix</code> attempts auto-remediation of failures</li>
+            <li>Scopes to a goal or a spec path</li>
+          </ul>
+          <code class="ex">/qa --goal G-0042 --fix</code>
+        </article>
+
+        <article class="pm-card pm-card-pmo">
+          <header><span class="pm-tag">portfolio</span><h3><code>/pmo</code> &mdash; portfolio dashboard</h3></header>
+          <p>
+            Cross-project RAG status (red / amber / green) rolled up from
+            ceremony outputs, QA reports, goal health, and budget burn.
+            Forecast completion dates from rolling velocity. Long-form
+            report for the weekly review.
+          </p>
+          <ul class="pm-list">
+            <li><code>/pmo status</code> &mdash; the dashboard view</li>
+            <li><code>/pmo report</code> &mdash; weekly long-form export</li>
+            <li><code>/pmo forecast --backlog 25</code> &mdash; velocity-based ETA for the next N items</li>
+          </ul>
+          <code class="ex">/pmo status --project agenit</code>
+        </article>
+
+        <article class="pm-card pm-card-radiator">
+          <header><span class="pm-tag">radiators</span><h3>Information radiators</h3></header>
+          <p>
+            Burndown writer (persists per-sprint), TUI health widget in
+            the right rail, plus <code>/agile digest</code> for a per-project
+            wrap-up and <code>/agile burndown</code> for an ASCII chart in
+            the chat. Velocity recorded deterministically at retrospective
+            time so CI gets the same numbers as your terminal.
+          </p>
+          <code class="ex">/agile digest · /agile burndown</code>
+        </article>
+
+        <article class="pm-card pm-card-resume">
+          <header><span class="pm-tag">resilience</span><h3>Session resume &amp; AgDR loop</h3></header>
+          <p>
+            <strong>ResumeStrategyModal</strong> recovers a paused session
+            into the right place &mdash; mid-ceremony, mid-goal, mid-stage.
+            The <strong>AgDR test-outcome feedback loop</strong>
+            (AgDR-0001) feeds failing tests back as the next prompt;
+            <strong>AgDR-0002</strong> ran every step inside a sandboxed
+            executor before it landed in the trunk.
+          </p>
+          <code class="ex">/sessions resume · /sessions list</code>
+        </article>
+      </div>
+
+      <h3 class="pm-h3">Inputs &amp; outputs</h3>
+      <ul class="pm-io">
+        <li><strong>Inputs</strong> &mdash; OPA assets, the spec (<code>spec.md</code> + acceptance criteria), goal state, ceremony cadence, session-token budget, change requests, blocker signals from the goal runner.</li>
+        <li><strong>Outputs</strong> &mdash; <code>qa-report.md</code>, <code>burndown.csv</code>, ceremony summaries appended to <code>context.md</code>, AgDR test-feedback entries, PMO RAG rows, persona action transcripts.</li>
+        <li><strong>Surfaces</strong> &mdash; right-rail health widget in the REPL, <code>/agile</code> · <code>/qa</code> · <code>/pmo</code> · <code>/opa</code> slash commands, ceremony gate modal, change-request flow.</li>
+      </ul>
+
+      <p class="pm-foot">
+        Authoring credit: large portions of the engine are
+        <a href="https://github.com/AbramAlfred" target="_blank" rel="noopener">Abram Alfred</a>'s work
+        (PRs <a href="https://github.com/muhammed-eldabea/AgenIT/pull/81" target="_blank" rel="noopener">#81</a>,
+        the <code>feat/agile-opa-qa-ceremonies-radiators</code> branch, and
+        the AgDR series). Source: <code>packages/orchestrator/src/agile/</code>,
+        <code>opa/</code>, <code>pmo/</code>, and the <code>ceremony-worker</code>
+        runner under <code>packages/orchestrator/src/repl/</code>.
+      </p>
+    </section>
+
+    <!-- ───── Sections (was: panel-switched dashboard) ───── -->
+<section id="objective" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 02</span> Objective</h2>
+      <div class="objective">
+        <p class="big-quote">
+          Most AI coding tools start every conversation from zero. You re-explain
+          the project, the conventions, the build commands, the bug you fixed
+          last week. AgenIT is built around the opposite premise &mdash; the
+          agent <em>learns once and remembers</em>, so each session begins where
+          the last one ended.
+        </p>
+        <div class="objective-grid">
+          <div class="card">
+            <h3>Learns who you are</h3>
+            <p>Code style, naming conventions, preferred libraries, communication tone &mdash; captured in <code>.flow/soul.md</code> the first time you mention them. Applies to every project.</p>
+          </div>
+          <div class="card">
+            <h3>Learns your project</h3>
+            <p>Architecture decisions, file conventions, test commands, gotchas, the bug from three weeks ago &mdash; stored per-project in <code>memory/projects/&lt;name&gt;/</code>.</p>
+          </div>
+          <div class="card">
+            <h3>Picks the right specialist</h3>
+            <p>62 SKILL.md files auto-activate from natural intent. You ask &mdash; the right specialist answers. No <code>@skill</code> syntax, no manual routing.</p>
+          </div>
+          <div class="card">
+            <h3>Stays in your control</h3>
+            <p>Approval gates, plan mode, file snapshots and <code>/undo</code>. Optional autonomy via <code>/goal</code> when you want to walk away.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+</section>
+<section id="memory" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 03</span> Memory &amp; Soul</h2>
+      <p class="section-sub big-sub">
+        Two markdown files give the agent a permanent body of knowledge about
+        you and your project. They survive restarts, machine swaps, and CLI
+        upgrades. They are version-controllable. They are <em>yours</em>.
+      </p>
+
+      <div class="memory-grid">
+        <div class="memory-card soul">
+          <div class="mem-header">
+            <span class="mem-tag">SOUL</span>
+            <span class="mem-path"><code>.flow/soul.md</code></span>
+          </div>
+          <h3>Engineer-wide preferences</h3>
+          <p>Persistent across <em>every</em> project on this machine. Captures who you are as an engineer.</p>
+          <ul class="mem-list">
+            <li>Code style (tabs vs spaces, brace style, line length)</li>
+            <li>Naming conventions (snake_case, camelCase, prefixes)</li>
+            <li>Default test framework, lint config, CI expectations</li>
+            <li>Preferred libraries and architectural patterns</li>
+            <li>Communication tone &mdash; formal, terse, with comments or without</li>
+            <li>Domain expertise &mdash; embedded, web, data, ops</li>
+          </ul>
+        </div>
+
+        <div class="memory-card project">
+          <div class="mem-header">
+            <span class="mem-tag alt">MEMORY</span>
+            <span class="mem-path"><code>memory/projects/&lt;name&gt;/AGENTS.md</code></span>
+          </div>
+          <h3>Per-project context</h3>
+          <p>Scoped to one repository. The agent reads it before every turn.</p>
+          <ul class="mem-list">
+            <li>Architecture decisions (the "why" behind the structure)</li>
+            <li>Build / test / deploy commands specific to this project</li>
+            <li>Conventions enforced by reviewers</li>
+            <li>Known pitfalls and accepted workarounds</li>
+            <li>External services and how to reach them locally</li>
+            <li>Audit log of stage transitions, goals, and big edits</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="mini-title">How the agent actually learns</h3>
+      <p class="figure-caption">
+        A background <em>soul-keeper</em> watches every turn for stable
+        preferences and project facts. When it sees one, it appends a line
+        to <code>soul.md</code> or <code>AGENTS.md</code>. The next turn
+        loads that file before anything else &mdash; so the agent starts
+        every session smarter than it ended the last.
+      </p>
+
+      <figure class="diagram-figure">
+        <svg viewBox="0 0 880 360" role="img" aria-label="Learning loop diagram" class="learn-loop">
+          <defs>
+            <marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#2ad6ff"/>
+            </marker>
+            <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#ff7a18"/>
+            </marker>
+          </defs>
+
+          <!-- Nodes -->
+          <g font-family="JetBrains Mono, monospace" font-size="14" fill="#e6edf3" text-anchor="middle">
+            <!-- 1 You -->
+            <rect x="40"  y="140" width="140" height="80" rx="10" fill="#0f1422" stroke="#2ad6ff" stroke-width="1.6"/>
+            <text x="110" y="172">You</text>
+            <text x="110" y="194" font-size="11" fill="#9aa4b2">prompts &amp; choices</text>
+
+            <!-- 2 Conversation -->
+            <rect x="240" y="140" width="160" height="80" rx="10" fill="#0f1422" stroke="#2ad6ff" stroke-width="1.6"/>
+            <text x="320" y="172">REPL turn</text>
+            <text x="320" y="194" font-size="11" fill="#9aa4b2">prompt + tool calls</text>
+
+            <!-- 3 Soul-keeper -->
+            <rect x="460" y="140" width="180" height="80" rx="10" fill="#1a0d05" stroke="#ff7a18" stroke-width="1.8"/>
+            <text x="550" y="170" fill="#ffd0a8">soul-keeper</text>
+            <text x="550" y="192" font-size="11" fill="#ffaa66">background watcher</text>
+
+            <!-- 4a soul.md -->
+            <rect x="700" y="60"  width="160" height="70" rx="8" fill="#050709" stroke="#2ad6ff" stroke-width="1.4"/>
+            <text x="780" y="92"  fill="#b9ecff">soul.md</text>
+            <text x="780" y="112" font-size="11" fill="#9aa4b2">engineer-wide</text>
+
+            <!-- 4b AGENTS.md -->
+            <rect x="700" y="230" width="160" height="70" rx="8" fill="#050709" stroke="#2ad6ff" stroke-width="1.4"/>
+            <text x="780" y="262" fill="#b9ecff">AGENTS.md</text>
+            <text x="780" y="282" font-size="11" fill="#9aa4b2">per-project</text>
+
+            <!-- Loop label -->
+            <text x="320" y="40"  fill="#ff7a18" font-size="12" letter-spacing="2">⌁ NEXT SESSION READS BOTH FILES FIRST</text>
+          </g>
+
+          <!-- Forward arrows (cyan) -->
+          <g stroke="#2ad6ff" stroke-width="1.8" fill="none" marker-end="url(#arrow-cyan)">
+            <path d="M180,180 L240,180"/>
+            <path d="M400,180 L460,180"/>
+            <path d="M640,170 C 670,170 670,95 700,95"/>
+            <path d="M640,190 C 670,190 670,265 700,265"/>
+          </g>
+
+          <!-- Feedback arrow (orange, dashed) -->
+          <g stroke="#ff7a18" stroke-width="1.8" fill="none" stroke-dasharray="6 5" marker-end="url(#arrow-orange)">
+            <path d="M780,60  C 780,20  300,20  110,60  L 110,140"/>
+          </g>
+        </svg>
+        <figcaption>
+          1 &middot; You speak &nbsp;→&nbsp; 2 &middot; A turn happens &nbsp;→&nbsp; 3 &middot; Soul-keeper notices a stable preference &nbsp;→&nbsp; 4 &middot; Appends to <code>soul.md</code> (engineer-wide) or <code>AGENTS.md</code> (this project) &nbsp;⤴&nbsp; loaded into your <em>next</em> session.
+        </figcaption>
+      </figure>
+
+      <h3 class="mini-title">What gets sent to the model on every turn</h3>
+      <figure class="diagram-figure">
+        <svg viewBox="0 0 880 320" role="img" aria-label="Context bundle assembly" class="ctx-bundle">
+          <g font-family="JetBrains Mono, monospace" font-size="13" fill="#e6edf3" text-anchor="middle">
+            <!-- Inputs (left column) -->
+            <rect x="40"  y="40"  width="200" height="50" rx="8" fill="#0f1422" stroke="#2ad6ff"/>
+            <text x="140" y="62" fill="#b9ecff">soul.md</text>
+            <text x="140" y="80" font-size="11" fill="#9aa4b2">who you are</text>
+
+            <rect x="40"  y="105" width="200" height="50" rx="8" fill="#0f1422" stroke="#2ad6ff"/>
+            <text x="140" y="127" fill="#b9ecff">AGENTS.md</text>
+            <text x="140" y="145" font-size="11" fill="#9aa4b2">this project</text>
+
+            <rect x="40"  y="170" width="200" height="50" rx="8" fill="#0f1422" stroke="#2ad6ff"/>
+            <text x="140" y="192" fill="#b9ecff">recent history</text>
+            <text x="140" y="210" font-size="11" fill="#9aa4b2">last N turns</text>
+
+            <rect x="40"  y="235" width="200" height="50" rx="8" fill="#1a0d05" stroke="#ff7a18"/>
+            <text x="140" y="257" fill="#ffd0a8">your task</text>
+            <text x="140" y="275" font-size="11" fill="#ffaa66">what you typed</text>
+
+            <!-- Bundle -->
+            <rect x="370" y="105" width="180" height="120" rx="10" fill="#0b0f18" stroke="#2ad6ff" stroke-width="1.8"/>
+            <text x="460" y="140" fill="#fff">Context bundle</text>
+            <text x="460" y="160" font-size="11" fill="#9aa4b2">soul + memory +</text>
+            <text x="460" y="176" font-size="11" fill="#9aa4b2">history + task</text>
+            <text x="460" y="208" font-size="10" fill="#5af0a8">≈ 2&ndash;8 KB / turn</text>
+
+            <!-- Backend -->
+            <rect x="680" y="105" width="180" height="120" rx="10" fill="#0f1422" stroke="#ff7a18" stroke-width="1.8"/>
+            <text x="770" y="142" fill="#ffd0a8">Backend</text>
+            <text x="770" y="166" font-size="11" fill="#ffaa66">Gemini · Claude</text>
+            <text x="770" y="184" font-size="11" fill="#ffaa66">+ 62 auto-skills</text>
+            <text x="770" y="208" font-size="10" fill="#5af0a8">streams response</text>
+          </g>
+
+          <g stroke="#2ad6ff" stroke-width="1.6" fill="none" marker-end="url(#arrow-cyan)">
+            <path d="M240,65  C 305,65  305,135 370,135"/>
+            <path d="M240,130 L 370,150"/>
+            <path d="M240,195 C 305,195 305,175 370,175"/>
+          </g>
+          <g stroke="#ff7a18" stroke-width="1.8" fill="none" marker-end="url(#arrow-orange)">
+            <path d="M240,260 C 305,260 305,200 370,200"/>
+            <path d="M550,165 L 680,165"/>
+          </g>
+        </svg>
+        <figcaption>
+          Every turn, AgenIT assembles the four inputs into a single context
+          bundle and ships it to the chosen backend. <em>You don't have to
+          paste anything in</em> &mdash; soul, project memory, and recent
+          history are added automatically.
+        </figcaption>
+      </figure>
+
+      <h3 class="mini-title">What growing-with-you actually looks like</h3>
+      <div class="timeline">
+        <div class="t-step">
+          <span class="t-num">Day 1</span>
+          <p>You mention you prefer <em>4-space indents</em>, <em>arrow functions</em>, and <em>vitest</em>. The soul keeper appends three lines to <code>soul.md</code> in the background. You don't have to do anything.</p>
+        </div>
+        <div class="t-step">
+          <span class="t-num">Day 4</span>
+          <p>You ask for a new module. The agent already follows your style. It also remembers from <code>AGENTS.md</code> that this project uses <em>strict-null-checks</em> and routes through a <em>service layer</em>.</p>
+        </div>
+        <div class="t-step">
+          <span class="t-num">Day 14</span>
+          <p>A reviewer rejects a PR because of a missing telemetry call. You tell the agent. It writes a new entry in <code>AGENTS.md</code>. From now on it adds the call automatically when generating handlers.</p>
+        </div>
+        <div class="t-step">
+          <span class="t-num">Day 30</span>
+          <p>You start a new project. The agent already knows <em>you</em> &mdash; style, frameworks, tone &mdash; from the soul. The project memory starts empty and fills as you work. No re-onboarding.</p>
+        </div>
+      </div>
+
+      <div class="soul-example">
+        <div class="example-head">A real <code>soul.md</code> excerpt &mdash; appended automatically by the soul-keeper</div>
+        <pre class="markdown-block"><span class="md-h">## Code style</span>
+- 4-space indent, no tabs
+- single quotes for strings
+- prefer <span class="md-em">arrow functions</span>; <span class="md-em">async/await</span> over .then()
+- always destructure props in React components
+
+<span class="md-h">## Tooling defaults</span>
+- test runner: <span class="md-em">vitest</span> (was jest before 2025-11)
+- bundler: vite for libs, next for apps
+- formatter: <span class="md-em">prettier</span> with print-width 100
+
+<span class="md-h">## Communication preferences</span>
+- terse summaries, full detail in code comments only when non-obvious
+- always show a diff before applying multi-file edits
+- <span class="md-em">never</span> add emoji to commit messages</pre>
+      </div>
+
+      <div class="mem-cta">
+        <code>/soul</code> shows the current contents.
+        <code>/memory</code> shows what's injected into this session.
+        Both files are plain markdown &mdash; check them into git, edit them by hand, share them with your team.
+      </div>
+    </section>
+
+</section>
+
+<section id="harness" class="doc-section harness-section">
+  <section class="panel-inner">
+    <h2 class="section-title"><span>// 03b</span> Harness — one widget, four extensions</h2>
+    <p class="section-sub">
+      Skills, MCP servers, Agents, and Python tools are the four ways to teach
+      AgenIT new tricks. The Harness widget gives them one creation flow,
+      one editor, and one set of canonical install paths &mdash; without ever
+      leaving the REPL.
+    </p>
+
+    <div class="harness-kinds">
+      <article class="harness-kind">
+        <header><span class="harness-num">01</span><h3>Skill</h3></header>
+        <p>A <code>SKILL.md</code> file (YAML frontmatter + Markdown body) that auto-activates when the user's message semantically matches its <code>description:</code>.</p>
+        <p class="harness-path"><code>.gemini/skills/&lt;name&gt;/SKILL.md</code><br/><code>.claude/skills/&lt;name&gt;/SKILL.md</code></p>
+      </article>
+      <article class="harness-kind">
+        <header><span class="harness-num">02</span><h3>MCP server</h3></header>
+        <p>A Model Context Protocol stdio entry with <code>command</code>, <code>args</code>, and <code>env</code>. Merged into the existing config so other servers survive.</p>
+        <p class="harness-path"><code>.mcp.json</code> (Gemini + Claude share)</p>
+      </article>
+      <article class="harness-kind">
+        <header><span class="harness-num">03</span><h3>Agent</h3></header>
+        <p>A persona block in <code>AGENTS.md</code> &mdash; role, specialty, tools allowed, system prompt. Discovered by both backends via semantic description matching.</p>
+        <p class="harness-path"><code>AGENTS.md</code> (single shared file)</p>
+      </article>
+      <article class="harness-kind">
+        <header><span class="harness-num">04</span><h3>Tool</h3></header>
+        <p>An executable Python script with a <code>run(payload) -&gt; dict</code> entrypoint and a CLI <code>main()</code>. Callable from hooks, shells, and MCP wrappers.</p>
+        <p class="harness-path"><code>.flow/tools/&lt;name&gt;.py</code> (chmod 0755)</p>
+      </article>
+    </div>
+
+    <h3 class="harness-h3">The end-to-end flow</h3>
+    <pre class="harness-flow">[Ctrl+W → Harnesses → Enter]
+        │
+        ▼
+   list (existing drafts + installed)
+        │
+   [n] ▶ pick kind: 1 Skill · 2 MCP · 3 Agent · 4 Tool
+                ▶ enter name (sanitised: lowercased, spaces → "-")
+                       ▶ pick source:
+                          [t] empty template (you write it)
+                          [a] ask the scaffolding agent (describe what you want)
+                                │
+                                ▼
+                   inline vim editor (gg G hjkl i a o O dd yy p P u :w :q :wq :x)
+                                │
+                   :wq saves the draft to ~/.agenit/harnesses/drafts.json
+                                │
+                                ▼
+                   review screen (kind · name · body preview · final path)
+                                │
+                   [y] install   [e] re-edit   [r] refine with agent   [n] discard
+                                │
+                                ▼
+                   install to canonical path → confirmation toast</pre>
+
+    <h3 class="harness-h3">Keybindings — expanded widget</h3>
+    <div class="harness-keys">
+      <div class="harness-key-group">
+        <h4>List view</h4>
+        <table class="cmd-table">
+          <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>Move selection between drafts &amp; installed.</td></tr>
+          <tr><td><kbd>n</kbd></td><td>New harness — opens the kind picker.</td></tr>
+          <tr><td><kbd>r</kbd></td><td>Refine selected with the scaffolding agent (edit-in-place).</td></tr>
+          <tr><td><kbd>e</kbd></td><td>Re-open the inline vim editor on the selected draft.</td></tr>
+          <tr><td><kbd>d</kbd></td><td>Delete draft (with confirm).</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Exit the widget back to the REPL.</td></tr>
+        </table>
+      </div>
+      <div class="harness-key-group">
+        <h4>Pickers + editor</h4>
+        <table class="cmd-table">
+          <tr><td><kbd>1</kbd>–<kbd>4</kbd></td><td>Kind picker — Skill / MCP / Agent / Tool.</td></tr>
+          <tr><td><kbd>t</kbd></td><td>Empty template (edit yourself).</td></tr>
+          <tr><td><kbd>a</kbd></td><td>Agent-generated. Prompts for a description.</td></tr>
+          <tr><td><kbd>:wq</kbd></td><td>Save the buffer and advance to review.</td></tr>
+          <tr><td><kbd>y</kbd> · <kbd>e</kbd> · <kbd>r</kbd> · <kbd>n</kbd></td><td>Install · re-edit · refine with agent · discard.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h3 class="harness-h3">How the scaffolding agent stays on-rails</h3>
+    <p>
+      Each kind locks the agent into a strict output shape so the install step
+      can drop the body into the canonical path without post-processing:
+    </p>
+    <ul class="harness-shapes">
+      <li><strong>Skill</strong> &mdash; "Output ONLY a <code>SKILL.md</code> — YAML frontmatter (<code>name</code>, <code>description</code>) + Markdown body."</li>
+      <li><strong>MCP</strong> &mdash; "Output ONLY valid JSON for <code>.mcp.json</code> — an object with <code>mcpServers</code> mapping to <code>{ command, args, env }</code>."</li>
+      <li><strong>Agent</strong> &mdash; "Output ONLY the <code>AGENTS.md</code> block — <code>## &lt;name&gt;</code> heading + <code>Role</code>, <code>Specialty</code>, <code>Tools allowed</code>, <code>System prompt</code>."</li>
+      <li><strong>Tool</strong> &mdash; "Output ONLY a Python script — shebang + docstring + <code>run(payload) -&gt; dict</code> + a <code>main()</code> that reads stdin JSON and writes stdout JSON."</li>
+    </ul>
+    <p>
+      <strong>Refine mode</strong> (<kbd>r</kbd>) prepends the existing body
+      plus your feedback so the agent edits in place instead of starting fresh.
+      Half-written drafts persist across REPL exits in
+      <code>~/.agenit/harnesses/drafts.json</code> (debounced 300 ms).
+    </p>
+
+    <h3 class="harness-h3">Cross-backend behaviour</h3>
+    <table class="cmd-table harness-cross">
+      <tr><th>Kind</th><th>Gemini CLI</th><th>Claude CLI</th></tr>
+      <tr><td>Skill</td><td><code>.gemini/skills/&lt;name&gt;/SKILL.md</code> — auto-matches on description.</td><td><code>.claude/skills/&lt;name&gt;/SKILL.md</code> — referenced from <code>.claude/settings.json</code> or system prompt.</td></tr>
+      <tr><td>MCP server</td><td colspan="2"><code>.mcp.json</code> — single shared file; same-id entries are overwritten, others preserved (temp-file + atomic rename).</td></tr>
+      <tr><td>Agent</td><td colspan="2"><code>AGENTS.md</code> — both CLIs discover via semantic <code>description:</code> match. No explicit <code>@agent</code> syntax.</td></tr>
+      <tr><td>Tool</td><td colspan="2"><code>.flow/tools/&lt;name&gt;.py</code> — shared, chmod 0755. Callable from hooks, <code>run_shell_command</code>, and over MCP via the memory MCP server.</td></tr>
+    </table>
+
+    <h3 class="harness-h3">Caveats</h3>
+    <ul class="harness-caveats">
+      <li><strong>Vim subset</strong> — visual mode, search (<kbd>/</kbd><kbd>?</kbd>), regex replace, marks, registers, and macros are out of scope. Basic motions, insert/append, line yank/paste, and undo only.</li>
+      <li><strong>TUI-only</strong> — harness creation is widget-driven; there's no <code>/harness</code> slash command. Install scripts can still drop files at the canonical paths directly.</li>
+      <li><strong>MCP merge</strong> — duplicate <code>mcpServers</code> ids replace silently rather than warning. Pick a unique id if you don't want to overwrite.</li>
+      <li><strong>Skill auto-activation</strong> is Gemini-CLI behaviour; under Claude CLI a skill needs an explicit reference (system prompt or <code>.claude/settings.json</code> hook).</li>
+    </ul>
+
+    <p class="harness-foot">
+      Canonical reference: <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/harnesses.md" target="_blank" rel="noopener"><code>docs/harnesses.md</code></a>.
+      Implementation: <code>packages/orchestrator/src/repl/harnesses-widget.tsx</code> · <code>harness-templates.ts</code> · <code>harness-installer.ts</code>.
+    </p>
+  </section>
+</section>
+
+<section id="features" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 04</span> Features</h2>
+      <p class="section-sub">Thirty-three building blocks &mdash; <strong>three brand-new packages</strong> just shipped (VS Code extension, Claude CLI backend, cross-backend failover) on top of the May 2026 wave. Each comes with a one-line example. <a href="#demos">See them in action</a> or jump to the <a href="#commands">command reference</a>.</p>
+      <div class="feature-grid">
+        <div class="feat star"><span class="num">01</span><h4>Persistent soul &amp; memory</h4>
+          <p>Markdown-based engineer preferences (<code>.flow/soul.md</code>) and per-project context (<code>AGENTS.md</code>). Survive restarts. The reason this tool exists.</p>
+          <code class="ex">/soul · /memory</code></div>
+        <div class="feat"><span class="num">02</span><h4>~80 auto-activated skills</h4>
+          <p>SKILL.md files match natural intent &mdash; no <code>@skill</code> syntax. Implementer, tester, reviewer, debugger, refactorer, doc-writer, plus 10 Pocock-style engineering skills and 7 design skills (NEW).</p>
+          <code class="ex">/skills list</code></div>
+        <div class="feat"><span class="num">03</span><h4>Disciplined 4-stage pipeline</h4>
+          <p>Requirements → Architecture → Code → Testing → Audit, with approval gates between stages. Stage names re-mapped per profile.</p>
+          <code class="ex">/run add user authentication</code></div>
+        <div class="feat"><span class="num">04</span><h4>5 domain profiles</h4>
+          <p>Generic, web (TS/React, OWASP, WCAG), embedded (FreeRTOS, MISRA), automotive (ASPICE V-Model), and <strong>design</strong> (UI/UX with WCAG 2.2 AA + design tokens &mdash; NEW). Auto-detected from repo markers.</p>
+          <code class="ex">agenit init --profile design</code></div>
+        <div class="feat"><span class="num">05</span><h4>Mission Squad</h4>
+          <p>Parallel agent fleet. Helpers gather context concurrently; the primary agent gets a structured briefing.</p>
+          <code class="ex">/squad implement &lt;task&gt;</code></div>
+        <div class="feat"><span class="num">06</span><h4>Autonomous Goals</h4>
+          <p><code>/goal</code> Plan → Code → Test → Evaluate loop with budget tracking, auditor, and persistent state.</p>
+          <code class="ex">/goal Migrate to TypeScript</code></div>
+        <div class="feat"><span class="num">07</span><h4>Spec-Kit (SDD)</h4>
+          <p>9-phase specify → clarify → plan → tasks → implement before any code is written.</p>
+          <code class="ex">/speckit run user login flow</code></div>
+        <div class="feat"><span class="num">08</span><h4>Code search</h4>
+          <p>Local BM25 keyword + symbol search via the bundled <code>codedigest</code>. No cloud calls, no embeddings download.</p>
+          <code class="ex">/codedigest search "ring buffer"</code></div>
+        <div class="feat"><span class="num">09</span><h4>Hardware bridge</h4>
+          <p>JLink (pylink-square), CAN/LIN traces (cantools), Saleae Logic 2 &mdash; invoked from the REPL via <code>hw-debugger</code>.</p>
+          <code class="ex">/debug analyze trace.asc</code></div>
+        <div class="feat"><span class="num">10</span><h4>Marketplace</h4>
+          <p>Install skills, MCP servers, and Claude Code plugins from a curated registry or any GitHub URL.</p>
+          <code class="ex">/marketplace install code-review</code></div>
+        <div class="feat"><span class="num">11</span><h4>Traceability</h4>
+          <p><code>@req REQ-NNN</code> tags link requirements → code → tests → audit. Optional but powerful when needed.</p>
+          <code class="ex">/traceability</code></div>
+        <div class="feat"><span class="num">12</span><h4>Multi-LLM federation</h4>
+          <p>Gemini by default; optionally Claude (Anthropic SDK with stream-json). Swap backends without changing your workflow.</p>
+          <code class="ex">[federation] backend = "anthropic"</code></div>
+        <div class="feat star"><span class="num">13</span><h4>Web control UI · NEW</h4>
+          <p>Browser SPA (Preact + htm) with seven panels: Chat, Pipeline, Squad, Goal, <strong>Design</strong>, Memory, Jobs. Auth-token + origin gated, served by the same orchestrator process.</p>
+          <code class="ex">/web start --port 8765</code></div>
+        <div class="feat star"><span class="num">14</span><h4>Design panel · NEW</h4>
+          <p>Pick a design skill, generate a sandboxed HTML preview, click any region to edit it via <em>comment mode</em>, then export. Inspired by open-codesign.</p>
+          <code class="ex">→ Design tab in /web</code></div>
+        <div class="feat star"><span class="num">15</span><h4><code>/overnight</code> loop · NEW</h4>
+          <p>Long-running autonomous loop with per-iteration git commits, rollback on failure, worktree-isolated parallel runs, and a permanent run summary. Agent-agnostic. Inspired by gnhf.</p>
+          <code class="ex">/overnight --parallel 2 -- gemini "..."</code></div>
+        <div class="feat star"><span class="num">16</span><h4>HTML / PDF / PPTX export · NEW</h4>
+          <p><code>@flow/exporter</code> turns a generated design into a shareable artefact. Puppeteer for PDF and pptxgenjs for PPTX are optional peer deps.</p>
+          <code class="ex">/export landing.html --to pdf</code></div>
+        <div class="feat star"><span class="num">17</span><h4>Engineering skills bundle · NEW</h4>
+          <p>10 vetted Pocock-style skills imported under MIT: <code>diagnose</code>, <code>tdd</code>, <code>prototype</code>, <code>grill-with-docs</code>, <code>triage</code>, <code>to-prd</code>, <code>to-issues</code>, <code>zoom-out</code>, <code>improve-codebase-architecture</code>, <code>setup-engineering-skills</code>.</p>
+          <code class="ex">Use the diagnose skill — debug X</code></div>
+        <a id="audit-traceability" class="anchor-offset" aria-hidden="true"></a>
+        <div class="feat"><span class="num">18</span><h4>Skill traceability · NEW</h4>
+          <p><code>@req REQ-SKILL-NNN</code> tags inside <code>SKILL.md</code> files. The scanner inventories them by source, flags duplicates, and reports skills missing a tag.</p>
+          <code class="ex">traceability_scan.py --skills .gemini/skills</code></div>
+        <div class="feat"><span class="num">19</span><h4>MCP support</h4>
+          <p>Install any MCP server (GitHub, filesystem, Postgres, …). AgenIT also exposes its own MCP server so external agents can read soul + memory.</p>
+          <code class="ex">/mcp install github-mcp</code></div>
+        <div class="feat"><span class="num">20</span><h4>Worktree isolation</h4>
+          <p>Risky work in an isolated git worktree under <code>.gemini/worktrees/</code>. Same helper powers <code>/overnight --parallel</code> &mdash; one code path, one safety story.</p>
+          <code class="ex">/worktree feat/x</code></div>
+        <div class="feat star"><span class="num">21</span><h4>Debug Mode · NEW</h4>
+          <p>Every chat / LLM / tool / agent call becomes a typed Run in a debuggable tree. TUI right-rail widget + Web UI tab + pause-before gates + replayable tool runs. LangSmith-style, in-process.</p>
+          <code class="ex">/debug on</code></div>
+        <div class="feat star"><span class="num">22</span><h4>Harnesses widget · NEW</h4>
+          <p>One-stop add for Skills / MCP / Agents / Tools. Empty template or scaffolding-agent generated, edited in an in-TUI vim editor, installed to the canonical path with MCP-JSON merge + AGENTS.md de-dup.</p>
+          <code class="ex">Ctrl+W → Harnesses → n</code></div>
+        <div class="feat star"><span class="num">23</span><h4>Widget navigation · NEW</h4>
+          <p><kbd>Ctrl+W</kbd> enters a keyboard-driven nav layer over rail widgets. Each widget expands into a full-pane view (tasks, hardware probes, agents, recipes). Legacy <kbd>Ctrl+T</kbd>/<kbd>Ctrl+]</kbd>/<kbd>Ctrl+G</kbd> preserved.</p>
+          <code class="ex">Ctrl+W</code></div>
+        <div class="feat star"><span class="num">24</span><h4>Agents dashboard · NEW</h4>
+          <p>Right-rail widget showing every active agent with live activity (<code>reading X</code>, <code>running Y</code>), per-agent token-cost sparkline, session spend total.</p>
+          <code class="ex">→ Agents widget</code></div>
+        <div class="feat star"><span class="num">25</span><h4>Recipes · NEW</h4>
+          <p>TOML-defined cross-widget orchestration — fire actions when a <code>tuiBus</code> event matches. Default recipes log goal failures + notify on agent failures; opt-in hardware-probe escalation.</p>
+          <code class="ex">.flow/recipes/*.toml</code></div>
+        <a id="verification-layers" class="anchor-offset" aria-hidden="true"></a>
+        <div class="feat star"><span class="num">26</span><h4>Critic phase &amp; <code>/diff-walk</code> · NEW</h4>
+          <p>New <code>swe6-critic</code> skill stress-tests every stage's output for vague verbs, contradictions, untestable claims. <code>/diff-walk</code> runs it per git-diff hunk; <code>/speckit critique</code> runs it on a spec.</p>
+          <code class="ex">/diff-walk --base main</code></div>
+        <div class="feat star"><span class="num">27</span><h4><code>/pr-autofix</code> &amp; <code>/pr-metrics</code> · NEW</h4>
+          <p>Critic per hunk + apply deterministic patches (lint / format / import-order / trailing-whitespace) with backup branch + telemetry. <code>/pr-metrics</code> ships an AI-vs-human cohort report.</p>
+          <code class="ex">/pr-autofix 1421 --confirm</code></div>
+        <div class="feat star"><span class="num">28</span><h4>LSP call graph &amp; graph-mode search · NEW</h4>
+          <p>Crabviz-style LSP-derived call graph (clangd / pyright / rust-analyzer; daemon-mode reuse). <code>codedigest --graph</code> auto-injects each search seed's direct callers + callees (DKB-style retrieval).</p>
+          <code class="ex">/codedigest graph --use-lsp --export svg</code></div>
+        <div class="feat"><span class="num">29</span><h4>Security hardening · NEW</h4>
+          <p>Slopsquatting hook rejects suspicious package names pre-install; MCP server pinning + skill audit; <code>--air-gapped</code> runtime mode; per-session / per-command token ceiling.</p>
+          <code class="ex">agenit --air-gapped</code></div>
+        <div class="feat"><span class="num">30</span><h4>Hardware tools over MCP · NEW</h4>
+          <p>JLink, CAN/LIN, Saleae also exposed as MCP tools — external agents (Claude Code, Cursor, …) can drive the bench through the same surface AgenIT uses.</p>
+          <code class="ex">/marketplace mcp tools agenit-hw</code></div>
+        <div class="feat star"><span class="num">31</span><h4>VS Code extension · NEW</h4>
+          <p>Compact panel + immersive view + 6 sidebar TreeViews + slash palette + <code>@req</code> CodeLens + cppcheck diagnostics + live event stream. Thin-client over <code>agenit serve</code> &mdash; fixes ship via <code>agenit</code> upgrade, no extension rebuild.</p>
+          <code class="ex">Ctrl+Alt+A &nbsp;·&nbsp; Ctrl+Alt+Shift+A</code></div>
+        <div class="feat star"><span class="num">32</span><h4>Claude CLI backend · NEW</h4>
+          <p>Spawn the locally installed <code>claude</code> binary as a subprocess backend &mdash; same hook layer, same pipeline, your existing OAuth (Pro / Max / Team / Enterprise). <code>agenit init --target claude</code> seeds <code>.claude/</code>.</p>
+          <code class="ex">agenit init --target claude</code></div>
+        <div class="feat star"><span class="num">33</span><h4>Cross-backend failover · NEW</h4>
+          <p>Router auto-falls-back Gemini → Claude → OpenAI on tier exhaustion or hard error. <code>/backend</code> shows what's detected, installed, and currently active; the status bar surfaces the live backend + model.</p>
+          <code class="ex">/backend &nbsp;·&nbsp; /backend chain pro</code></div>
+      </div>
+    </section>
+
+</section>
+<section id="demos" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 05</span> Demos</h2>
+      <p class="section-sub">Eight walkthroughs of the things you'll actually use day to day.</p>
+
+      <figure class="screenshot">
+        <img src="demo-repl.png" alt="AgenIT REPL — V-Model rail, conversation, soul + codedigest right rail" loading="lazy"
+             onerror="this.parentNode.classList.add('missing')"/>
+        <figcaption>
+          The REPL &mdash; pipeline rail on the left, conversation in the middle,
+          <em>Job Tray</em> &middot; <em>Soul</em> &middot; <em>Codedigest</em>
+          on the right. Notice the soul rail showing
+          <code>44 entries · Engineering Defaults · User Profile</code> &mdash;
+          that's the agent remembering you between sessions.
+        </figcaption>
+      </figure>
+
+      <div class="demo-tabs" role="tablist">
+        <button class="demo-tab active" role="tab" data-target="demo-soul">Soul &amp; Memory</button>
+        <button class="demo-tab" role="tab" data-target="demo-init">Init</button>
+        <button class="demo-tab" role="tab" data-target="demo-pipeline">Pipeline</button>
+        <button class="demo-tab" role="tab" data-target="demo-squad">Squad</button>
+        <button class="demo-tab" role="tab" data-target="demo-goal">Goal</button>
+        <button class="demo-tab" role="tab" data-target="demo-speckit">Spec-Kit</button>
+        <button class="demo-tab" role="tab" data-target="demo-codedigest">Search</button>
+        <button class="demo-tab" role="tab" data-target="demo-debug">Hardware</button>
+        <button class="demo-tab" role="tab" data-target="demo-market">Marketplace</button>
+      </div>
+
+      <!-- Demo: Soul & Memory -->
+      <article id="demo-soul" class="demo-panel active" role="tabpanel">
+        <h3>The agent learns &mdash; without being asked to learn</h3>
+        <p class="demo-desc">
+          A soul-keeper background job watches conversations for stable
+          preferences and appends them to <code>soul.md</code>. Project memory
+          works the same way for project-specific facts. <code>/soul</code> and
+          <code>/memory</code> show you what's been captured.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[my-app]</span> agenit&gt; for new modules use vitest, not jest. and arrow fns please.
+
+  <span class="t-orange">→</span> got it &mdash; will follow vitest + arrow-functions for new modules.
+  <span class="t-dim">◈ soul-keeper appended 2 entries to soul.md (background)</span>
+
+<span class="t-cyan">[my-app]</span> agenit&gt; /soul
+
+  ── <span class="t-orange">Engineer Soul</span> ──────────────────────────────────────
+  <span class="t-cyan">## Code style</span>
+    - 4-space indent, no tabs
+    - prefer <span class="t-ok">arrow functions</span>
+  <span class="t-cyan">## Tooling defaults</span>
+    - test runner: <span class="t-ok">vitest</span>
+    - bundler: vite for libs, next for apps
+  <span class="t-cyan">## Communication preferences</span>
+    - terse summaries
+    - never emoji in commit messages
+  <span class="t-dim">… 38 more entries</span>
+
+<span class="t-cyan">[my-app]</span> agenit&gt; /memory
+
+  ── <span class="t-orange">Project Memory · my-app</span> ────────────────────────────
+  <span class="t-cyan">## Architecture</span>
+    - service layer between routes and db
+    - feature flags via GrowthBook
+  <span class="t-cyan">## Conventions</span>
+    - every handler emits an analytics event
+    - PR titles use Conventional Commits</pre>
+      </article>
+
+      <!-- Demo: Init -->
+      <article id="demo-init" class="demo-panel" role="tabpanel">
+        <h3>Initialise a project &mdash; auto-detected profile</h3>
+        <p class="demo-desc">
+          <code>agenit init</code> scans the repo and picks a profile from
+          markers. It seeds <code>.agenit/</code>, <code>.gemini/skills/</code>,
+          and a starter <code>AGENTS.md</code>. Re-running on an existing project
+          repairs config without overwriting customisations.
+        </p>
+        <pre class="terminal"><span class="t-prompt">$</span> cd ~/projects/my-app
+<span class="t-prompt">$</span> agenit init --name my-app
+
+  <span class="t-ok">✓</span> profile detected: <span class="t-cyan">web</span> (next + typescript + vitest)
+  <span class="t-ok">✓</span> seeded <span class="t-dim">.agenit/profiles/web/</span>
+  <span class="t-ok">✓</span> seeded <span class="t-dim">.gemini/skills/</span>      <span class="t-dim">(62 skills)</span>
+  <span class="t-ok">✓</span> seeded <span class="t-dim">.gemini/settings.json</span> <span class="t-dim">(absolute hook paths)</span>
+  <span class="t-ok">✓</span> seeded <span class="t-dim">AGENTS.md</span>             <span class="t-dim">(project memory starter)</span>
+  <span class="t-ok">✓</span> linked engineer soul from <span class="t-dim">~/.flow/soul.md</span>
+
+<span class="t-prompt">$</span> agenit
+<span class="t-cyan">[my-app]</span> agenit&gt;</pre>
+      </article>
+
+      <!-- Demo: Pipeline -->
+      <article id="demo-pipeline" class="demo-panel" role="tabpanel">
+        <h3>Full pipeline run &mdash; one prompt, four gated stages</h3>
+        <p class="demo-desc">
+          <code>/run &lt;task&gt;</code> walks Requirements → Architecture →
+          Code → Testing → Audit. Each stage activates a different skill.
+          Memory and soul ride along on every stage so style stays consistent.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[my-app]</span> agenit&gt; /run add OAuth login flow with Google
+
+  <span class="t-orange">▶ Requirements</span>
+    <span class="t-dim">EARS user stories + acceptance criteria</span> → <span class="t-cyan">requirements.md</span>
+    <span class="t-ok">✓</span> REQ-014, REQ-015, REQ-016 (3 new)
+
+  <span class="t-orange">▶ Architecture</span>
+    <span class="t-dim">component diagram + sequence flow</span> → <span class="t-cyan">architecture.md</span>
+    <span class="t-ok">✓</span> NextAuth provider config sketched
+
+  <span class="t-orange">▶ Code</span>             <span class="t-dim">@req REQ-014..016</span>
+    edits <span class="t-cyan">app/api/auth/[...nextauth]/route.ts</span>
+    edits <span class="t-cyan">lib/auth/google.ts</span>
+    edits <span class="t-cyan">middleware.ts</span>
+    <span class="t-ok">✓</span> follows project service-layer convention <span class="t-dim">(from AGENTS.md)</span>
+    <span class="t-ok">✓</span> arrow functions, single quotes <span class="t-dim">(from soul.md)</span>
+
+  <span class="t-orange">▶ Testing</span>
+    creates <span class="t-cyan">tests/auth.spec.ts</span> (vitest, 7 cases)
+    <span class="t-ok">✓</span> REQ-014..016 covered
+
+  <span class="t-orange">▶ Audit</span>
+    <span class="t-ok">✓</span> 100% requirements covered
+    <span class="t-ok">✓</span> 0 orphans · 0 test gaps</pre>
+      </article>
+
+      <!-- Demo: Squad -->
+      <article id="demo-squad" class="demo-panel" role="tabpanel">
+        <h3>Mission Squad &mdash; parallel context-gathering before the implementer fires</h3>
+        <figure class="agent-squad-figure">
+          <svg class="agent-squad" viewBox="0 0 760 260" role="img" aria-label="AgenIT Agent Squad">
+            <use href="#agent-squad"/>
+          </svg>
+          <figcaption>Meet the cast — each helper persona has a pixel-character avatar in the TUI and editor surfaces.</figcaption>
+        </figure>
+        <p class="demo-desc">
+          <code>/squad implement</code> spawns helpers in parallel
+          (req-reader, code-scanner, codedigest, lint pre-flight), aggregates
+          their output into a structured briefing, and auto-fires the
+          implementer with the briefing pre-injected. <kbd>Ctrl-C</kbd>
+          cancels everything cleanly.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[my-app]</span> agenit&gt; /squad implement add password reset
+
+  <span class="t-orange">Mission Squad</span>
+  Mission: add password reset
+  Helpers: 7 across 3 phase(s)
+  ──────────────────────────────────────────────────
+  Phase 1
+    <span class="t-ok">✓</span> req-reader            (52 ms)
+    <span class="t-ok">✓</span> session-memory        (34 ms)
+    <span class="t-cyan">⟳</span> codedigest-searcher   (<span class="t-dim">8s</span>)
+  Phase 2
+    <span class="t-ok">✓</span> code-scanner          (210 ms)
+    <span class="t-ok">✓</span> lint-preflight        (640 ms)
+    <span class="t-ok">✓</span> dependency-check      (1.2 s)
+  Phase 3
+    <span class="t-ok">✓</span> synthesiser           (3.2 s)
+
+  <span class="t-orange">▶</span> firing <span class="t-cyan">implementer</span> with briefing (4.1 KB)</pre>
+      </article>
+
+      <!-- Demo: Goal -->
+      <article id="demo-goal" class="demo-panel" role="tabpanel">
+        <h3>Autonomous Goal &mdash; Plan → Code → Test → Evaluate, persistent across restarts</h3>
+        <p class="demo-desc">
+          Define an objective, kick off the runner, walk away. Every turn the
+          auditor inspects <code>git status</code>, counts new tests, optionally
+          runs your verify command, and decides
+          <em>Continue / Complete / Block</em>. State is checkpointed under
+          <code>memory/projects/&lt;name&gt;/goal.json</code> &mdash; quit
+          the REPL, the runner survives.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[my-app]</span> agenit&gt; /goal Migrate the entire codebase from JavaScript to TypeScript
+
+  <span class="t-ok">✓</span> GOAL-20260509010244-8a11 created
+  objective:    Migrate the entire codebase from JavaScript to TypeScript
+  turn budget:  50
+
+<span class="t-cyan">[my-app]</span> agenit&gt; /goal start
+  <span class="t-orange">▶</span> Autonomous runner started for GOAL-20260509010244-8a11
+
+<span class="t-cyan">[my-app]</span> agenit&gt; /goal status
+  ── <span class="t-orange">Goal Status</span> ──────────────────────────────────────
+  state:          <span class="t-cyan">Active</span>
+  turns:          7/50 (43 remaining)
+  files touched:  19
+  tests added:    3
+  errors logged:  0
+  runner:         <span class="t-ok">running</span></pre>
+      </article>
+
+      <!-- Demo: Spec-Kit -->
+      <article id="demo-speckit" class="demo-panel" role="tabpanel">
+        <a id="speckit-flow" class="anchor-offset" aria-hidden="true"></a>
+        <h3>Spec-Kit (SDD) &mdash; turn a fuzzy idea into structured specs</h3>
+        <p class="demo-desc">
+          Run before the pipeline when you don't yet have requirements. The
+          9-phase flow produces <code>spec.md</code>, <code>plan.md</code>,
+          and <code>tasks.md</code> under <code>.specify/specs/&lt;feature&gt;/</code>.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[my-app]</span> agenit&gt; /speckit run add team workspaces
+
+  <span class="t-orange">▶ phase 1</span> specify       → <span class="t-cyan">spec.md</span>
+    <span class="t-dim">user stories: 4 · acceptance criteria: 14 · NFRs: 5</span>
+
+  <span class="t-orange">▶ phase 2</span> clarify       → 3 ambiguities resolved
+    <span class="t-dim">"team" → 2-50 members, single owner</span>
+    <span class="t-dim">"invite" → email-only (SSO deferred)</span>
+
+  <span class="t-orange">▶ phase 3</span> plan          → <span class="t-cyan">plan.md</span>
+    <span class="t-dim">stack: existing Next.js + Postgres · new tables: teams, memberships</span>
+
+  <span class="t-orange">▶ phase 4</span> tasks         → <span class="t-cyan">tasks.md</span> (18 ordered tasks)
+
+<span class="t-cyan">[my-app]</span> agenit&gt; /speckit implement
+  <span class="t-orange">▶</span> executing tasks.md via implementer skill</pre>
+      </article>
+
+      <!-- Demo: Codedigest -->
+      <article id="demo-codedigest" class="demo-panel" role="tabpanel">
+        <h3>Code search &mdash; local BM25 + symbol search, no cloud calls</h3>
+        <p class="demo-desc">
+          Index a repo once, search forever. The bundled <code>codedigest</code>
+          package walks <code>src/</code>-style paths with a .gitignore-aware
+          filter, regex-extracts function / class chunks, and stores BM25 scores
+          in JSON. No native deps, no model download.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[my-app]</span> agenit&gt; /codedigest index ./src
+  <span class="t-ok">✓</span> walked 412 files
+  <span class="t-ok">✓</span> extracted 2 074 chunks
+  <span class="t-ok">✓</span> stored at <span class="t-dim">memory/projects/my-app/codedigest_my-app.json</span>
+
+<span class="t-cyan">[my-app]</span> agenit&gt; /codedigest search "rate limiter"
+
+  <span class="t-orange">1.</span> <span class="t-cyan">src/lib/rate-limit.ts:42</span>     <span class="t-dim">score 9.21</span>
+     <span class="t-dim">export const tokenBucket = (capacity, refillPerSec) =&gt; { ... }</span>
+  <span class="t-orange">2.</span> <span class="t-cyan">src/middleware/api.ts:88</span>    <span class="t-dim">score 6.54</span>
+  <span class="t-orange">3.</span> <span class="t-cyan">tests/rate-limit.spec.ts:14</span> <span class="t-dim">score 5.08</span></pre>
+      </article>
+
+      <!-- Demo: Hardware -->
+      <article id="demo-debug" class="demo-panel" role="tabpanel">
+        <h3>Hardware bridge &mdash; JLink, CAN/LIN, Saleae from inside the REPL</h3>
+        <p class="demo-desc">
+          The <code>hw-debugger</code> skill auto-activates on hardware-flavoured
+          prompts. It calls Python tools in <code>.flow/tools/</code> via the
+          bundled venv. Optional &mdash; ignore it entirely if you're not on
+          embedded.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[stm32-can]</span> agenit&gt; analyze trace.asc for CAN timeout errors
+
+  <span class="t-orange">→</span> <span class="t-cyan">hw-debugger</span> skill activates
+  <span class="t-orange">→</span> running <span class="t-dim">.venv/bin/python3 .flow/tools/lin_can_tool.py trace.asc</span>
+
+  <span class="t-orange">CAN timeout report</span>
+  ──────────────────────────────────────────────
+  frame ID    0x101  EngineState
+  expected    20 ms cycle
+  observed    342 ms gap at 12.418 s
+  hypothesis  ISR latency on EngineState publisher
+
+  <span class="t-orange">→</span> writing <span class="t-cyan">trace_analysis.md</span></pre>
+      </article>
+
+      <!-- Demo: Marketplace -->
+      <article id="demo-market" class="demo-panel" role="tabpanel">
+        <h3>Marketplace &mdash; curated registry + live Claude Code ecosystem</h3>
+        <p class="demo-desc">
+          <code>/marketplace</code> aggregates the curated AgenIT registry and
+          the live Claude Code marketplace. Skills, MCP servers, agents, slash
+          commands, and hooks are translated into Gemini-compatible artefacts
+          at install time.
+        </p>
+        <pre class="terminal"><span class="t-cyan">[my-app]</span> agenit&gt; /marketplace search "code review"
+
+  <span class="t-orange">curated</span>
+    code-review              MISRA + style + security review (1.2 KB)
+
+  <span class="t-orange">claude-code/anthropics</span>
+    cc/code-review           Anthropic's code-review plugin (3 skills, 1 MCP)
+    cc/security-review       OWASP-aware diff scanner (2 skills)
+
+<span class="t-cyan">[my-app]</span> agenit&gt; /marketplace install cc/code-review
+  <span class="t-ok">✓</span> 3 skills → <span class="t-dim">.gemini/skills/</span>
+  <span class="t-ok">✓</span> 1 MCP server → <span class="t-dim">~/.gemini/settings.json</span></pre>
+      </article>
+    </section>
+
+</section>
+<section id="screenshots" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 05b</span> Screenshots</h2>
+      <p class="section-sub">Real captures from the REPL &mdash; the widget rail, Debug Mode trace tree, expanded panes, and the autonomous-goal workflow. Click any image to open full-size.</p>
+
+      <div class="shots-grid">
+        <figure class="shot">
+          <a href="screenshots/repl-overview.jpeg" target="_blank" rel="noopener">
+            <img src="screenshots/repl-overview.jpeg" alt="Full AgenIT REPL — left rail (Tasks · Goals · Approvals · HW Status), chat stream with /debug on and /color pink, right rail (Agents · Recipes · Harnesses · Debug · Job Tray · Soul · CodeDigest)" loading="lazy"/>
+          </a>
+          <figcaption>
+            <strong>Full REPL.</strong> Left rail: Tasks · Goals · Approvals · HW Status. Centre: chat stream &mdash; <code>/debug on</code> flips the trace recorder, <code>/color pink</code> retones the accent live. Right rail: Agents · Recipes · Harnesses · Debug · Job Tray · Soul · CodeDigest.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <a href="screenshots/debug-expanded.jpeg" target="_blank" rel="noopener">
+            <img src="screenshots/debug-expanded.jpeg" alt="Debug widget expanded — trace tree showing chain → llm:gemini-cli with inputs panel" loading="lazy"/>
+          </a>
+          <figcaption>
+            <strong>Debug Mode &mdash; trace tree.</strong> Every chat / LLM / tool call captured as a typed Run. Expand to see the chain, child LLM spans, timing, and full input / output payloads. Pause-before gates step through risky tools; runs are replayable.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <a href="screenshots/codedigest-graph.jpeg" target="_blank" rel="noopener">
+            <img src="screenshots/codedigest-graph.jpeg" alt="CodeDigest expanded — search results for PMC with CALLERS, FUNCTION, CALLEES panels" loading="lazy"/>
+          </a>
+          <figcaption>
+            <strong>CodeDigest with call graph.</strong> Local BM25 hit + the LSP-derived call graph in one view: callers above, the function body in the middle, callees below. <code>b</code> rebuilds, <code>/</code> searches, <kbd>Tab</kbd> cycles panes.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <a href="screenshots/recipes-expanded.jpeg" target="_blank" rel="noopener">
+            <img src="screenshots/recipes-expanded.jpeg" alt="Recipes widget expanded — 3 loaded, 2 enabled, log goal failures recipe shown with goal.tick.failed trigger" loading="lazy"/>
+          </a>
+          <figcaption>
+            <strong>Recipes &mdash; cross-widget orchestration.</strong> TOML-defined event handlers on the <code>tuiBus</code>. <em>log goal failures</em> fires on <code>goal.tick.failed</code>; <em>escalate to hw-debugger</em> fires on <code>hw.probe.failed</code>; <em>notify when agent fails</em> on <code>agent.failed</code>. <kbd>t</kbd> test-fires, <kbd>e</kbd> opens <code>recipes.toml</code>.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <a href="screenshots/tasks-expanded.jpeg" target="_blank" rel="noopener">
+            <img src="screenshots/tasks-expanded.jpeg" alt="Tasks widget expanded — 23 tasks from Spec-Kit tasks.md with toggle / priority / comment / assign / delete / AI-suggest actions" loading="lazy"/>
+          </a>
+          <figcaption>
+            <strong>Tasks widget.</strong> Live-tied to the active Spec-Kit <code>tasks.md</code>. <kbd>t</kbd> toggles done, <kbd>p</kbd> sets priority, <kbd>c</kbd> adds a comment, <kbd>n</kbd> creates a new task, <kbd>s</kbd> asks the AI curator to suggest the next batch.
+          </figcaption>
+        </figure>
+
+        <figure class="shot">
+          <a href="screenshots/goal-start.jpeg" target="_blank" rel="noopener">
+            <img src="screenshots/goal-start.jpeg" alt="Goal widget — Turn 1 of 50 in Planning state, /goal start kicks off the autonomous runner, slash command autocomplete suggests /overnight" loading="lazy"/>
+          </a>
+          <figcaption>
+            <strong>Autonomous goal.</strong> <code>/goal "implement can driver…"</code> creates a long-lived Plan → Code → Test → Evaluate loop. Right-rail Goal widget shows turn budget, current phase, and a <em>while-you-wait</em> microcopy. Autocomplete surfaces <code>/overnight</code> for unattended multi-iteration runs.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+</section>
+<section id="pipeline" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 06</span> The Pipeline</h2>
+      <pre class="diagram">
+Requirements ──► Architecture ──► Code ──► Testing ──► Critic ──► Audit
+     ▲                                                              │
+     └──────────────── @req REQ-NNN traceability ◄──────────────────┘</pre>
+      <p class="section-sub centered">
+        Profiles re-map stage names and standards to your domain.
+        The mechanics are the same.
+      </p>
+      <div class="profile-table">
+        <table>
+          <thead><tr><th>Profile</th><th>Standards &amp; frameworks</th></tr></thead>
+          <tbody>
+            <tr><td><strong>generic</strong></td><td>Language-agnostic starter &mdash; copy and customise. The default.</td></tr>
+            <tr><td><strong>web</strong></td><td>TypeScript / React / Node, OWASP Top 10, Jest / Playwright, WCAG 2.2 AA.</td></tr>
+            <tr><td><strong>embedded</strong></td><td>MISRA C, FreeRTOS, Doxygen, Unity / CppUTest, REQ-NNN tags.</td></tr>
+            <tr><td><strong>automotive</strong></td><td>ASPICE V-Model (SWE.1–SWE.6), MISRA C:2012, ISO 26262 / ASIL, AUTOSAR.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+</section>
+
+<!-- ───── Marketplace, MCP & install support ───── -->
+<section id="extend" class="doc-section extend-section">
+  <section class="panel-inner">
+    <h2 class="section-title"><span>// 06b</span> Extend it &mdash; Marketplace, MCP, Plugins</h2>
+    <p class="section-sub">
+      AgenIT installs more than its own bundle. One CLI surface aggregates
+      a <strong>curated AgenIT registry</strong>, the <strong>live Claude
+      Code marketplace</strong>, the <strong>public MCP Registry</strong>,
+      and <strong>arbitrary GitHub URLs</strong>. Skills, MCP servers,
+      agents, and plugins land in the same canonical paths the Harness
+      widget uses &mdash; so they auto-activate just like first-party ones.
+    </p>
+
+    <div class="extend-grid">
+      <article class="extend-card">
+        <header><span class="extend-num">A</span><h3>Curated AgenIT registry</h3></header>
+        <p>The opinionated set we ship with: <code>diagnose</code>, <code>tdd</code>, <code>prototype</code>, <code>grill-with-docs</code>, <code>triage</code>, <code>to-prd</code>, <code>zoom-out</code>, &hellip; All MIT-licensed, all <code>@req REQ-SKILL-NNN</code>-tagged.</p>
+        <pre class="ex-block">/marketplace list
+/marketplace install diagnose</pre>
+      </article>
+
+      <article class="extend-card">
+        <header><span class="extend-num">B</span><h3>Claude Code marketplace</h3></header>
+        <p>Any Claude Code plugin from GitHub. The installer translates Claude Code skill bundles into Gemini-compatible artefacts on install, so the same plugin works on either backend.</p>
+        <pre class="ex-block">/marketplace cc-browse anthropics/claude-code-plugins
+/marketplace install cc/code-review
+/marketplace add https://github.com/&lt;owner&gt;/&lt;repo&gt;</pre>
+      </article>
+
+      <article class="extend-card">
+        <header><span class="extend-num">C</span><h3>Live MCP Registry</h3></header>
+        <p>Search and probe the public Model Context Protocol registry without leaving the REPL. Handshake-check a server before adopting it; introspect its tool surface; invoke a tool inline.</p>
+        <pre class="ex-block">/marketplace mcp search "github"
+/marketplace mcp servers
+/marketplace mcp ping &lt;server&gt;
+/marketplace mcp tools &lt;server&gt;
+/marketplace mcp call &lt;srv&gt;:&lt;tool&gt; '{"q":"agenit"}'</pre>
+      </article>
+
+      <article class="extend-card">
+        <header><span class="extend-num">D</span><h3>Plugins from any GitHub URL</h3></header>
+        <p>For plugins that aren't in either marketplace, point at a repo and the installer fetches, validates, and registers it with the active backend.</p>
+        <pre class="ex-block">/plugin install https://github.com/&lt;owner&gt;/&lt;repo&gt;
+/plugin list
+/plugin info &lt;name&gt;
+/plugin remove &lt;name&gt;</pre>
+      </article>
+    </div>
+
+    <h3 class="extend-h3">How install really works</h3>
+    <ol class="extend-flow">
+      <li><strong>Discover</strong> &mdash; <code>/marketplace search &lt;q&gt;</code> queries all four sources (curated · Claude Code · MCP Registry · already-installed) and merges the results.</li>
+      <li><strong>Resolve</strong> &mdash; the installer figures out the artefact type (skill, MCP server, plugin) and finds its canonical install path.</li>
+      <li><strong>Validate</strong> &mdash; for skills it checks the YAML frontmatter; for MCP entries it dry-runs the launch command; for Python tools it checks the <code>run(payload)</code> entrypoint.</li>
+      <li><strong>Security gate</strong> &mdash; the <strong>slopsquatting hook</strong> blocks suspicious package names; <strong>MCP server pinning</strong> records exact versions so a future install can't silently swap the binary; <strong>skill audit</strong> flags skills that override existing ones.</li>
+      <li><strong>Atomic merge</strong> &mdash; <code>.mcp.json</code> is updated via temp-file + rename so other servers survive; <code>AGENTS.md</code> de-dups blocks by name; <code>.gemini/skills/</code> writes are sandboxed by name.</li>
+      <li><strong>Persist</strong> &mdash; <code>/marketplace installed</code> shows the current snapshot; <code>/marketplace update</code> refreshes registry caches; <code>/marketplace remove &lt;id&gt;</code> reverses the install with the backup it took.</li>
+    </ol>
+
+    <h3 class="extend-h3">Air-gapped &amp; pinned installs</h3>
+    <p>
+      For environments without outbound network access, AgenIT runs in
+      <code>--air-gapped</code> mode &mdash; only locally-cached registries
+      are consulted, MCP servers are pinned to recorded versions, and the
+      slopsquatting hook treats any unfamiliar package name as a hard
+      block. Pair with a vendored registry tarball for full
+      reproducibility:
+    </p>
+    <pre class="ex-block">agenit --air-gapped         # session-wide
+/marketplace install &lt;id&gt;   # uses local cache only
+/marketplace update --offline  # rebuild caches from local mirror</pre>
+
+    <h3 class="extend-h3">Where the artefacts land</h3>
+    <table class="cmd-table extend-paths">
+      <tr><th>Source</th><th>Artefact</th><th>Lands at</th></tr>
+      <tr><td>Curated · Claude Code</td><td>Skill</td><td><code>.gemini/skills/&lt;name&gt;/SKILL.md</code></td></tr>
+      <tr><td>MCP Registry · Claude Code</td><td>MCP server</td><td>merged into <code>.mcp.json</code></td></tr>
+      <tr><td>Claude Code · GitHub URL</td><td>Plugin (agent)</td><td>block in <code>AGENTS.md</code></td></tr>
+      <tr><td>Curated</td><td>Python tool</td><td><code>.flow/tools/&lt;name&gt;.py</code> (chmod 0755)</td></tr>
+      <tr><td>Any source</td><td>Slash command</td><td><code>.gemini/extensions/&lt;name&gt;/gemini-extension.json</code></td></tr>
+    </table>
+
+    <p class="extend-foot">
+      Full reference: <a href="#commands">command tables below</a> ·
+      <a href="wiki.html">searchable wiki</a> ·
+      <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/marketplace.md" target="_blank" rel="noopener"><code>docs/marketplace.md</code></a>.
+    </p>
+  </section>
+</section>
+
+<section id="commands" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 07</span> Complete Command Reference</h2>
+      <p class="section-sub">Every slash command, grouped. Type <code>/help</code> in the REPL for the same list inline &mdash; or use the <a href="wiki.html"><strong>searchable wiki</strong></a> for command + subcommand search.</p>
+
+      <a class="wiki-cta" href="wiki.html">
+        <span class="wiki-cta-icon">⌕</span>
+        <span class="wiki-cta-text">
+          <strong>Open the Wiki</strong>
+          <em>Live search across every command, subcommand, flag, and environment variable. Filter by category, press <kbd>/</kbd> to search.</em>
+        </span>
+        <span class="wiki-cta-arrow">→</span>
+      </a>
+
+      <div class="cmd-grid">
+        <div class="cmd-block">
+          <h3>Project &amp; session</h3>
+          <table class="cmd-table">
+            <tr><td><code>/init [name] [--profile X]</code></td><td>Initialise / repair project config.</td></tr>
+            <tr><td><code>/unflow</code></td><td>Remove AgenIT config &mdash; restore vanilla Gemini CLI.</td></tr>
+            <tr><td><code>/project &lt;name&gt;</code></td><td>Switch or create active project.</td></tr>
+            <tr><td><code>/yolo on|off|auto_edit</code></td><td>Toggle approval mode for tool calls.</td></tr>
+            <tr><td><code>/jobs [&lt;id&gt;]</code></td><td>List / inspect / stop background jobs.</td></tr>
+            <tr><td><code>/configure [hardware]</code></td><td>JLink + Saleae detection, env validation.</td></tr>
+            <tr><td><code>/feature &lt;description&gt;</code></td><td>Start a feature workflow.</td></tr>
+            <tr><td><code>/help</code> · <code>/clear</code> · <code>/exit</code></td><td>Standard.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Memory &amp; soul</h3>
+          <table class="cmd-table">
+            <tr><td><code>/soul</code></td><td>Show <code>.flow/soul.md</code> &mdash; engineer-wide preferences.</td></tr>
+            <tr><td><code>/memory</code></td><td>Show what context is being injected this session.</td></tr>
+            <tr><td><code>/worktree &lt;branch&gt;</code></td><td>Isolated git branch for risky work.</td></tr>
+            <tr><td><code>/undo</code></td><td>Restore the most recent file snapshot.</td></tr>
+            <tr><td><code>/undo list</code></td><td>Show last 10 snapshots.</td></tr>
+            <tr><td><code>/undo &lt;commandId&gt;</code></td><td>Restore a specific snapshot.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Backends &amp; failover <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/backend</code></td><td>Diagnostic table &mdash; detected / installed / active backends + current model.</td></tr>
+            <tr><td><code>/backend models &lt;provider&gt;</code></td><td>List available models for a backend (<code>gemini-cli</code>, <code>claude</code>, <code>claude-cli</code>, <code>openai</code>, <code>ollama</code>).</td></tr>
+            <tr><td><code>/backend chain &lt;tier&gt;</code></td><td>Show the cross-backend failover chain for a routing tier.</td></tr>
+            <tr><td><code>agenit init --target claude</code></td><td>Seed <code>.claude/</code> assets alongside <code>.gemini/</code> (shared <code>.flow/hooks/</code>).</td></tr>
+            <tr><td><code>agenit init --target both</code></td><td>Seed assets for both Gemini and Claude CLI.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>VS Code extension <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><kbd>Ctrl+Alt+A</kbd> / <kbd>⌘⌥A</kbd></td><td>Open the AgenIT compact panel.</td></tr>
+            <tr><td><kbd>Ctrl+Alt+Shift+A</kbd> / <kbd>⌘⌥⇧A</kbd></td><td>Open the immersive view (full-screen webview).</td></tr>
+            <tr><td><kbd>Ctrl+Alt+/</kbd> / <kbd>⌘⌥/</kbd></td><td>Slash command palette &mdash; fuzzy-find 50+ commands.</td></tr>
+            <tr><td><code>AgenIT: Restart Daemon</code></td><td>Restart the spawned <code>agenit serve</code> after an <code>agenit</code> upgrade.</td></tr>
+            <tr><td><code>AgenIT: Show Logs</code></td><td>Open the Output Channel with raw <code>agenit serve</code> stdio.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Web UI &amp; design <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/web start [--port N]</code></td><td>Launch the browser control SPA (Chat · Design · Goal · …).</td></tr>
+            <tr><td><code>/web stop</code></td><td>Stop the control server.</td></tr>
+            <tr><td><code>/serve [--port N]</code></td><td>Run the control SPA <em>inside</em> the REPL process — shared run-registry, live Debug tab.</td></tr>
+            <tr><td><code>/export &lt;file.html&gt; --to pdf</code></td><td>Convert a design HTML to PDF (puppeteer) or PPTX (pptxgenjs).</td></tr>
+            <tr><td><code>/export &lt;file&gt; --to html --out &lt;path&gt;</code></td><td>Copy / re-emit HTML to a chosen path.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Debug Mode &amp; harnesses <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/debug on</code> · <code>/debug off</code></td><td>Toggle the trace tree — every chat / LLM / tool / agent call becomes a typed Run.</td></tr>
+            <tr><td><code>/debug status</code></td><td>Show current debug state + active gates.</td></tr>
+            <tr><td><code>/debug pause &lt;tool&gt;</code></td><td>Pause before a given tool fires (step-through gating).</td></tr>
+            <tr><td><code>/debug release &lt;runId&gt;</code></td><td>Release a paused run.</td></tr>
+            <tr><td><code>/debug replay &lt;runId&gt;</code></td><td>Re-run a captured tool invocation.</td></tr>
+            <tr><td><kbd>Ctrl+W</kbd></td><td>Enter widget-navigation mode (keyboard-driven rail).</td></tr>
+            <tr><td><kbd>Ctrl+W</kbd> → <strong>Harnesses</strong> → <kbd>n</kbd></td><td>Open the Harness widget &amp; pick a kind. (TUI-only — there is no <code>/harness</code> slash command.) See <a href="#harness">the Harness section</a>.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Critic &amp; PR review <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/diff-walk [--base &lt;ref&gt;]</code></td><td>Walk <code>git diff</code> hunks; run <code>swe6-critic</code> per hunk; severity-sorted report.</td></tr>
+            <tr><td><code>/diff-walk --inventory-only</code></td><td>List hunks without critiquing.</td></tr>
+            <tr><td><code>/speckit critique [&lt;feature-id&gt;]</code></td><td>Stress-test a spec for vague verbs, contradictions, untestable claims → <code>critique.md</code>.</td></tr>
+            <tr><td><code>/pr-autofix &lt;pr#&gt;</code></td><td>Critic per hunk + apply deterministic patches with backup branch + telemetry.</td></tr>
+            <tr><td><code>/pr-autofix &lt;pr#&gt; --confirm</code></td><td>Apply the patches non-interactively.</td></tr>
+            <tr><td><code>/pr-metrics [--since &lt;iso&gt;]</code></td><td>AI-vs-human cohort report (writes / cost / tool calls / autofix).</td></tr>
+            <tr><td><code>/pr-metrics --json</code></td><td>Machine-readable output for dashboards.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Agile · OPA · QA · PMO <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/agile enable</code> · <code>/agile disable</code></td><td>Toggle the Agile persona layer (Scrum ceremonies + crew).</td></tr>
+            <tr><td><code>/agile status</code></td><td>Sprint state, cadence, token budget, ceremony worker.</td></tr>
+            <tr><td><code>/agile sprint start</code> · <code>sprint status</code></td><td>Manually open / inspect the active sprint.</td></tr>
+            <tr><td><code>/agile next-sprint</code></td><td>Close the current sprint, archive metrics, open the next.</td></tr>
+            <tr><td><code>/agile digest</code></td><td>Per-project digest: ceremonies fired, blockers, velocity. <span class="badge">NEW</span></td></tr>
+            <tr><td><code>/agile burndown</code></td><td>ASCII burndown chart for the active sprint. <span class="badge">NEW</span></td></tr>
+            <tr><td><code>/opa status</code></td><td>List Organizational Process Asset categories + counts.</td></tr>
+            <tr><td><code>/opa enable &lt;cat&gt;</code> · <code>disable &lt;cat&gt;</code></td><td>Toggle a category (policies, templates, lessons, …).</td></tr>
+            <tr><td><code>/opa upload &lt;path&gt;</code></td><td>Ingest a policy / template / lesson file into the OPA store.</td></tr>
+            <tr><td><code>/opa reset &lt;cat&gt;</code></td><td>Clear a category back to defaults.</td></tr>
+            <tr><td><code>/opa init</code></td><td>Seed the OPA store with the bundled defaults.</td></tr>
+            <tr><td><code>/qa [--goal &lt;id&gt;] [--spec &lt;path&gt;] [--fix]</code></td><td>Verified-deliverables &amp; scope gate → <code>qa-report.md</code>. LLM-evaluates acceptance criteria. <span class="badge">NEW</span></td></tr>
+            <tr><td><code>/pmo status [--project &lt;name&gt;]</code></td><td>Portfolio RAG status across all active projects.</td></tr>
+            <tr><td><code>/pmo report</code></td><td>Long-form PMO report (budget, velocity, blockers).</td></tr>
+            <tr><td><code>/pmo forecast [--backlog &lt;N&gt;]</code></td><td>Velocity-based completion forecast for the backlog.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Migration <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/migrate review &lt;file.sql&gt;</code></td><td>Review a single SQL migration for safety.</td></tr>
+            <tr><td><code>/migrate review --dir &lt;dir&gt; [--rowcounts &lt;file&gt;]</code></td><td>Review every migration in a directory; weight by row counts.</td></tr>
+            <tr><td><code>/migrate gemini-plan list [--cache &lt;dir&gt;]</code></td><td>List raw Gemini plan-mode artefacts found on disk. <span class="badge">NEW</span></td></tr>
+            <tr><td><code>/migrate gemini-plan copy &lt;path|--latest&gt; [--slug &lt;name&gt;] [--force]</code></td><td>Copy a plan-mode artefact into <code>.specify/specs/&lt;slug&gt;/</code> for the AgenIT pipeline.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Overnight loop <span class="badge">NEW</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/overnight -- &lt;shell cmd&gt;</code></td><td>Run a loop with per-iter git commits + rollback.</td></tr>
+            <tr><td><code>/overnight --max-iter N -- &lt;cmd&gt;</code></td><td>Cap iterations (default 50).</td></tr>
+            <tr><td><code>/overnight --budget-tokens N -- &lt;cmd&gt;</code></td><td>Stop once a tick reports tokensSpent ≥ N.</td></tr>
+            <tr><td><code>/overnight --parallel N -- &lt;cmd&gt;</code></td><td>Run N worktree-isolated copies in parallel.</td></tr>
+            <tr><td><code>/overnight --no-commit -- &lt;cmd&gt;</code></td><td>Dry-run; no commits, no rollback.</td></tr>
+            <tr><td><code>/overnight --allow-dirty -- &lt;cmd&gt;</code></td><td>Skip the clean-tree precondition.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Pipeline (V-Model)</h3>
+          <table class="cmd-table">
+            <tr><td><code>/run &lt;task&gt;</code></td><td>Full pipeline (Req → Arch → Code → Test → Audit).</td></tr>
+            <tr><td><code>/swe1 &lt;task&gt;</code></td><td>Requirements stage (EARS, REQ-NNN / SWR-NNN).</td></tr>
+            <tr><td><code>/swe2 &lt;task&gt;</code></td><td>Architecture stage (HLD, PlantUML).</td></tr>
+            <tr><td><code>/swe4 &lt;task&gt;</code></td><td>Implementation stage.</td></tr>
+            <tr><td><code>/swe5 &lt;task&gt;</code></td><td>Testing stage.</td></tr>
+            <tr><td><code>/swe6 &lt;task&gt;</code></td><td>Critic stage — <code>swe6-critic</code> stress-tests prior output. <span class="badge">NEW</span></td></tr>
+            <tr><td><code>/audit</code></td><td>Traceability + compliance report.</td></tr>
+            <tr><td><code>/traceability</code></td><td>Show the @req graph.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Spec-Kit (SDD)</h3>
+          <table class="cmd-table">
+            <tr><td><code>/speckit run &lt;task&gt;</code></td><td>specify → plan → tasks in one shot.</td></tr>
+            <tr><td><code>/speckit specify &lt;task&gt;</code></td><td>User stories + acceptance criteria → <code>spec.md</code>.</td></tr>
+            <tr><td><code>/speckit clarify</code></td><td>Resolve ambiguities.</td></tr>
+            <tr><td><code>/speckit plan [stack]</code></td><td>Technical architecture → <code>plan.md</code>.</td></tr>
+            <tr><td><code>/speckit tasks</code></td><td>Ordered task list → <code>tasks.md</code>.</td></tr>
+            <tr><td><code>/speckit implement</code></td><td>Execute <code>tasks.md</code>.</td></tr>
+            <tr><td><code>/speckit checklist</code></td><td>Generate review checklist.</td></tr>
+            <tr><td><code>/speckit analyze</code></td><td>Cross-check spec / plan / tasks consistency.</td></tr>
+            <tr><td><code>/speckit issues</code></td><td>Open GitHub issues from tasks.</td></tr>
+            <tr><td><code>/speckit constitution</code></td><td>Load / edit project constitution.</td></tr>
+            <tr><td><code>/speckit init</code></td><td>Initialise Spec-Kit in this project.</td></tr>
+            <tr><td><code>/speckit branch</code></td><td>Create a feature branch from spec.</td></tr>
+            <tr><td><code>/speckit commit</code></td><td>Stage + commit current spec/plan/tasks.</td></tr>
+            <tr><td><code>/speckit status</code></td><td>List all <code>.specify/specs/</code> features.</td></tr>
+            <tr><td><code>/speckit export-to-swe1</code></td><td>Seed pipeline requirements from spec.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Mission Squad</h3>
+          <table class="cmd-table">
+            <tr><td><code>/squad implement &lt;task&gt;</code></td><td>Deterministic helpers → implementer.</td></tr>
+            <tr><td><code>/squad implement-agentic &lt;task&gt;</code></td><td>Same shape; every helper is its own LLM sub-agent.</td></tr>
+            <tr><td><code>/squad debug &lt;task&gt;</code></td><td>Trace + code + lint pre-flight → <code>hw-debugger</code>.</td></tr>
+            <tr><td><code>/squad review &lt;task&gt;</code></td><td>Style + req + code → reviewer.</td></tr>
+            <tr><td><code>/squad test &lt;task&gt;</code></td><td>Req + code + memory → tester.</td></tr>
+            <tr><td><code>/squad requirements &lt;task&gt;</code></td><td>Single-phase context gather → requirements.</td></tr>
+            <tr><td><code>/squad architecture &lt;task&gt;</code></td><td>Req + memory + headers → architect.</td></tr>
+            <tr><td><code>/squad &lt;template&gt;-agentic &lt;task&gt;</code></td><td>LLM-per-slot variant of any template.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Autonomous Goals</h3>
+          <table class="cmd-table">
+            <tr><td><code>/goal &lt;objective&gt; [--force]</code></td><td>Create / replace the active goal.</td></tr>
+            <tr><td><code>/goal</code></td><td>Short status (id, state, turns).</td></tr>
+            <tr><td><code>/goal status</code></td><td>Verbose dashboard.</td></tr>
+            <tr><td><code>/goal log [n]</code></td><td>Audit log (or last n entries).</td></tr>
+            <tr><td><code>/goal pause</code> · <code>resume</code></td><td>Flip state mid-run.</td></tr>
+            <tr><td><code>/goal start</code></td><td>Spawn the autonomous runner.</td></tr>
+            <tr><td><code>/goal start --interactive</code></td><td>Launch with an interactive turn-budget / cadence prompt. <span class="badge">NEW</span></td></tr>
+            <tr><td><code>/goal stop</code></td><td>Cancel the runner cleanly.</td></tr>
+            <tr><td><code>/goal tick</code></td><td>Step a single turn manually.</td></tr>
+            <tr><td><code>/goal budget &lt;n&gt;</code></td><td>Extend the turn budget.</td></tr>
+            <tr><td><code>/goal clear</code></td><td>Archive to <code>goals_archive.md</code>.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Code search</h3>
+          <table class="cmd-table">
+            <tr><td><code>/codedigest index &lt;path&gt;</code></td><td>Build BM25 index for the given path.</td></tr>
+            <tr><td><code>/codedigest search &lt;query&gt;</code></td><td>Top 5 results, ranked.</td></tr>
+            <tr><td><code>/codedigest search &lt;q&gt; --lang c</code></td><td>Filter by language.</td></tr>
+            <tr><td><code>/codedigest search &lt;q&gt; --graph</code></td><td>Attach each hit's direct callers + callees (DKB-style).</td></tr>
+            <tr><td><code>/codedigest graph --use-lsp</code></td><td>Build LSP-derived call graph (clangd / pyright / rust-analyzer).</td></tr>
+            <tr><td><code>/codedigest graph --export svg|dot|html</code></td><td>Render the call graph to Graphviz / SVG / interactive HTML.</td></tr>
+            <tr><td><code>/codedigest status</code></td><td>Show index stats.</td></tr>
+            <tr><td><code>/codedigest clear</code></td><td>Drop the index.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Hardware &amp; debug</h3>
+          <table class="cmd-table">
+            <tr><td><code>/debug &lt;query&gt;</code></td><td>Ad-hoc: JLink registers, CAN/LIN, Saleae, code search.</td></tr>
+            <tr><td><code>/configure hardware</code></td><td>Detect and configure JLink / Saleae.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Marketplace &amp; plugins</h3>
+          <table class="cmd-table">
+            <tr><td><code>/marketplace list</code></td><td>Curated registry + live Claude Code marketplace.</td></tr>
+            <tr><td><code>/marketplace search &lt;q&gt;</code></td><td>Search across all sources.</td></tr>
+            <tr><td><code>/marketplace install &lt;id&gt;</code></td><td>Install by id (use <code>cc/&lt;name&gt;</code> for Claude Code entries).</td></tr>
+            <tr><td><code>/marketplace installed</code></td><td>List installed artifacts.</td></tr>
+            <tr><td><code>/marketplace remove &lt;id&gt;</code></td><td>Uninstall.</td></tr>
+            <tr><td><code>/marketplace update</code></td><td>Refresh registry caches.</td></tr>
+            <tr><td><code>/marketplace add &lt;github-url&gt;</code></td><td>Install any Claude Code plugin from a GitHub URL.</td></tr>
+            <tr><td><code>/marketplace cc-browse [&lt;owner&gt;/&lt;repo&gt;]</code></td><td>Browse a Claude Code marketplace index.</td></tr>
+            <tr><td><code>/marketplace mcp &lt;query&gt;</code></td><td>Search the live MCP Registry API.</td></tr>
+            <tr><td><code>/marketplace mcp servers</code></td><td>List discovered MCP servers.</td></tr>
+            <tr><td><code>/marketplace mcp ping &lt;server&gt;</code></td><td>Live MCP handshake.</td></tr>
+            <tr><td><code>/marketplace mcp tools &lt;server&gt;</code></td><td>List tools an MCP server advertises.</td></tr>
+            <tr><td><code>/marketplace mcp call &lt;srv&gt;:&lt;tool&gt; &lt;json&gt;</code></td><td>Invoke an MCP tool directly.</td></tr>
+            <tr><td><code>/plugin install &lt;github-url&gt;</code></td><td>Install a Claude Code plugin into the active backend.</td></tr>
+            <tr><td><code>/plugin list</code> · <code>info</code> · <code>remove</code></td><td>Manage installed plugins.</td></tr>
+            <tr><td><code>/skills list</code> · <code>install</code> · <code>remove</code></td><td>Manage <code>.gemini/skills/</code>.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Code intelligence &amp; modes</h3>
+          <table class="cmd-table">
+            <tr><td><code>/lsp def &lt;file&gt;:&lt;line&gt;:&lt;col&gt;</code></td><td>Goto definition (clangd / pyright / rust-analyzer).</td></tr>
+            <tr><td><code>/lsp refs &lt;file&gt;:&lt;line&gt;:&lt;col&gt;</code></td><td>Find references.</td></tr>
+            <tr><td><code>/lsp hover &lt;file&gt;:&lt;line&gt;:&lt;col&gt;</code></td><td>Type / docs at point.</td></tr>
+            <tr><td><code>/lsp diag [&lt;file&gt;]</code></td><td>Diagnostics from the language server.</td></tr>
+            <tr><td><code>/plan</code></td><td>Plan mode &mdash; tool calls require approval.</td></tr>
+            <tr><td><code>/build</code></td><td>Switch back to default execute mode.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>Input shortcuts (not slash commands)</h3>
+          <table class="cmd-table">
+            <tr><td><code>@src/file.ts</code></td><td>Insert file content as a code block.</td></tr>
+            <tr><td><code>@src/</code></td><td>Insert directory listing.</td></tr>
+            <tr><td><code>/cmd</code> + <kbd>Tab</kbd></td><td>Fuzzy autocomplete slash commands.</td></tr>
+            <tr><td><code>@</code> + <kbd>Tab</kbd></td><td>File / folder picker.</td></tr>
+            <tr><td><kbd>Ctrl-C</kbd></td><td>Cancel the current turn / squad / goal tick.</td></tr>
+            <tr><td><kbd>Ctrl-U</kbd></td><td>Scroll to earlier messages.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block">
+          <h3>CLI flags (outside the REPL)</h3>
+          <table class="cmd-table">
+            <tr><td><code>agenit init [--name] [--profile X]</code></td><td>Initialise a project.</td></tr>
+            <tr><td><code>agenit init --no-agents</code></td><td>Skip <code>AGENTS.md</code> seed.</td></tr>
+            <tr><td><code>agenit init --no-skills</code></td><td>Skip <code>.gemini/skills/</code> seed.</td></tr>
+            <tr><td><code>agenit init --no-verify</code></td><td>Skip the post-init Gemini-CLI verification.</td></tr>
+            <tr><td><code>agenit --help</code></td><td>Top-level help.</td></tr>
+            <tr><td><code>FLOW_GOAL_TEST_CMD=…</code></td><td>Verify command run after each <code>/goal</code> turn.</td></tr>
+            <tr><td><code>FLOW_GOAL_WORKSPACE=…</code></td><td>Override the workspace the auditor inspects.</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+</section>
+<section id="usecases" class="doc-section">
+    <header class="panel-head">
+      <span class="panel-title">Use Cases</span>
+      <span class="panel-state">(expanded)</span>
+    </header>
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 03</span> Use Cases</h2>
+      <p class="section-sub">Twelve concrete recipes — when to reach for AgenIT, and the exact key-presses to get from prompt to outcome. Each card lists <em>when</em>, <em>steps</em>, <em>what you get</em>, and <em>tips</em>.</p>
+
+      <div class="uc-filter" role="tablist">
+        <button class="uc-chip active" data-uc-filter="all">All</button>
+        <button class="uc-chip" data-uc-filter="onboard">Onboarding</button>
+        <button class="uc-chip" data-uc-filter="build">Build features</button>
+        <button class="uc-chip" data-uc-filter="quality">Quality &amp; review</button>
+        <button class="uc-chip" data-uc-filter="autonomy">Autonomy</button>
+        <button class="uc-chip" data-uc-filter="hw">Hardware</button>
+        <button class="uc-chip" data-uc-filter="vscode">Editor</button>
+        <button class="uc-chip" data-uc-filter="memory">Memory / team</button>
+      </div>
+
+      <div class="uc-grid">
+
+        <!-- 01 First-time onboarding -->
+        <article class="uc-card" data-uc-tags="onboard">
+          <header class="uc-head">
+            <span class="uc-num">01</span>
+            <h3>Onboard a fresh project in 5 minutes</h3>
+            <span class="uc-tag onboard">onboarding</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you've just cloned a repo (or started one) and want AgenIT to know who you are and what the project is before you type your first prompt.</p>
+          <ol class="uc-steps">
+            <li><strong>Authenticate Gemini once</strong> &mdash; <code>gemini</code> in any terminal. Opens a browser for Google OAuth. No API key required.</li>
+            <li><strong>Drop into the project</strong> &mdash; <code>cd ~/projects/my-app</code>.</li>
+            <li><strong>Initialise</strong> &mdash; <code>agenit init</code>. AgenIT auto-detects a profile (<code>web</code>, <code>embedded</code>, <code>automotive</code>, <code>design</code>, <code>generic</code>) from repo markers and seeds <code>.agenit/</code>, <code>.gemini/skills/</code>, and a starter <code>AGENTS.md</code>.</li>
+            <li><strong>Pick a backend</strong> &mdash; the picker shows what's installed (Gemini, Claude CLI, OpenAI, Ollama). Hit Enter to take the default.</li>
+            <li><strong>Run it</strong> &mdash; <code>agenit</code>. The REPL boots; the right rail shows your soul + memory loaded.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a project-specific <code>AGENTS.md</code>, hooks wired into the active backend, and a soul-keeper running in the background to learn your preferences from this session forward.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> <code>agenit init --target both</code> seeds <em>both</em> Gemini and Claude CLI so you can swap mid-session with <code>/backend</code>.</p>
+        </article>
+
+        <!-- 02 Add a new feature with the V-Model -->
+        <article class="uc-card" data-uc-tags="build">
+          <header class="uc-head">
+            <span class="uc-num">02</span>
+            <h3>Build a new feature with the V-Model pipeline</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you have a feature in your head and you want the full Req → Arch → Code → Test → Critic → Audit treatment with traceability tags.</p>
+          <ol class="uc-steps">
+            <li><strong>State the goal in plain English</strong> &mdash; <code>/run add OAuth login flow with Google</code>.</li>
+            <li><strong>Watch the stages light up</strong> &mdash; the left-rail pipeline widget shows Req → Arch → Code → Test → Critic → Audit, one at a time.</li>
+            <li><strong>Approve gates</strong> &mdash; between stages, AgenIT pauses for your review. Type <code>y</code> or use <code>/yolo on</code> to auto-approve.</li>
+            <li><strong>Inspect traceability</strong> &mdash; <code>/traceability</code> shows every <code>SWR-NNN</code> requirement linked to its code (via <code>@req</code> tags) and tests.</li>
+            <li><strong>Audit at the end</strong> &mdash; <code>/audit</code> prints coverage, orphan tests, and (for automotive) the ASPICE checklist.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> <code>requirements.md</code>, <code>architecture.md</code>, edits to your code with <code>@req</code> tags, fresh tests, and a clean audit report &mdash; all linked.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> for big features, run <code>/speckit run &lt;task&gt;</code> first to produce <code>spec.md</code> / <code>plan.md</code> / <code>tasks.md</code>, then <code>/speckit export-to-swe1</code> seeds the pipeline.</p>
+        </article>
+
+        <!-- 03 Spec-driven development -->
+        <article class="uc-card" data-uc-tags="build quality">
+          <header class="uc-head">
+            <span class="uc-num">03</span>
+            <h3>Turn a fuzzy idea into a real spec (SDD)</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> a stakeholder gives you a vague request ("add team workspaces") and you want a structured spec, plan, and task list before writing code.</p>
+          <ol class="uc-steps">
+            <li><strong>Kick off Spec-Kit</strong> &mdash; <code>/speckit run add team workspaces</code>. Runs specify → clarify → plan → tasks.</li>
+            <li><strong>Resolve ambiguities</strong> &mdash; the <code>clarify</code> phase asks you direct questions ("'team' = how many members? single owner?"). Answer them inline.</li>
+            <li><strong>Stress-test the spec</strong> &mdash; <code>/speckit critique</code> looks for vague verbs, contradictions, untestable claims; writes <code>critique.md</code>.</li>
+            <li><strong>Implement</strong> &mdash; <code>/speckit implement</code> walks <code>tasks.md</code> task-by-task; each task ticks off in the Tasks widget.</li>
+            <li><strong>Hand off to V-Model</strong> &mdash; <code>/speckit export-to-swe1</code> seeds <code>requirements.md</code> for <code>/run</code>.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a folder under <code>.specify/specs/&lt;feature&gt;/</code> containing <code>spec.md</code>, <code>plan.md</code>, <code>tasks.md</code>, <code>critique.md</code> &mdash; plus running code.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> <code>/speckit issues</code> opens GitHub issues from the task list (needs <code>gh</code> auth).</p>
+        </article>
+
+        <!-- 04 Mission Squad: parallel context gathering -->
+        <article class="uc-card" data-uc-tags="build">
+          <header class="uc-head">
+            <span class="uc-num">04</span>
+            <h3>Fan out helpers before a hard change</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> the change touches multiple files, several requirements, an unfamiliar module, and you'd burn 30 minutes manually gathering context.</p>
+          <ol class="uc-steps">
+            <li><strong>Pick a template</strong> &mdash; <code>/squad implement add password reset</code>. (Other templates: <code>debug</code>, <code>review</code>, <code>test</code>, <code>requirements</code>, <code>architecture</code>.)</li>
+            <li><strong>Watch helpers run in parallel</strong> &mdash; req-reader · code-scanner · trace · MISRA · codedigest fire concurrently in 3 phases. Cancellable with <kbd>Ctrl-C</kbd>.</li>
+            <li><strong>Read the briefing</strong> &mdash; helpers reduce into a structured briefing (about 4 KB). The primary skill auto-fires with the briefing pre-injected.</li>
+            <li><strong>Optional &mdash; agentic variant</strong> &mdash; append <code>-agentic</code> (<code>/squad implement-agentic ...</code>) to make every helper its own Gemini sub-agent.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> the implementer fires with the full context map &mdash; req → existing code → trace history → lint pre-flight &mdash; instead of fishing for it turn-by-turn.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> tune <code>[squad] max_concurrent_agents</code> in <code>agenit.toml</code> to control memory (~300 MB per helper).</p>
+        </article>
+
+        <!-- 05 Autonomous goal -->
+        <article class="uc-card" data-uc-tags="autonomy">
+          <header class="uc-head">
+            <span class="uc-num">05</span>
+            <h3>Walk away — autonomous goal loop</h3>
+            <span class="uc-tag autonomy">autonomy</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you need a long-running migration, refactor, or chore that you can leave overnight. Plan → Code → Test → Evaluate, with an auditor deciding "continue / complete / block" each turn.</p>
+          <ol class="uc-steps">
+            <li><strong>Define the objective</strong> &mdash; <code>/goal Migrate the entire codebase from JavaScript to TypeScript</code>.</li>
+            <li><strong>Set verify command</strong> &mdash; export <code>FLOW_GOAL_TEST_CMD="pnpm test"</code> so the auditor knows when a turn passes.</li>
+            <li><strong>Spawn the runner</strong> &mdash; <code>/goal start</code>. State is checkpointed under <code>memory/projects/&lt;name&gt;/goal.json</code>; survives REPL exit.</li>
+            <li><strong>Check status anytime</strong> &mdash; <code>/goal status</code> for the dashboard, <code>/goal log</code> for the audit trail.</li>
+            <li><strong>Pause/resume/budget</strong> &mdash; <code>/goal pause</code>, <code>/goal resume</code>, <code>/goal budget 20</code> to extend the turn cap.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> an autonomous loop that commits per-turn, runs your verify command, and stops itself when complete (or when budget runs out).</p>
+          <p class="uc-tip">↗ <em>Tip:</em> use <code>/overnight --parallel 2 -- gemini "..."</code> for shell-driven multi-iteration runs with worktree-isolated parallel copies.</p>
+        </article>
+
+        <!-- 06 Debugging hardware -->
+        <article class="uc-card" data-uc-tags="hw">
+          <header class="uc-head">
+            <span class="uc-num">06</span>
+            <h3>Diagnose a CAN bus / firmware bug</h3>
+            <span class="uc-tag hw">hardware</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you've got a CAN log, a JLink-attached MCU, or a Saleae capture and you want AgenIT to triage with the same Python tools you'd use by hand.</p>
+          <ol class="uc-steps">
+            <li><strong>Configure probes once</strong> &mdash; <code>/configure hardware</code>. Detects JLink / Saleae serials, validates env vars, writes to <code>config/flow.toml</code>.</li>
+            <li><strong>Hand AgenIT the trace</strong> &mdash; <code>/debug analyze trace.asc for CAN timeout errors</code>. The <code>hw-debugger</code> skill auto-activates.</li>
+            <li><strong>Squad variant for richer context</strong> &mdash; <code>/squad debug "frame 0x101 EngineState misses cycle"</code> &mdash; brings code-scanner + MISRA + trace helpers along.</li>
+            <li><strong>Run live diagnostics</strong> &mdash; AgenIT shells out to <code>.flow/tools/lin_can_tool.py</code> / <code>jlink_tool.py</code> / <code>saleae_tool.py</code>.</li>
+            <li><strong>Read the report</strong> &mdash; written to <code>trace_analysis.md</code> with frame ID, cycle deltas, hypothesis.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a structured Markdown report with timestamped findings, a working hypothesis, and links back to suspected code paths via codedigest hits.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> the same hardware tools are exposed over MCP &mdash; external agents (Claude Code, Cursor) can drive the bench too.</p>
+        </article>
+
+        <!-- 07 Code archaeology -->
+        <article class="uc-card" data-uc-tags="build">
+          <header class="uc-head">
+            <span class="uc-num">07</span>
+            <h3>Land in a foreign codebase — find your way</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you've just been added to a 400 KLoC C codebase and need to locate "the rate limiter" without grep guessing.</p>
+          <ol class="uc-steps">
+            <li><strong>Index the repo</strong> &mdash; <code>/codedigest index ./src</code>. Bundled BM25 chunker, no native deps, no embeddings download.</li>
+            <li><strong>Build the call graph</strong> &mdash; <code>/codedigest graph --use-lsp</code>. Uses clangd / pyright / rust-analyzer; daemon-mode reuse keeps it fast.</li>
+            <li><strong>Search</strong> &mdash; <code>/codedigest search "rate limiter" --graph</code>. Each hit auto-includes its direct callers + callees (DKB-style retrieval).</li>
+            <li><strong>Jump in the editor</strong> &mdash; click a hit (or in VS Code, use the <code>@req</code> CodeLens) to open at the right line.</li>
+            <li><strong>Export the graph</strong> &mdash; <code>/codedigest graph --export svg</code> or <code>--export html</code> for an interactive view.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a structured map of where things live, plus a call graph you can render anytime.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> the codedigest index is also a Broker source &mdash; every <code>/squad</code> helper sees those hits in their briefing.</p>
+        </article>
+
+        <!-- 08 PR review / autofix -->
+        <article class="uc-card" data-uc-tags="quality">
+          <header class="uc-head">
+            <span class="uc-num">08</span>
+            <h3>Review &amp; auto-fix an open PR</h3>
+            <span class="uc-tag quality">quality</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> a teammate (or your AI yesterday) opened a PR; you want a critic pass per hunk and the easy fixes applied automatically.</p>
+          <ol class="uc-steps">
+            <li><strong>Walk the diff locally</strong> &mdash; <code>/diff-walk --base origin/main</code>. Runs <code>swe6-critic</code> on every hunk, prints a severity-sorted report.</li>
+            <li><strong>Drill into a hunk</strong> &mdash; the critic flags vague names, missing tests, dead code. Click line numbers to jump in VS Code.</li>
+            <li><strong>Critique a spec too</strong> &mdash; <code>/speckit critique</code> stress-tests the matching spec for ambiguity.</li>
+            <li><strong>Auto-fix the trivials</strong> &mdash; <code>/pr-autofix 1421 --confirm</code>. Applies lint / format / import-order / trailing-whitespace patches on a backup branch with telemetry.</li>
+            <li><strong>Measure AI-vs-human cohort</strong> &mdash; <code>/pr-metrics --since 2026-01-01</code> reports writes, cost, tool calls, autofix activity.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a focused review you can act on, deterministic auto-fixes already pushed to a safe branch, and a metric trail for retrospectives.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> <code>--dry-run</code> on <code>/pr-autofix</code> prints the patch plan without writing.</p>
+        </article>
+
+        <!-- 09 Design UI -->
+        <article class="uc-card" data-uc-tags="build">
+          <header class="uc-head">
+            <span class="uc-num">09</span>
+            <h3>Prototype a UI in a sandboxed browser</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you need a landing page, dashboard mock, or pricing card and you want a real preview you can comment-edit and export.</p>
+          <ol class="uc-steps">
+            <li><strong>Open the web SPA</strong> &mdash; <code>/web start</code>. Auth-token + origin gated; runs on <code>localhost:8765</code>.</li>
+            <li><strong>Or in-REPL</strong> &mdash; <code>/serve</code> launches the same SPA inside the running orchestrator process (shared run-registry → Debug tab sees your live traces).</li>
+            <li><strong>Pick a design skill</strong> &mdash; landing · dashboard · pricing · chat-ui · SVG illustration · single component. Each renders into a sandboxed iframe.</li>
+            <li><strong>Comment-mode edit</strong> &mdash; click any region in the preview to attach a comment ("make the headline pink"); the agent re-emits the HTML with that change.</li>
+            <li><strong>Export</strong> &mdash; <code>/export landing.html --to pdf</code> (puppeteer) or <code>--to pptx</code> (pptxgenjs).</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a working HTML preview, a comment trail, and a shareable PDF / PPTX in seconds.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> auto-detect the profile with <code>agenit init --profile design</code> to ship the design skills automatically.</p>
+        </article>
+
+        <!-- 10 VS Code daily workflow -->
+        <article class="uc-card" data-uc-tags="vscode">
+          <header class="uc-head">
+            <span class="uc-num">10</span>
+            <h3>Drive AgenIT from inside VS Code</h3>
+            <span class="uc-tag vscode">editor</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you live in VS Code and don't want to alt-tab to a terminal to use AgenIT.</p>
+          <ol class="uc-steps">
+            <li><strong>Install the .vsix</strong> &mdash; download from the <code>vscode-v*</code> GitHub release, or build with <code>pnpm -F agenit package</code>.</li>
+            <li><strong>Open the compact panel</strong> &mdash; <kbd>Ctrl+Alt+A</kbd> (<kbd>⌘⌥A</kbd> on Mac). Chat · V-Model · Squad · Goal · Jobs · Memory · Design tabs.</li>
+            <li><strong>Or go immersive</strong> &mdash; <kbd>Ctrl+Alt+Shift+A</kbd> for a full-screen webview with the brand chrome.</li>
+            <li><strong>Run any slash command</strong> &mdash; <kbd>Ctrl+Alt+/</kbd> opens the fuzzy palette over all 50+ commands. Arguments prompt via QuickPick.</li>
+            <li><strong>Use the sidebar</strong> &mdash; six TreeViews (Pipeline · Squad · Goal · Jobs · Memory · Debug) refresh live from <code>/ws/events</code>.</li>
+            <li><strong>CodeLens + cppcheck</strong> &mdash; click <code>@req SWR-NNN</code> tags to jump to requirements; cppcheck diagnostics surface on save.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> the same backend that powers the CLI, with editor-native integration. Fixes ship via <code>agenit</code> upgrade &mdash; no extension rebuild.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> after an <code>agenit</code> upgrade, run <code>AgenIT: Restart Daemon</code> from the command palette.</p>
+        </article>
+
+        <!-- 11 Team memory -->
+        <article class="uc-card" data-uc-tags="memory onboard">
+          <header class="uc-head">
+            <span class="uc-num">11</span>
+            <h3>Share institutional memory across a team</h3>
+            <span class="uc-tag memory">memory</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> a new teammate joins, or you want past decisions to outlast a Slack thread.</p>
+          <ol class="uc-steps">
+            <li><strong>Check soul in</strong> &mdash; <code>.flow/soul.md</code> is a plain Markdown file. Add it to git so every clone gets your style preferences and tooling defaults.</li>
+            <li><strong>Check project memory in</strong> &mdash; <code>memory/projects/&lt;name&gt;/AGENTS.md</code>, <code>decisions.md</code>, <code>requirements.md</code>. Same deal &mdash; commit them.</li>
+            <li><strong>Watch the soul-keeper grow it</strong> &mdash; a background job appends new stable preferences each session, with file locks so multiple REPLs don't clobber each other.</li>
+            <li><strong>Inspect at any time</strong> &mdash; <code>/soul</code> shows the engineer-wide file, <code>/memory</code> shows what's been injected this turn.</li>
+            <li><strong>Review changes</strong> &mdash; <code>git diff .flow/soul.md</code> lets you reject AI-added entries that don't match your team's style.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a versionable, reviewable, branchable institutional memory that survives restarts, machine swaps, and CLI upgrades.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> for sensitive repos run <code>agenit --air-gapped</code> &mdash; blocks all outbound network except OAuth refresh.</p>
+        </article>
+
+        <!-- 12 Multi-backend cost control -->
+        <article class="uc-card" data-uc-tags="autonomy quality">
+          <header class="uc-head">
+            <span class="uc-num">12</span>
+            <h3>Run cheaply — multi-backend with failover</h3>
+            <span class="uc-tag autonomy">autonomy</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you want Gemini for routine work but Claude for the hard cases, and you want budget enforced before a bill arrives.</p>
+          <ol class="uc-steps">
+            <li><strong>Detect what's installed</strong> &mdash; <code>/backend</code>. Shows detected / installed / active backends + current model.</li>
+            <li><strong>Configure a fallback chain</strong> &mdash; in <code>agenit.toml</code> under <code>[routing]</code>, set per-tier chains (e.g. <code>pro = ["gemini-cli", "claude-cli", "openai"]</code>).</li>
+            <li><strong>Inspect a tier</strong> &mdash; <code>/backend chain pro</code> shows the order, models per backend, and current cost ceiling.</li>
+            <li><strong>List models</strong> &mdash; <code>/backend models claude-cli</code>.</li>
+            <li><strong>Cap spend</strong> &mdash; <code>agenit --token-cap 200000</code> for a per-session ceiling, or <code>--token-cap 30000 --per command</code> for per-call. Hard-stops when exceeded.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> automatic failover from Gemini → Claude → OpenAI on tier exhaustion or hard error, a status-bar indicator showing the live backend, and a hard token budget you can rely on.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> all <code>.flow/hooks/*.py</code> work for both Gemini and Claude CLI &mdash; same safety story across the chain.</p>
+        </article>
+
+        <!-- 13 Debug Mode step-through -->
+        <article class="uc-card" data-uc-tags="quality">
+          <header class="uc-head">
+            <span class="uc-num">13</span>
+            <h3>Step through an agent run with Debug Mode</h3>
+            <span class="uc-tag quality">quality</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> a chain is taking too long, fanning out unexpectedly, or eating tokens &mdash; and you want to see every chat / LLM / tool call as a typed Run in a tree.</p>
+          <ol class="uc-steps">
+            <li><strong>Turn on the recorder</strong> &mdash; <code>/debug on</code>. The right rail DEBUG widget lights up and starts collecting Runs.</li>
+            <li><strong>Run your prompt</strong> &mdash; do anything; every chain / LLM / tool span is captured with timing + inputs + outputs.</li>
+            <li><strong>Expand into the trace tree</strong> &mdash; press <kbd>Ctrl+W</kbd>, focus the DEBUG widget, hit Enter. You get a foldable tree: <code>chain → llm:gemini-cli</code>, each with its payload.</li>
+            <li><strong>Gate a risky tool</strong> &mdash; <code>/debug pause shell</code>. Future <code>shell</code> tool calls pause for human review.</li>
+            <li><strong>Release or replay</strong> &mdash; <code>/debug release fa3551</code> resumes a paused run; <code>/debug replay fa3551</code> re-runs a captured tool invocation.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a LangSmith-style local trace tree with pause-before gating &mdash; observability and step-through, no external service.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> the Web UI Debug tab and the VS Code Debug TreeView share the same registry &mdash; opened in either, traces stream live.</p>
+        </article>
+
+        <!-- 14 Add a custom skill / MCP / tool -->
+        <article class="uc-card" data-uc-tags="build">
+          <header class="uc-head">
+            <span class="uc-num">14</span>
+            <h3>Add a custom skill, MCP server, or tool</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you want to teach AgenIT a new capability &mdash; a project-specific lint rule, a domain MCP, or a Python sidecar &mdash; without leaving the REPL.</p>
+          <ol class="uc-steps">
+            <li><strong>Open the Harnesses widget</strong> &mdash; <kbd>Ctrl+W</kbd>, navigate to <em>Harnesses</em>, <kbd>Enter</kbd>. (Widget-only — there's no <code>/harness</code> slash command.)</li>
+            <li><strong>Hit <kbd>n</kbd> &amp; pick a kind</strong> &mdash; <kbd>1</kbd> Skill · <kbd>2</kbd> MCP · <kbd>3</kbd> Agent · <kbd>4</kbd> Tool, then type a name.</li>
+            <li><strong>Pick a starting point</strong> &mdash; <kbd>t</kbd> empty template or <kbd>a</kbd> agent-generated (describe what you want).</li>
+            <li><strong>Edit in the inline vim editor</strong> &mdash; basic motions + insert + line yank/paste + undo. <code>:wq</code> saves the draft.</li>
+            <li><strong>Review &amp; install</strong> &mdash; <kbd>y</kbd> writes to the canonical path (<code>.gemini/skills/…</code>, <code>.mcp.json</code>, <code>AGENTS.md</code>, or <code>.flow/tools/…</code>) with JSON merge + de-dup. <kbd>r</kbd> refines the draft with the agent in place.</li>
+            <li><strong>Verify</strong> &mdash; <code>/skills list</code> for skills, <code>/marketplace mcp servers</code> for MCPs.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a new skill auto-activates on matching natural intent; a new MCP shows up to all installed backends; a new Python tool is callable from <code>.flow/tools/</code>.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> add <code>@req REQ-SKILL-NNN</code> tags inside <code>SKILL.md</code> for the skill traceability scanner.</p>
+        </article>
+
+        <!-- 14b Harness · ship a domain skill -->
+        <article class="uc-card" data-uc-tags="build memory">
+          <header class="uc-head">
+            <span class="uc-num">14b</span>
+            <h3>Ship a domain-specific skill via the Harness widget</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> your team has a recurring review (AWS cost audit, accessibility pass, ASPICE compliance) and you want it to fire automatically whenever someone asks for it in plain English.</p>
+          <ol class="uc-steps">
+            <li><kbd>Ctrl+W</kbd> → <em>Harnesses</em> → <kbd>Enter</kbd> → <kbd>n</kbd> → <kbd>1</kbd> for Skill. Name it (e.g. <code>aws-cost-review</code>).</li>
+            <li>Hit <kbd>a</kbd> &mdash; describe the skill ("walk an AWS Terraform plan, flag oversized instances, idle NAT gateways, unencrypted volumes").</li>
+            <li>Inline vim opens with the agent-generated <code>SKILL.md</code>. Tweak the <code>description:</code> so semantic matching catches the phrases your team uses. <kbd>:wq</kbd>.</li>
+            <li>Review the body and the install path (<code>.gemini/skills/aws-cost-review/SKILL.md</code>). <kbd>y</kbd> to install.</li>
+            <li>Test it &mdash; ask AgenIT plainly: <em>"audit this Terraform plan for cost issues"</em>. The skill auto-activates and prepends its checklist to the response.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a Markdown skill checked into the repo, shareable with your team, auto-firing on intent &mdash; no slash command to remember.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> drafts survive REPL exits in <code>~/.agenit/harnesses/drafts.json</code>; re-open with <kbd>e</kbd>.</p>
+        </article>
+
+        <!-- 14c Harness · integrate a third-party MCP -->
+        <article class="uc-card" data-uc-tags="build hw">
+          <header class="uc-head">
+            <span class="uc-num">14c</span>
+            <h3>Wire up a third-party MCP server in 30 seconds</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you've found an MCP server you want (Hacker-News, Linear, your in-house ticket system) and want it merged into <code>.mcp.json</code> safely.</p>
+          <ol class="uc-steps">
+            <li><kbd>Ctrl+W</kbd> → <em>Harnesses</em> → <kbd>n</kbd> → <kbd>2</kbd> for MCP. Type the server id.</li>
+            <li><kbd>a</kbd> with a description ("Hacker News story + comment search MCP"), or <kbd>t</kbd> if you have the launch command ready and want to paste it in.</li>
+            <li>Vim opens with valid <code>.mcp.json</code> JSON. Fill in <code>command</code>, <code>args</code>, <code>env</code>. <kbd>:wq</kbd>.</li>
+            <li>Review &amp; <kbd>y</kbd>. The widget does a temp-file + atomic rename merge into the existing <code>.mcp.json</code> &mdash; other servers survive untouched.</li>
+            <li><code>/marketplace mcp servers</code> to confirm it shows up; <code>/marketplace mcp ping &lt;id&gt;</code> for a live handshake.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a new MCP server live in this project &mdash; the same <code>.mcp.json</code> is read by Gemini CLI <em>and</em> Claude CLI.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> picking an existing id silently overwrites &mdash; useful for "fix the typo in the launch args" without manually editing JSON.</p>
+        </article>
+
+        <!-- 14d Harness · persona agent -->
+        <article class="uc-card" data-uc-tags="build quality">
+          <header class="uc-head">
+            <span class="uc-num">14d</span>
+            <h3>Define a persona agent in <code>AGENTS.md</code></h3>
+            <span class="uc-tag quality">quality</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you want a named expert ("security-auditor", "performance-reviewer") that auto-fires whenever its specialty matches your prompt &mdash; without writing a full skill.</p>
+          <ol class="uc-steps">
+            <li><kbd>Ctrl+W</kbd> → <em>Harnesses</em> → <kbd>n</kbd> → <kbd>3</kbd> for Agent. Name it (e.g. <code>security-auditor</code>).</li>
+            <li><kbd>a</kbd> &mdash; describe the role ("review code changes for OWASP-top-10, secrets exposure, dependency CVEs; output a severity-sorted report").</li>
+            <li>Vim opens with the agent block &mdash; <code>## security-auditor</code>, then <strong>Role</strong>, <strong>Specialty</strong>, <strong>Tools allowed</strong>, <strong>System prompt</strong> sections. Tighten the <strong>Specialty</strong> wording so matching is sharp. <kbd>:wq</kbd>.</li>
+            <li>Review &amp; <kbd>y</kbd>. The block is appended to <code>AGENTS.md</code>; same file is loaded by Gemini <em>and</em> Claude CLI.</li>
+            <li>Trigger it: <em>"audit this PR for security issues"</em>. Both backends route to the new persona based on the specialty match.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a versioned persona checked into the repo, shared by every backend, with no per-CLI duplication.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> use <kbd>r</kbd> in the widget after an install to refine the block in place with new feedback &mdash; the agent reads the existing prose and edits it rather than starting fresh.</p>
+        </article>
+
+        <!-- 14e Harness · python tool -->
+        <article class="uc-card" data-uc-tags="hw build">
+          <header class="uc-head">
+            <span class="uc-num">14e</span>
+            <h3>Add a Python sidecar tool callable from hooks &amp; MCP</h3>
+            <span class="uc-tag hw">hardware</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you need a small piece of automation (deployment checker, JLink-flash helper, custom CAN frame builder) that AgenIT can call from a hook, a shell command, or an MCP wrapper.</p>
+          <ol class="uc-steps">
+            <li><kbd>Ctrl+W</kbd> → <em>Harnesses</em> → <kbd>n</kbd> → <kbd>4</kbd> for Tool. Name it (e.g. <code>deploy-status</code>).</li>
+            <li><kbd>a</kbd> &mdash; describe the tool ("hit the Vercel API with $VERCEL_TOKEN, return JSON of the most recent deployment").</li>
+            <li>Vim opens with a Python skeleton: shebang, docstring, <code>run(payload) -&gt; dict</code>, and a <code>main()</code> that reads stdin JSON, calls <code>run</code>, writes stdout JSON. <kbd>:wq</kbd>.</li>
+            <li>Review &amp; <kbd>y</kbd>. The widget installs to <code>.flow/tools/deploy-status.py</code> with <code>chmod 0755</code>.</li>
+            <li>Call it from anywhere: a hook (<code>subprocess.run([&quot;.flow/tools/deploy-status.py&quot;], input=json.dumps({...}))</code>), the REPL (<code>run_shell_command python3 .flow/tools/deploy-status.py</code>), or wrap it with an MCP tool definition.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a contract-shaped Python script in the canonical sidecar path &mdash; the same place the built-in JLink / CAN / Saleae helpers live.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> if the tool needs deps, add them to <code>.flow/tools/requirements.txt</code> and re-run the project's venv install.</p>
+        </article>
+
+        <!-- 15 Install from marketplace -->
+        <article class="uc-card" data-uc-tags="onboard build">
+          <header class="uc-head">
+            <span class="uc-num">15</span>
+            <h3>Install from the marketplace (incl. Claude Code plugins)</h3>
+            <span class="uc-tag build">build</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you want to pull in a curated skill bundle, a popular MCP server, or any Claude Code plugin without writing it yourself.</p>
+          <ol class="uc-steps">
+            <li><strong>Search across all sources</strong> &mdash; <code>/marketplace search code-review</code>. Returns curated AgenIT registry hits + live Claude Code marketplace + live MCP registry.</li>
+            <li><strong>Browse a vendor</strong> &mdash; <code>/marketplace cc-browse anthropics/claude-code-plugins</code>.</li>
+            <li><strong>Install by ID</strong> &mdash; <code>/marketplace install cc/code-review</code>. Claude Code skills/plugins are translated into Gemini-compatible artefacts at install time.</li>
+            <li><strong>Install from any GitHub URL</strong> &mdash; <code>/marketplace add https://github.com/&lt;owner&gt;/&lt;repo&gt;</code>.</li>
+            <li><strong>Try an MCP live</strong> &mdash; <code>/marketplace mcp ping &lt;server&gt;</code> for a handshake, <code>mcp call &lt;srv&gt;:&lt;tool&gt; '{...}'</code> to invoke a tool inline.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> new skills under <code>.gemini/skills/</code>, new MCP entries in your settings, all hooked into the same activation pipeline as your built-ins.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> <code>/marketplace installed</code> lists what's currently active &mdash; useful before a clean rebuild.</p>
+        </article>
+
+        <!-- 16 Compliance / regulated industries -->
+        <article class="uc-card" data-uc-tags="memory autonomy">
+          <header class="uc-head">
+            <span class="uc-num">16</span>
+            <h3>Run safely in a regulated / air-gapped repo</h3>
+            <span class="uc-tag autonomy">autonomy</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> the repo handles regulated data (medical / automotive safety / defence) and you need zero outbound network plus an auditable hook trail.</p>
+          <ol class="uc-steps">
+            <li><strong>Boot air-gapped</strong> &mdash; <code>agenit --air-gapped</code>. Blocks all outbound except the OAuth-refresh handshake.</li>
+            <li><strong>Set a hard token ceiling</strong> &mdash; <code>--token-cap 80000 --per command</code> &mdash; the loop halts when exceeded.</li>
+            <li><strong>Lock down installs</strong> &mdash; the slopsquatting hook rejects suspicious package names before they touch <code>npm/pip/cargo</code>; the MCP-pinning + skill-audit scanner flags unverified entries.</li>
+            <li><strong>Inspect the hook trail</strong> &mdash; every guard decision lands in <code>.flow/events.jsonl</code> hash-chained for tamper detection.</li>
+            <li><strong>Set compliance mode</strong> &mdash; in <code>agenit.toml</code> <code>[compliance] mode = "soc2"|"gdpr"|"hipaa"</code> tightens PII redaction and citation enforcement.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a hermetic runtime with deterministic guardrails, a tamper-evident audit log, and zero unexpected network traffic.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> the slopsquatting / MCP-pinning / air-gapped story is documented under <code>docs/security/</code>.</p>
+        </article>
+
+        <!-- 17 Sandboxed risky work -->
+        <article class="uc-card" data-uc-tags="autonomy build">
+          <header class="uc-head">
+            <span class="uc-num">17</span>
+            <h3>Try a risky refactor in a sandboxed worktree</h3>
+            <span class="uc-tag autonomy">autonomy</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you want to ask the agent for something speculative &mdash; "rewrite the auth layer in Rust" &mdash; without polluting your working tree or main branch.</p>
+          <ol class="uc-steps">
+            <li><strong>Spawn an isolated worktree</strong> &mdash; <code>/worktree feat/rust-auth</code>. AgenIT creates <code>.gemini/worktrees/feat-rust-auth/</code> and switches you in.</li>
+            <li><strong>Work normally</strong> &mdash; every edit, test, commit happens in the worktree. Your main checkout is untouched.</li>
+            <li><strong>Parallelise with overnight</strong> &mdash; <code>/overnight --parallel 3 -- gemini "make a rust port"</code> runs three worktree-isolated copies side by side, each with its own commit chain.</li>
+            <li><strong>Adopt what works</strong> &mdash; if the experiment lands, <code>git merge</code> the worktree branch back. If not, just delete the worktree.</li>
+            <li><strong>Undo per-write fallback</strong> &mdash; <code>/undo list</code> shows the last 10 snapshots; <code>/undo &lt;id&gt;</code> restores one.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a safe playground where bold ideas can fail without cost; the same helper powers <code>/overnight --parallel</code> for multi-worktree runs.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> <code>/plan</code> flips approval-mode on (tool calls need explicit y/n) when you don't trust the next batch of edits.</p>
+        </article>
+
+        <!-- 18 Make AgenIT callable from external agents -->
+        <article class="uc-card" data-uc-tags="memory">
+          <header class="uc-head">
+            <span class="uc-num">18</span>
+            <h3>Call AgenIT from Claude Desktop, Cursor, or another agent</h3>
+            <span class="uc-tag memory">memory</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> another agent (Claude Desktop, Cursor, an LLM gateway) wants to read your soul + memory or fire a squad / goal &mdash; AgenIT acts as an MCP server to that caller.</p>
+          <ol class="uc-steps">
+            <li><strong>Start the MCP server</strong> &mdash; <code>agenit-memory-mcp</code> ships as a stdio binary that exposes 14 tools (soul read, project memory read, doc append, global memory query, …).</li>
+            <li><strong>Wire it into the consumer</strong> &mdash; add an entry to Claude Desktop / Cursor / your gateway's MCP config (<code>~/.cursor/mcp.json</code> or the equivalent).</li>
+            <li><strong>Read soul from outside</strong> &mdash; the calling agent invokes <code>agenit_soul_read</code> to load your engineering preferences.</li>
+            <li><strong>Query global memory</strong> &mdash; <code>agenit_global_memory_query_tag({ tag: "rust-style" })</code> pulls cross-project knowledge.</li>
+            <li><strong>Append back</strong> &mdash; <code>agenit_global_memory_write({ file, tag, text })</code> records what the external agent learned, so future AgenIT sessions inherit it.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> AgenIT becomes a memory + autonomy substrate for your whole AI tool chain &mdash; one institutional memory, many consumers.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> hardware tools (JLink / CAN / Saleae) are also exposed over MCP &mdash; external agents can drive your bench.</p>
+        </article>
+
+        <!-- 19 Recipes for cross-widget orchestration -->
+        <article class="uc-card" data-uc-tags="autonomy quality">
+          <header class="uc-head">
+            <span class="uc-num">19</span>
+            <h3>Wire alerts &amp; auto-actions with Recipes</h3>
+            <span class="uc-tag autonomy">autonomy</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> you want "if X happens, do Y" automation &mdash; e.g. when a goal tick fails, log it; when a hardware probe fails, escalate.</p>
+          <ol class="uc-steps">
+            <li><strong>Open the Recipes widget</strong> &mdash; right rail / center-pane (in the REPL). Three default recipes ship enabled: log goal failures, notify agent failures, escalate hardware probe failures.</li>
+            <li><strong>Define a recipe</strong> &mdash; edit <code>.flow/recipes/*.toml</code>: <code>when = "goal.tick.failed"</code>, <code>action = "system-message: ⚠ goal {{goalId}} blocked at turn {{turn}}"</code>.</li>
+            <li><strong>Test-fire</strong> &mdash; in the Recipes widget, press <kbd>t</kbd> &mdash; runs the action against a synthetic event.</li>
+            <li><strong>Toggle live</strong> &mdash; <kbd>p</kbd> enables / disables without editing TOML.</li>
+            <li><strong>Edit inline</strong> &mdash; <kbd>e</kbd> opens <code>recipes.toml</code> in the in-TUI vim.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> declarative, hot-reloadable automation tied to the <code>tuiBus</code> event taxonomy &mdash; no extra orchestration layer needed.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> trigger templates support variables (<code>{{goalId}}</code>, <code>{{turn}}</code>, <code>{{tool}}</code>) so messages stay specific.</p>
+        </article>
+
+        <!-- 20 Migrate a codebase to a new language -->
+        <article class="uc-card" data-uc-tags="autonomy build">
+          <header class="uc-head">
+            <span class="uc-num">20</span>
+            <h3>Migrate a codebase to a new language / framework</h3>
+            <span class="uc-tag autonomy">autonomy</span>
+          </header>
+          <p class="uc-when"><strong>When:</strong> the migration is too big for one chat but too repetitive for hand-coding. Days, not minutes.</p>
+          <ol class="uc-steps">
+            <li><strong>Anchor with a spec</strong> &mdash; <code>/speckit run migrate from javascript to typescript</code>. Produces phased <code>tasks.md</code>.</li>
+            <li><strong>Tighten it</strong> &mdash; <code>/speckit critique</code> looks for missing edge cases ("how do we handle .d.ts shadowing?").</li>
+            <li><strong>Spawn the autonomous loop</strong> &mdash; <code>FLOW_GOAL_TEST_CMD="pnpm test"</code> then <code>/goal Migrate the codebase from JavaScript to TypeScript</code> + <code>/goal start</code>.</li>
+            <li><strong>Add a CI safety net</strong> &mdash; run <code>/diff-walk --base main</code> nightly to keep the critic running over each new chunk.</li>
+            <li><strong>Land cleanly</strong> &mdash; when the goal completes, <code>/audit</code> + <code>/pr-metrics</code> give you a write-up of AI vs human deltas.</li>
+          </ol>
+          <p class="uc-out"><strong>What you get:</strong> a turn-by-turn migration with auditor-decided continuation, hard token budget, and per-turn git commits you can revert at any point.</p>
+          <p class="uc-tip">↗ <em>Tip:</em> for multi-developer migrations, share the <code>.specify/specs/&lt;feature&gt;/</code> folder via git so everyone runs against the same task list.</p>
+        </article>
+
+      </div>
+    </section>
+    <footer class="panel-foot">Esc collapse · Ctrl+W exit nav · 20 use cases · all backed by features documented in the <a href="wiki.html">Wiki</a></footer>
+</section>
+
+<section id="roadmap" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 08</span> Roadmap</h2>
+      <p class="section-sub">Where AgenIT goes next &mdash; sourced from the <a href="https://github.com/muhammed-eldabea/AgenIT/issues" target="_blank" rel="noopener">open issue tracker</a>, ranked by priority labels (<code>P0</code>/<code>P1</code>/<code>P2</code>). Help shape it: thumbs-up the issues that matter most to you, or open a new one.</p>
+
+      <div class="roadmap-themes">
+
+        <article class="theme theme-now">
+          <header class="theme-head">
+            <span class="theme-tag">SHIPPING NOW · P0 / P1</span>
+            <h3 class="theme-title">Agile crew &amp; ceremony engine</h3>
+            <p class="theme-sub">A detachable "management layer" of AI personas that handles the work surrounding the engineering loop &mdash; backlog grooming, sprint ceremonies, acceptance reviews, portfolio governance. Toggleable; V-Model-only mode keeps the existing experience untouched.</p>
+          </header>
+          <ul class="theme-items">
+            <li>
+              <span class="theme-status progress">◐</span>
+              <div>
+                <strong>Autonomous Agile Persona Engine.</strong>
+                PO, Customer, Scrum Master, PM, and PMO as AI agents (or seats for real humans). Each has a distinct toolset, voice, and gate authority.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/99" target="_blank" rel="noopener">#99</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Product Owner agent.</strong>
+                Owns the backlog, authors user stories from raw conversations, gates sprint planning.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/105" target="_blank" rel="noopener">#105</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Customer agent.</strong>
+                Persona-driven acceptance &mdash; simulates a real user during sprint review, signs off (or doesn't) on each story.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/106" target="_blank" rel="noopener">#106</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Scrum Master agent.</strong>
+                Runs ceremonies, detects impediments, posts stand-ups, drives retros.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/107" target="_blank" rel="noopener">#107</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Ceremony engine.</strong>
+                Sprint lifecycle, configurable cadence, automatic ceremony triggers from <code>tuiBus</code> events.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/111" target="_blank" rel="noopener">#111</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Human-relay system.</strong>
+                Blocking gates, REPL modals, and notification relays for when an AI persona needs a real human's call.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/110" target="_blank" rel="noopener">#110</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Agile toggle.</strong>
+                Detach the entire crew with one flag; fall back to plain V-Model mode for solo or strict-process projects.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/104" target="_blank" rel="noopener">#104</a>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="theme theme-next">
+          <header class="theme-head">
+            <span class="theme-tag">UP NEXT · P1</span>
+            <h3 class="theme-title">Organizational Process Assets (OPA)</h3>
+            <p class="theme-sub">Make process and policy first-class artefacts &mdash; not screenshots in a Notion page. Upload your DoD, coding standards, retrospective templates, and lessons-learned; the agents enforce and consult them automatically.</p>
+          </header>
+          <ul class="theme-items">
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>OPA engine.</strong>
+                Upload, toggle, and lifecycle-manage organizational process assets &mdash; with versioning and per-project overrides.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/100" target="_blank" rel="noopener">#100</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Processes, Policies &amp; Procedures.</strong>
+                Definition of Done, compliance gates, coding standards &mdash; consulted at every stage transition.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/101" target="_blank" rel="noopener">#101</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Templates library.</strong>
+                User stories, sprint boards, retro formats, project charters &mdash; pre-filled and consistent across every new project.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/102" target="_blank" rel="noopener">#102</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Lessons-learned &amp; historical metrics.</strong>
+                Velocity, forecasting, retrospective knowledge base &mdash; a real institutional memory that compounds over sprints.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/103" target="_blank" rel="noopener">#103</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Project Manager agent.</strong>
+                Budget tracking, cross-goal dependencies, timeline reports.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/108" target="_blank" rel="noopener">#108</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>PMO agent.</strong>
+                Portfolio governance, standards enforcement, cross-project alignment dashboard.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/109" target="_blank" rel="noopener">#109</a>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="theme theme-later">
+          <header class="theme-head">
+            <span class="theme-tag">EXPLORING · P1 / P2</span>
+            <h3 class="theme-title">Quality, autonomy &amp; rough edges</h3>
+            <p class="theme-sub">Smaller items that show up regularly in our own dogfooding &mdash; verified deliverables, smarter long sessions, deeper goal/squad integration, and platform polish.</p>
+          </header>
+          <ul class="theme-items">
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong><code>/qa</code> command &mdash; verified deliverables gate.</strong>
+                Scope validation + acceptance checks between "the agent says it's done" and "we hand it to the PO".
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/97" target="_blank" rel="noopener">#97</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Session resume strategy.</strong>
+                When you re-open a long-running session, pick between a token-cheap summary and the full transcript &mdash; with a comparison preview before you commit.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/114" target="_blank" rel="noopener">#114</a> ·
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/95" target="_blank" rel="noopener">#95</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong><code>/goal</code> V-Model mode.</strong>
+                Let an autonomous goal drive the SWE.1 → SWE.6 pipeline across multiple turns instead of a single-shot run.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/16" target="_blank" rel="noopener">#16</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong><code>/goal</code> × <code>/squad</code> integration.</strong>
+                Spin up a fresh squad per goal turn &mdash; helpers gather context on this turn's narrow problem, primary executes, audit decides next-turn.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/15" target="_blank" rel="noopener">#15</a>
+              </div>
+            </li>
+            <li>
+              <span class="theme-status todo">○</span>
+              <div>
+                <strong>Windows REPL performance fix.</strong>
+                Typed characters can appear duplicated and the REPL feels sluggish on Windows. Replace the TTY layer.
+                <a class="issue-ref" href="https://github.com/muhammed-eldabea/AgenIT/issues/18" target="_blank" rel="noopener">#18</a>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+      </div>
+
+      <div class="roadmap-meta">
+        <p>
+          Status pips: <span class="theme-status done">✓</span> shipped &nbsp;·&nbsp;
+          <span class="theme-status progress">◐</span> in progress &nbsp;·&nbsp;
+          <span class="theme-status todo">○</span> planned.
+          The roadmap is community-driven &mdash;
+          <a href="https://github.com/muhammed-eldabea/AgenIT/issues" target="_blank" rel="noopener">browse open issues</a>,
+          <a href="https://github.com/muhammed-eldabea/AgenIT/issues/new" target="_blank" rel="noopener">file a new one</a>,
+          or 👍 the items that matter most to you.
+        </p>
+      </div>
+    </section>
+
+</section>
+<section id="install" class="doc-section">
+    <section class="panel-inner">
+      <h2 class="section-title"><span>// 09</span> Install</h2>
+      <div class="install-grid">
+        <div class="install-card">
+          <h3>From npm (recommended)</h3>
+<pre><code><span class="t-prompt">$</span> npm i -g @agenit/cli
+<span class="t-prompt">$</span> agenit --help
+
+<span class="t-prompt">$</span> gemini                    <span class="t-dim"># one-time Google OAuth</span>
+<span class="t-prompt">$</span> cd ~/projects/my-project
+<span class="t-prompt">$</span> agenit init               <span class="t-dim"># auto-detects profile</span>
+<span class="t-prompt">$</span> agenit                    <span class="t-dim"># start the REPL</span></code></pre>
+        </div>
+        <div class="install-card">
+          <h3>From source</h3>
+<pre><code><span class="t-prompt">$</span> git clone https://github.com/muhammed-eldabea/AgenIT.git
+<span class="t-prompt">$</span> cd AgenIT
+<span class="t-prompt">$</span> bash install.sh           <span class="t-dim"># Linux / macOS</span>
+<span class="t-dim"># Windows:</span>
+<span class="t-prompt">&gt;</span> powershell -ExecutionPolicy Bypass -File install.ps1</code></pre>
+        </div>
+        <div class="install-card narrow">
+          <h3>Prerequisites</h3>
+          <ul class="prereqs">
+            <li><strong>Node.js</strong> ≥ 20</li>
+            <li><strong>pnpm</strong> ≥ 9 — <code>npm i -g pnpm</code></li>
+            <li><strong>Python</strong> ≥ 3.11 — hardware tools only</li>
+            <li><strong>Gemini CLI</strong> ≥ 0.37</li>
+            <li><strong>Google account</strong> for OAuth</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+</section>
+
+  </main>
+
+  <!-- ───── Footer ───── -->
+  <footer class="doc-bottom">
+    <div class="left">
+      <span>MIT © muhammed-eldabea</span>
+    </div>
+    <div class="right">
+      <a href="https://github.com/muhammed-eldabea/AgenIT" target="_blank" rel="noopener">repo</a>
+      <span class="sep">·</span>
+      <a href="wiki.html">wiki</a>
+      <span class="sep">·</span>
+      <a href="index.legacy.html">long view</a>
+    </div>
+  </footer>
+
+  <script src="script.js?v=2026-05-17b" defer></script>
+  <script src="dash.js?v=2026-05-17b" defer></script>
+</body>
+</html>

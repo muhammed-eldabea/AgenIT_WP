@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgenIT Wiki — Searchable Command Reference</title>
+  <meta name="description" content="Every AgenIT slash command, subcommand, and CLI flag — searchable in real time." />
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="wiki.css" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="wiki-body">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="scanline" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <span>Agen<em>IT</em> &nbsp;<span class="brand-sub">/ Wiki</span></span>
+    </a>
+    <nav>
+      <a href="index.html#updates">What's New</a>
+      <a href="index.html#features">Features</a>
+      <a href="index.html#demos">Demos</a>
+      <a href="index.html#screenshots">Screenshots</a>
+      <a href="wiki.html" class="active">Wiki</a>
+      <a href="index.html#install">Install</a>
+      <a class="ghost" href="https://github.com/muhammed-eldabea/AgenIT" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <main id="top" class="wiki-main">
+    <header class="wiki-hero">
+      <h1>Command Wiki</h1>
+      <p class="wiki-tag">
+        Every slash command, subcommand, CLI flag, and environment variable.
+        Type to filter in real time &mdash; matches command names,
+        subcommands, descriptions, aliases, examples.
+      </p>
+      <div class="search-shell">
+        <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="wiki-search" type="search" placeholder="Search commands &mdash; e.g. goal, /squad, --air-gapped, pr-autofix"
+               autocomplete="off" autofocus />
+        <span class="search-hint"><kbd>/</kbd></span>
+      </div>
+      <div class="filter-row" id="cat-filters">
+        <button class="chip active" data-cat="all">All</button>
+        <button class="chip" data-cat="project">Project</button>
+        <button class="chip" data-cat="memory">Memory</button>
+        <button class="chip" data-cat="debug">Debug</button>
+        <button class="chip" data-cat="backend">Backends</button>
+        <button class="chip" data-cat="vscode">VS Code</button>
+        <button class="chip" data-cat="web">Web UI</button>
+        <button class="chip" data-cat="pipeline">Pipeline</button>
+        <button class="chip" data-cat="speckit">Spec-Kit</button>
+        <button class="chip" data-cat="squad">Squad</button>
+        <button class="chip" data-cat="goal">Goal</button>
+        <button class="chip" data-cat="overnight">Overnight</button>
+        <button class="chip" data-cat="agile">Agile / OPA / QA</button>
+        <button class="chip" data-cat="migrate">Migration</button>
+        <button class="chip" data-cat="critic">Critic / PR</button>
+        <button class="chip" data-cat="codedigest">Code search</button>
+        <button class="chip" data-cat="hardware">Hardware</button>
+        <button class="chip" data-cat="marketplace">Marketplace</button>
+        <button class="chip" data-cat="lsp">LSP</button>
+        <button class="chip" data-cat="shortcut">Shortcuts</button>
+        <button class="chip" data-cat="cli">CLI / Env</button>
+      </div>
+      <div class="search-meta">
+        <span id="result-count">— commands</span>
+        <span class="search-meta-sep">·</span>
+        <button id="clear-btn" class="ghost-mini" type="button" hidden>Clear filter</button>
+      </div>
+    </header>
+
+    <div id="cmd-list" class="cmd-list">
+
+      <!-- ─── Project & session ─── -->
+      <section class="cat" data-cat="project">
+        <h2 class="cat-title">Project &amp; session</h2>
+
+        <article class="cmd-card" data-cmd="/init" data-keys="init initialise initialize profile bootstrap">
+          <header><code class="cmd-name">/init</code> <span class="cmd-syntax">[name] [--profile X]</span></header>
+          <p>Initialise or repair the AgenIT config in the current directory. Auto-detects a profile from repo markers (<code>package.json</code> → <code>web</code>, <code>CMakeLists.txt</code>+C → <code>embedded</code>, DBC/AUTOSAR → <code>automotive</code>).</p>
+          <ul class="sub">
+            <li><code>--profile generic|web|embedded|automotive|design</code> — force a profile.</li>
+            <li><code>--name &lt;n&gt;</code> — explicit project name (otherwise the directory).</li>
+            <li><code>--no-agents</code> — skip <code>AGENTS.md</code> seeding.</li>
+            <li><code>--no-skills</code> — skip <code>.gemini/skills/</code> seeding.</li>
+            <li><code>--no-verify</code> — skip the post-init Gemini-CLI sanity check.</li>
+          </ul>
+          <code class="ex">agenit init --name my-app --profile web</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/unflow" data-keys="unflow remove uninstall restore vanilla">
+          <header><code class="cmd-name">/unflow</code></header>
+          <p>Remove AgenIT-managed config (<code>.agenit/</code>, <code>.gemini/</code>, <code>.flow/</code>, <code>AGENTS.md</code>) from the project. Your project files are untouched. Restores a vanilla Gemini CLI.</p>
+          <code class="ex">agenit /unflow</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/project" data-keys="project switch active scope">
+          <header><code class="cmd-name">/project</code> <span class="cmd-syntax">&lt;name&gt;</span></header>
+          <p>Switch or create the active project context. Project-scoped memory lives under <code>memory/projects/&lt;name&gt;/</code>.</p>
+          <code class="ex">/project firmware-v2</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/yolo" data-keys="yolo approval mode auto edit safe risky">
+          <header><code class="cmd-name">/yolo</code> <span class="cmd-syntax">on | off | auto_edit</span></header>
+          <p>Toggle approval mode for tool calls. <code>on</code> = fully autonomous; <code>off</code> = ask before every tool; <code>auto_edit</code> = autonomous for edits, ask for shell/network.</p>
+          <code class="ex">/yolo auto_edit</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/jobs" data-keys="jobs background process kill stop list">
+          <header><code class="cmd-name">/jobs</code> <span class="cmd-syntax">[&lt;id&gt;]</span></header>
+          <p>List, inspect, or stop background jobs (long-running tool calls, soul-keeper, overnight loops, goal runners). With no id, lists all; with an id, prints status; <code>stop &lt;id&gt;</code> kills it.</p>
+          <code class="ex">/jobs · /jobs stop GOAL-…-8a11</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/configure" data-keys="configure hardware jlink saleae detect env">
+          <header><code class="cmd-name">/configure</code> <span class="cmd-syntax">[hardware]</span></header>
+          <p>Detect and configure attached hardware (JLink probes, Saleae logic analyzers, virtual CAN channels). Validates env vars and writes detected serial numbers into <code>config/flow.toml</code>.</p>
+          <code class="ex">/configure hardware</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/feature" data-keys="feature workflow start description">
+          <header><code class="cmd-name">/feature</code> <span class="cmd-syntax">&lt;description&gt;</span></header>
+          <p>Start a feature workflow — branch off, scaffold a tasks file, prime the squad. Shorter than running speckit + run by hand for small features.</p>
+          <code class="ex">/feature add OTP login</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/help" data-keys="help clear exit standard">
+          <header><code class="cmd-name">/help</code> · <code class="cmd-name">/clear</code> · <code class="cmd-name">/exit</code></header>
+          <p>Standard. <code>/help</code> lists every command with one-liners; <code>/clear</code> wipes the scrollback (memory survives); <code>/exit</code> quits cleanly.</p>
+        </article>
+      </section>
+
+      <!-- ─── Memory & soul ─── -->
+      <section class="cat" data-cat="memory">
+        <h2 class="cat-title">Memory &amp; soul</h2>
+
+        <article class="cmd-card" data-cmd="/soul" data-keys="soul preferences engineer profile">
+          <header><code class="cmd-name">/soul</code></header>
+          <p>Show <code>.flow/soul.md</code> — engineer-wide preferences (code style, tooling defaults, communication tone). Persistent across every project on this machine.</p>
+          <code class="ex">/soul</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/memory" data-keys="memory context injection project agents">
+          <header><code class="cmd-name">/memory</code></header>
+          <p>Show what context is being injected into this session — recent turns, project AGENTS.md, soul excerpts, codedigest hits. Useful for debugging "why did the agent do X."</p>
+          <code class="ex">/memory</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/worktree" data-keys="worktree branch isolated risky safe sandbox">
+          <header><code class="cmd-name">/worktree</code> <span class="cmd-syntax">&lt;branch&gt;</span></header>
+          <p>Create an isolated git worktree under <code>.gemini/worktrees/&lt;branch&gt;</code> and switch the REPL into it. The same helper powers <code>/overnight --parallel</code>.</p>
+          <code class="ex">/worktree feat/auth</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/undo" data-keys="undo snapshot restore revert file">
+          <header><code class="cmd-name">/undo</code> <span class="cmd-syntax">[list | &lt;commandId&gt;]</span></header>
+          <p>Restore file snapshots taken before every write. With no args, undoes the most recent write. <code>list</code> shows the last 10 snapshots; passing a commandId restores that specific one.</p>
+          <ul class="sub">
+            <li><code>/undo</code> — restore the most recent snapshot.</li>
+            <li><code>/undo list</code> — show last 10 snapshots.</li>
+            <li><code>/undo &lt;id&gt;</code> — restore a specific snapshot.</li>
+          </ul>
+          <code class="ex">/undo list</code>
+        </article>
+      </section>
+
+      <!-- ─── Debug Mode & harnesses ─── -->
+      <section class="cat" data-cat="debug">
+        <h2 class="cat-title">Debug Mode &amp; harnesses <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="/debug" data-keys="debug trace tree langsmith pause gate replay observability">
+          <header><code class="cmd-name">/debug</code> <span class="cmd-syntax">on | off | status | pause | release | replay</span></header>
+          <p>Turn every chat / LLM / tool / agent call into a typed Run in a debuggable tree. TUI right-rail widget + Web UI tab. Pause-before gates step through risky tools; tool runs are replayable.</p>
+          <ul class="sub">
+            <li><code>/debug on</code> · <code>/debug off</code> — toggle the trace recorder.</li>
+            <li><code>/debug status</code> — current state + active gates.</li>
+            <li><code>/debug pause &lt;tool&gt;</code> — pause before a given tool fires.</li>
+            <li><code>/debug release &lt;runId&gt;</code> — release a paused run.</li>
+            <li><code>/debug replay &lt;runId&gt;</code> — re-run a captured tool invocation.</li>
+            <li><code>/debug clear</code> — drop the in-memory trace tree.</li>
+          </ul>
+          <code class="ex">/debug on  →  /debug pause shell  →  /debug release fa3551</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="Harness widget" data-keys="harness skill mcp agent tool scaffold vim editor add widget ctrl-w">
+          <header><kbd>Ctrl+W</kbd> → <strong>Harnesses</strong> → <kbd>Enter</kbd> <span class="cmd-syntax">(TUI widget — there is no /harness slash command)</span></header>
+          <p>One-stop add for Skills / MCP / Agents / Tools. Hit <kbd>n</kbd>, pick a kind (<kbd>1</kbd>–<kbd>4</kbd>), name it, choose empty template (<kbd>t</kbd>) or scaffolding-agent generated (<kbd>a</kbd>), edit in the in-TUI vim editor (<kbd>:wq</kbd> saves), review, then <kbd>y</kbd> installs to the canonical path with MCP-JSON atomic merge + AGENTS.md de-dup.</p>
+          <ul class="sub">
+            <li><strong>Skill</strong> → <code>.gemini/skills/&lt;name&gt;/SKILL.md</code> (or <code>.claude/skills/…</code>) — auto-activates on semantic description match.</li>
+            <li><strong>MCP</strong> → <code>.mcp.json</code> — merged into the shared file; same-id entries overwrite, others survive.</li>
+            <li><strong>Agent</strong> → block appended to <code>AGENTS.md</code> — shared by both backends.</li>
+            <li><strong>Tool</strong> → <code>.flow/tools/&lt;name&gt;.py</code> (chmod 0755) — callable from hooks, shells, MCP wrappers.</li>
+            <li><kbd>r</kbd> on an installed harness <strong>refines it in place</strong> with the agent + your feedback.</li>
+            <li>Drafts persist between sessions in <code>~/.agenit/harnesses/drafts.json</code>.</li>
+          </ul>
+          <code class="ex">Ctrl+W → Harnesses → Enter → n</code>
+          <p class="harness-note">Full reference: <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/docs/harnesses.md" target="_blank" rel="noopener">docs/harnesses.md</a>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Ctrl+W" data-keys="widget navigation rail keyboard ctrl+w expand">
+          <header><code class="cmd-name">Ctrl+W</code> <span class="cmd-syntax">widget navigation mode</span></header>
+          <p>Enter a keyboard-driven nav layer over the rail widgets. Each widget can expand into a full-pane interactive view (tasks, hardware probes, agents dashboard, recipes, codedigest, debug). Legacy <kbd>Ctrl+T</kbd> / <kbd>Ctrl+]</kbd> / <kbd>Ctrl+G</kbd> shortcuts preserved.</p>
+          <ul class="sub">
+            <li><kbd>↑</kbd>/<kbd>↓</kbd> — move focus between widgets.</li>
+            <li><kbd>Enter</kbd> — expand the focused widget to full pane.</li>
+            <li><kbd>Esc</kbd> — collapse / exit nav mode.</li>
+            <li><kbd>Ctrl+W</kbd> — toggle nav.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ─── Backends ─── -->
+      <section class="cat" data-cat="backend">
+        <h2 class="cat-title">Backends &amp; failover <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="/backend" data-keys="backend detect installed active gemini claude openai ollama failover router">
+          <header><code class="cmd-name">/backend</code> <span class="cmd-syntax">[models &lt;provider&gt; | chain &lt;tier&gt;]</span></header>
+          <p>Runtime visibility for the multi-backend layer. With no args, prints a diagnostic table of detected backends, installed binaries, and the currently active provider + model.</p>
+          <ul class="sub">
+            <li><code>/backend</code> &mdash; detected / installed / active table.</li>
+            <li><code>/backend models &lt;provider&gt;</code> &mdash; list available models for <code>gemini-cli</code>, <code>claude</code>, <code>claude-cli</code>, <code>openai</code>, <code>ollama</code>.</li>
+            <li><code>/backend chain &lt;tier&gt;</code> &mdash; show the cross-backend failover chain (e.g. <code>pro</code>, <code>flash</code>).</li>
+          </ul>
+          <code class="ex">/backend models claude-cli</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="claude-cli" data-keys="claude cli subprocess backend oauth pro max team enterprise binary">
+          <header><code class="cmd-name">[backend] provider = "claude-cli"</code></header>
+          <p>Spawn the locally installed <code>claude</code> binary as a subprocess backend. Uses your existing Anthropic OAuth (Pro / Max / Team / Enterprise) &mdash; no API key required. Distinct from <code>provider = "claude"</code>, which goes straight to the Anthropic Messages API with <code>ANTHROPIC_API_KEY</code>.</p>
+          <ul class="sub">
+            <li><code>binary</code> &mdash; path to the <code>claude</code> binary (default: from <code>PATH</code>).</li>
+            <li><code>model</code> &mdash; e.g. <code>claude-sonnet-4-5</code>.</li>
+            <li><code>fallbackModel</code> &mdash; model to drop to on rate-limit.</li>
+            <li><code>requestTimeoutSecs</code> &mdash; per-request wall-clock cap (default 120s, 0 disables).</li>
+            <li><code>settingsPath</code> &mdash; explicit <code>.claude/settings.json</code> path for hook bindings.</li>
+          </ul>
+        </article>
+
+        <article class="cmd-card" data-cmd="agenit init --target" data-keys="init target claude gemini both seed assets dual">
+          <header><code class="cmd-name">agenit init --target</code> <span class="cmd-syntax">claude | gemini | both</span></header>
+          <p>Seed <code>.claude/</code>, <code>.gemini/</code>, or both. Hooks under <code>.flow/hooks/</code> are shared between backends &mdash; one hook, both runtimes.</p>
+          <code class="ex">agenit init --target both</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="backend picker" data-keys="interactive backend picker tty init choose detect">
+          <header><code class="cmd-name">Interactive backend picker</code></header>
+          <p><code>agenit init</code> probes which backends you have installed and asks you to pick when stdin is a TTY. Non-interactive runs (CI) fall back to <code>--target gemini</code>.</p>
+        </article>
+      </section>
+
+      <!-- ─── VS Code ─── -->
+      <section class="cat" data-cat="vscode">
+        <h2 class="cat-title">VS Code extension <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="AgenIT compact panel" data-keys="vscode panel webview compact chat v-model squad goal memory design">
+          <header><code class="cmd-name">AgenIT: Open Panel</code> <span class="cmd-syntax"><kbd>Ctrl+Alt+A</kbd> / <kbd>⌘⌥A</kbd></span></header>
+          <p>Embedded web UI inside VS Code &mdash; Chat, V-Model, Squad, Goal, Jobs, Memory, Design tabs. Same surface as the browser SPA.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="AgenIT immersive view" data-keys="vscode immersive full-screen webview brand activity bar widgets">
+          <header><code class="cmd-name">AgenIT: Open Immersive View</code> <span class="cmd-syntax"><kbd>Ctrl+Alt+Shift+A</kbd> / <kbd>⌘⌥⇧A</kbd></span></header>
+          <p>Full-screen webview reproducing the AgenIT design chrome (titlebar, brand activity bar, right-rail widgets, status pill). Best for long-running pair sessions.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="AgenIT slash palette" data-keys="vscode slash command palette quickpick fuzzy">
+          <header><code class="cmd-name">AgenIT: Slash Command Palette</code> <span class="cmd-syntax"><kbd>Ctrl+Alt+/</kbd> / <kbd>⌘⌥/</kbd></span></header>
+          <p>Fuzzy-find any of the 50+ slash commands. Arguments are prompted via QuickPick / InputBox so you don't have to remember syntax.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="VS Code TreeViews" data-keys="vscode sidebar treeview activity bar pipeline squad goal jobs memory debug">
+          <header><code class="cmd-name">Activity Bar → AgenIT</code></header>
+          <p>Six sidebar TreeViews: <strong>V-Model Pipeline</strong> (live status + SWR-coverage footer) · <strong>Mission Squad</strong> (helpers + elapsed time) · <strong>Goal</strong> (active loop + linger summary) · <strong>Background Jobs</strong> (overnight / soul-keeper / goal runners) · <strong>Memory</strong> (soul.md + project files with size + mtime) · <strong>Debug Mode</strong> (toggle + pending gates + recent traces).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="@req CodeLens" data-keys="vscode codelens req swr traceability coverage jump">
+          <header><code class="cmd-name">@req SWR-NNN CodeLens</code></header>
+          <p>In C / C++ / H files, every <code>@req SWR-NNN</code> tag gets a CodeLens line above it. Click to jump to the requirement; coverage badge pulls from <code>traceability.json</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="cppcheck diagnostics" data-keys="cppcheck vscode diagnostics save c cpp linter">
+          <header><code class="cmd-name">cppcheck diagnostics</code></header>
+          <p>Native cppcheck diagnostics on save / open for C/C++ files. Silent when cppcheck isn't installed (no nag).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="AgenIT Restart Daemon" data-keys="vscode restart daemon agenit serve upgrade refresh">
+          <header><code class="cmd-name">AgenIT: Restart Daemon</code></header>
+          <p>After upgrading <code>agenit</code>, restart the spawned <code>agenit serve</code> daemon to pick up the new orchestrator. <em>No extension rebuild required</em>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="AgenIT Show Logs" data-keys="vscode show logs output channel agenit serve stdio">
+          <header><code class="cmd-name">AgenIT: Show Logs</code></header>
+          <p>Open the Output Channel with raw <code>agenit serve</code> stdio &mdash; useful when something silent breaks.</p>
+        </article>
+      </section>
+
+      <!-- ─── Web UI ─── -->
+      <section class="cat" data-cat="web">
+        <h2 class="cat-title">Web UI &amp; design <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="/web" data-keys="web ui browser spa control panel">
+          <header><code class="cmd-name">/web</code> <span class="cmd-syntax">start [--port N] | stop</span></header>
+          <p>Launch the browser control SPA in a separate process — seven panels: Chat · Pipeline · Squad · Goal · Design · Memory · Jobs. Auth-token + origin gated.</p>
+          <ul class="sub">
+            <li><code>/web start</code> — start on default port 8765.</li>
+            <li><code>/web start --port 9000</code> — pick a port.</li>
+            <li><code>/web stop</code> — stop the control server.</li>
+          </ul>
+          <code class="ex">/web start --port 8765</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/serve" data-keys="serve in-process repl shared run-registry debug tab">
+          <header><code class="cmd-name">/serve</code> <span class="cmd-syntax">[--port N]</span></header>
+          <p>Start the full control SPA <em>inside</em> the running REPL (same process → shared run-registry → Debug tab sees your live traces). Replaces the need to launch <code>agenit serve</code> in a second terminal.</p>
+          <code class="ex">/serve --port 8765</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/export" data-keys="export pdf pptx html puppeteer pptxgenjs design">
+          <header><code class="cmd-name">/export</code> <span class="cmd-syntax">&lt;file&gt; --to pdf | pptx | html [--out &lt;path&gt;]</span></header>
+          <p><code>@flow/exporter</code> turns a generated design into a shareable artefact. <code>puppeteer</code> for PDF and <code>pptxgenjs</code> for PPTX are optional peer deps.</p>
+          <ul class="sub">
+            <li><code>--to pdf</code> — render via headless Chromium.</li>
+            <li><code>--to pptx</code> — slide-per-section deck.</li>
+            <li><code>--to html --out &lt;path&gt;</code> — copy / re-emit HTML.</li>
+          </ul>
+          <code class="ex">/export landing.html --to pdf</code>
+        </article>
+      </section>
+
+      <!-- ─── Pipeline (V-Model) ─── -->
+      <section class="cat" data-cat="pipeline">
+        <h2 class="cat-title">Pipeline (V-Model)</h2>
+
+        <article class="cmd-card" data-cmd="/run" data-keys="run pipeline full v-model stages req arch code test audit">
+          <header><code class="cmd-name">/run</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Full pipeline: SWE.1 Requirements → SWE.2 Architecture → SWE.4 Code → SWE.5 Testing → SWE.6 Critic → Audit. Each stage activates a different skill. Memory + soul ride along on every stage.</p>
+          <code class="ex">/run add CAN timeout recovery to can_driver.c</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/swe1" data-keys="swe1 requirements ears swr req">
+          <header><code class="cmd-name">/swe1</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Requirements stage — writes EARS user stories with <code>SWR-NNN</code> / <code>REQ-NNN</code> tags into <code>requirements.md</code>.</p>
+          <code class="ex">/swe1 add password reset flow</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/swe2" data-keys="swe2 architecture hld plantuml diagram">
+          <header><code class="cmd-name">/swe2</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Architecture stage — HLD + PlantUML diagrams written to <code>architecture.md</code>.</p>
+          <code class="ex">/swe2 design the message bus</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/swe4" data-keys="swe4 implementation misra doxygen code">
+          <header><code class="cmd-name">/swe4</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Implementation stage — MISRA-compliant C / language-appropriate code with Doxygen and <code>@req</code> tags linking back to <code>SWR-NNN</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/swe5" data-keys="swe5 tests unity cpputest vitest hil">
+          <header><code class="cmd-name">/swe5</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Testing stage — Unity / CppUTest / Vitest / Playwright tests covering every requirement. Optional HIL hooks.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/swe6" data-keys="swe6 critic stress test vague verbs contradictions">
+          <header><code class="cmd-name">/swe6</code> <span class="cmd-syntax">&lt;task&gt;</span> <span class="cat-badge">NEW</span></header>
+          <p>Critic stage — <code>swe6-critic</code> stress-tests the output of every other stage for vague verbs, contradictions, and untestable claims. Writes <code>critique.md</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/audit" data-keys="audit traceability compliance aspice report">
+          <header><code class="cmd-name">/audit</code></header>
+          <p>Traceability + compliance report — requirements covered, orphan tests, missing audits, ASPICE checklist.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/traceability" data-keys="traceability req tags graph reqs code tests">
+          <header><code class="cmd-name">/traceability</code></header>
+          <p>Show the <code>@req</code> graph linking requirements → code → tests → audit notes. Includes the new <code>REQ-SKILL-NNN</code> skill inventory.</p>
+        </article>
+      </section>
+
+      <!-- ─── Spec-Kit ─── -->
+      <section class="cat" data-cat="speckit">
+        <h2 class="cat-title">Spec-Kit (Spec-Driven Development)</h2>
+
+        <article class="cmd-card" data-cmd="/speckit run" data-keys="speckit run specify plan tasks sdd">
+          <header><code class="cmd-name">/speckit run</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Run specify → clarify → plan → tasks in one shot. Outputs land under <code>.specify/specs/&lt;feature&gt;/</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit specify" data-keys="speckit specify spec user stories acceptance">
+          <header><code class="cmd-name">/speckit specify</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>User stories + acceptance criteria + NFRs → <code>spec.md</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit clarify" data-keys="speckit clarify ambiguity resolve">
+          <header><code class="cmd-name">/speckit clarify</code></header>
+          <p>Walk the spec, flag ambiguities, ask the user to resolve them. Updates <code>spec.md</code> with decisions.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit plan" data-keys="speckit plan technical architecture stack">
+          <header><code class="cmd-name">/speckit plan</code> <span class="cmd-syntax">[stack]</span></header>
+          <p>Technical architecture → <code>plan.md</code>. Optionally override the auto-detected stack.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit tasks" data-keys="speckit tasks ordered list breakdown">
+          <header><code class="cmd-name">/speckit tasks</code></header>
+          <p>Ordered task list → <code>tasks.md</code>. Tied live to the Tasks widget in the REPL.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit implement" data-keys="speckit implement execute">
+          <header><code class="cmd-name">/speckit implement</code></header>
+          <p>Execute <code>tasks.md</code> via the implementer skill, ticking off each task as it completes.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit critique" data-keys="speckit critique stress untestable contradictions vague verbs">
+          <header><code class="cmd-name">/speckit critique</code> <span class="cmd-syntax">[&lt;feature-id&gt;]</span> <span class="cat-badge">NEW</span></header>
+          <p>Stress-test a spec for vague verbs, contradictions, untestable claims. Writes <code>critique.md</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit checklist" data-keys="speckit checklist review">
+          <header><code class="cmd-name">/speckit checklist</code></header>
+          <p>Generate a review checklist from the spec.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit analyze" data-keys="speckit analyze cross-check consistency">
+          <header><code class="cmd-name">/speckit analyze</code></header>
+          <p>Cross-check spec / plan / tasks consistency. Flags drift between artefacts.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit issues" data-keys="speckit issues github open">
+          <header><code class="cmd-name">/speckit issues</code></header>
+          <p>Open GitHub issues from <code>tasks.md</code> (needs <code>gh</code> auth).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit constitution" data-keys="speckit constitution principles project">
+          <header><code class="cmd-name">/speckit constitution</code></header>
+          <p>Load / edit the project constitution — high-level principles every feature inherits.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit init" data-keys="speckit init initialise scaffold">
+          <header><code class="cmd-name">/speckit init</code></header>
+          <p>Initialise Spec-Kit in this project — scaffolds <code>.specify/</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit branch" data-keys="speckit branch git feature">
+          <header><code class="cmd-name">/speckit branch</code></header>
+          <p>Create a feature branch from the current spec.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit commit" data-keys="speckit commit stage git">
+          <header><code class="cmd-name">/speckit commit</code></header>
+          <p>Stage + commit the current <code>spec.md</code> / <code>plan.md</code> / <code>tasks.md</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit status" data-keys="speckit status list features">
+          <header><code class="cmd-name">/speckit status</code></header>
+          <p>List every feature under <code>.specify/specs/</code> with phase status.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/speckit export-to-swe1" data-keys="speckit export swe1 seed requirements">
+          <header><code class="cmd-name">/speckit export-to-swe1</code></header>
+          <p>Seed <code>requirements.md</code> for the V-Model pipeline from the active spec.</p>
+        </article>
+      </section>
+
+      <!-- ─── Squad ─── -->
+      <section class="cat" data-cat="squad">
+        <h2 class="cat-title">Mission Squad</h2>
+
+        <article class="cmd-card" data-cmd="/squad implement" data-keys="squad implement fleet helpers parallel briefing">
+          <header><code class="cmd-name">/squad implement</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Deterministic helpers (req-reader · code-scanner · trace · MISRA · codedigest) → <code>swe4-implementer</code>. Helpers run in parallel; the implementer fires with a pre-injected briefing.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/squad implement-agentic" data-keys="squad implement agentic llm sub-agents">
+          <header><code class="cmd-name">/squad implement-agentic</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Same shape as <code>implement</code> but every helper is its own Gemini sub-agent loaded with a focused skill. Heavier but more flexible.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/squad debug" data-keys="squad debug trace lint pre-flight hw-debugger">
+          <header><code class="cmd-name">/squad debug</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Trace + code + MISRA → <code>hw-debugger</code>. Use when a hardware/firmware bug needs context-gathering before diagnosis.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/squad review" data-keys="squad review misra style reviewer">
+          <header><code class="cmd-name">/squad review</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>MISRA + req + code → <code>embedded-misra-review</code> (or language-appropriate reviewer).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/squad test" data-keys="squad test req code memory tester">
+          <header><code class="cmd-name">/squad test</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Req + code + memory → <code>swe5-tester</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/squad requirements" data-keys="squad requirements context gather">
+          <header><code class="cmd-name">/squad requirements</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Single-phase context gather → <code>swe1-requirements</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/squad architecture" data-keys="squad architecture req memory headers architect">
+          <header><code class="cmd-name">/squad architecture</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>Req + memory + headers → <code>swe2-architect</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/squad &lt;template&gt;-agentic" data-keys="squad agentic suffix variant llm-per-slot">
+          <header><code class="cmd-name">/squad &lt;template&gt;-agentic</code> <span class="cmd-syntax">&lt;task&gt;</span></header>
+          <p>LLM-per-slot variant of any template — append <code>-agentic</code> to <code>implement</code>, <code>debug</code>, <code>review</code>, <code>test</code>, <code>requirements</code>, <code>architecture</code>.</p>
+        </article>
+      </section>
+
+      <!-- ─── Goal ─── -->
+      <section class="cat" data-cat="goal">
+        <h2 class="cat-title">Autonomous Goals</h2>
+
+        <article class="cmd-card" data-cmd="/goal" data-keys="goal autonomous plan code test evaluate budget objective">
+          <header><code class="cmd-name">/goal</code> <span class="cmd-syntax">&lt;objective&gt; [--force]</span></header>
+          <p>Create or replace the active goal. Long-lived Plan → Code → Test → Evaluate loop with budget tracking + auditor. State checkpointed under <code>memory/projects/&lt;name&gt;/goal.json</code>.</p>
+          <ul class="sub">
+            <li><code>/goal &lt;objective&gt;</code> — create (fails if one is active).</li>
+            <li><code>/goal &lt;objective&gt; --force</code> — replace the active goal.</li>
+            <li><code>/goal</code> (no args) — short status (id, state, turns).</li>
+          </ul>
+          <code class="ex">/goal Migrate the entire codebase to TypeScript</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal status" data-keys="goal status dashboard verbose turns">
+          <header><code class="cmd-name">/goal status</code></header>
+          <p>Verbose dashboard — id, state, turns used / remaining, files touched, tests added, errors, runner status.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal log" data-keys="goal log audit history events">
+          <header><code class="cmd-name">/goal log</code> <span class="cmd-syntax">[n]</span></header>
+          <p>Audit log — every stage transition, every auditor decision. With <code>n</code>, shows the last <code>n</code> entries.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal start" data-keys="goal start runner spawn autonomous interactive checkpoint cadence">
+          <header><code class="cmd-name">/goal start</code> <span class="cmd-syntax">[--interactive]</span></header>
+          <p>Spawn the autonomous runner in the background. The REPL stays interactive; the runner survives REPL exit.</p>
+          <ul class="sub">
+            <li><code>--interactive</code> — prompts for turn budget &amp; cadence at launch, and pauses for review at each per-tick checkpoint (audit #134). <span class="cat-badge">NEW</span></li>
+            <li>Auto-checkpoint cadence is configurable via <code>[goal] checkpoint_every_turns</code> in <code>agenit.toml</code>.</li>
+          </ul>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal stop" data-keys="goal stop cancel kill runner">
+          <header><code class="cmd-name">/goal stop</code></header>
+          <p>Cancel the runner cleanly. State is preserved; <code>/goal start</code> resumes.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal tick" data-keys="goal tick manual step single turn">
+          <header><code class="cmd-name">/goal tick</code></header>
+          <p>Step a single turn manually. Useful for stepping through a goal interactively.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal pause" data-keys="goal pause resume flip state">
+          <header><code class="cmd-name">/goal pause</code> · <code class="cmd-name">/goal resume</code></header>
+          <p>Flip state mid-run. Runner stays alive; just stops issuing turns.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal budget" data-keys="goal budget extend turns cap">
+          <header><code class="cmd-name">/goal budget</code> <span class="cmd-syntax">&lt;n&gt;</span></header>
+          <p>Extend the turn budget by <code>n</code>. Useful when an auditor decides "Continue" but the cap is reached.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/goal clear" data-keys="goal clear archive goals_archive">
+          <header><code class="cmd-name">/goal clear</code></header>
+          <p>Archive the active goal to <code>goals_archive.md</code> and free the slot for a new one.</p>
+        </article>
+      </section>
+
+      <!-- ─── Overnight ─── -->
+      <section class="cat" data-cat="overnight">
+        <h2 class="cat-title">Overnight loop <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="/overnight" data-keys="overnight loop unattended commit rollback worktree parallel gnhf">
+          <header><code class="cmd-name">/overnight</code> <span class="cmd-syntax">[flags] -- &lt;shell cmd&gt;</span></header>
+          <p>Long-running autonomous loop with per-iteration git commits, rollback on failure, worktree-isolated parallel runs, and a permanent markdown summary. Agent-agnostic. Inspired by <a href="https://github.com/kunchenguid/gnhf" target="_blank" rel="noopener">gnhf</a>.</p>
+          <ul class="sub">
+            <li><code>--max-iter N</code> — cap iterations (default 50).</li>
+            <li><code>--budget-tokens N</code> — stop once a tick reports <code>tokensSpent ≥ N</code>.</li>
+            <li><code>--parallel N</code> — run N worktree-isolated copies in parallel.</li>
+            <li><code>--no-commit</code> — dry-run; no commits, no rollback.</li>
+            <li><code>--allow-dirty</code> — skip the clean-tree precondition.</li>
+            <li><code>--summary &lt;path&gt;</code> — where to write the permanent run summary.</li>
+          </ul>
+          <code class="ex">/overnight --parallel 2 --max-iter 30 -- gemini "fix the failing tests"</code>
+        </article>
+      </section>
+
+      <!-- ─── Agile / OPA / QA / PMO ─── -->
+      <section class="cat" data-cat="agile">
+        <h2 class="cat-title">Agile · OPA · QA · PMO <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="/agile" data-keys="agile scrum ceremonies persona crew sprint enable disable status digest burndown next-sprint cadence">
+          <header><code class="cmd-name">/agile</code> <span class="cmd-syntax">[enable | disable | status | digest | burndown | sprint start | sprint status | next-sprint]</span></header>
+          <p>Manage the Agile persona layer — enable / disable Scrum ceremonies and the persona crew. The ceremony worker runs in the background and fires standup / planning / review / retro on cadence; OPA and QA gates plug in automatically.</p>
+          <ul class="sub">
+            <li><code>/agile enable</code> · <code>/agile disable</code> — toggle the layer and the ceremony worker.</li>
+            <li><code>/agile status</code> — sprint state, cadence, token budget, ceremony worker status.</li>
+            <li><code>/agile sprint start</code> · <code>/agile sprint status</code> · <code>/agile sprint approve-scope</code> — manual sprint control.</li>
+            <li><code>/agile next-sprint</code> — close the active sprint, archive metrics, open the next.</li>
+            <li><code>/agile digest</code> — per-project digest: ceremonies fired, blockers, velocity. <span class="cat-badge">NEW</span></li>
+            <li><code>/agile burndown</code> — ASCII burndown chart for the active sprint. <span class="cat-badge">NEW</span></li>
+          </ul>
+          <code class="ex">/agile enable && /agile burndown</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/opa" data-keys="opa organizational process assets policies templates lessons upload reset init category">
+          <header><code class="cmd-name">/opa</code> <span class="cmd-syntax">[status | enable &lt;cat&gt; | disable &lt;cat&gt; | upload &lt;path&gt; | reset &lt;cat&gt; | init]</span></header>
+          <p>Manage Organizational Process Assets — upload policies, templates, and lessons-learned. OPA assets are auto-injected into the prompt for matching ceremonies and stages.</p>
+          <ul class="sub">
+            <li><code>/opa status</code> — categories + counts.</li>
+            <li><code>/opa upload &lt;path&gt;</code> — ingest a policy / template / lesson file.</li>
+            <li><code>/opa enable &lt;cat&gt;</code> · <code>/opa disable &lt;cat&gt;</code> — toggle a category.</li>
+            <li><code>/opa reset &lt;cat&gt;</code> — clear back to defaults.</li>
+            <li><code>/opa init</code> — seed the store with the bundled defaults.</li>
+          </ul>
+        </article>
+
+        <article class="cmd-card" data-cmd="/qa" data-keys="qa quality assurance verified deliverables scope validation gate definition done acceptance criteria fix report">
+          <header><code class="cmd-name">/qa</code> <span class="cmd-syntax">[--goal &lt;id&gt;] [--spec &lt;path&gt;] [--fix]</span></header>
+          <p>Verified deliverables + scope validation gate — writes <code>qa-report.md</code> with LLM-evaluated acceptance criteria, Definition-of-Done checks, and PMO QA failure detection.</p>
+          <ul class="sub">
+            <li><code>--goal &lt;id&gt;</code> — scope QA to a specific active goal.</li>
+            <li><code>--spec &lt;path&gt;</code> — point at a non-default spec file.</li>
+            <li><code>--fix</code> — attempt auto-fix of QA gate failures.</li>
+          </ul>
+          <code class="ex">/qa --goal G-0042</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/pmo" data-keys="pmo portfolio governance dashboard rag status report forecast velocity backlog projects">
+          <header><code class="cmd-name">/pmo</code> <span class="cmd-syntax">[status [--project &lt;name&gt;] | report | forecast [--backlog &lt;N&gt;]]</span></header>
+          <p>Portfolio governance dashboard — RAG status across all active projects, long-form PMO report, and velocity-based backlog completion forecast.</p>
+          <ul class="sub">
+            <li><code>/pmo status</code> — RAG (red / amber / green) across every project the orchestrator has touched.</li>
+            <li><code>/pmo report</code> — long-form report (budget, velocity, blockers, ceremonies, OPA hits).</li>
+            <li><code>/pmo forecast --backlog 25</code> — predict completion date for the next N backlog items.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ─── Migration ─── -->
+      <section class="cat" data-cat="migrate">
+        <h2 class="cat-title">Migration <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="/migrate review" data-keys="migrate sql review safety lock rowcounts directory">
+          <header><code class="cmd-name">/migrate review</code> <span class="cmd-syntax">&lt;file.sql | --dir &lt;dir&gt;&gt; [--rowcounts &lt;file&gt;]</span></header>
+          <p>Review SQL migrations for safety — NOT NULL adds, table rewrites, long-running indexes — weighted by row counts when provided.</p>
+          <code class="ex">/migrate review --dir db/migrations --rowcounts rowcounts.csv</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/migrate gemini-plan" data-keys="migrate gemini plan-mode artefacts recover copy list cache specify spec slug">
+          <header><code class="cmd-name">/migrate gemini-plan</code> <span class="cmd-syntax">list [--cache &lt;dir&gt;] | copy &lt;path|--latest&gt; [--slug &lt;name&gt;] [--force]</span> <span class="cat-badge">NEW</span></header>
+          <p>Recover raw Gemini CLI plan-mode artefacts so they can run through the AgenIT pipeline. Lists every plan-mode artefact found on disk and copies the chosen one into <code>.specify/specs/&lt;slug&gt;/</code> for <code>/speckit</code> + <code>/run</code>.</p>
+          <ul class="sub">
+            <li><code>list</code> — show every artefact (filename, timestamp, size).</li>
+            <li><code>copy &lt;path&gt;</code> — copy a specific artefact.</li>
+            <li><code>copy --latest</code> — copy the most recent one.</li>
+            <li><code>--slug &lt;name&gt;</code> — target spec folder name (defaults to a slug of the artefact title).</li>
+            <li><code>--force</code> — overwrite an existing spec folder.</li>
+          </ul>
+          <code class="ex">/migrate gemini-plan copy --latest --slug oauth-recovery</code>
+        </article>
+      </section>
+
+      <!-- ─── Critic / PR review ─── -->
+      <section class="cat" data-cat="critic">
+        <h2 class="cat-title">Critic &amp; PR review <span class="cat-badge">NEW</span></h2>
+
+        <article class="cmd-card" data-cmd="/diff-walk" data-keys="diff-walk hunks critic swe6 severity review base">
+          <header><code class="cmd-name">/diff-walk</code> <span class="cmd-syntax">[--base &lt;ref&gt;] [--inventory-only]</span></header>
+          <p>Walk <code>git diff</code> hunks; run <code>swe6-critic</code> on each; print a severity-sorted report.</p>
+          <ul class="sub">
+            <li><code>--base &lt;ref&gt;</code> — compare against a base ref (default: <code>main</code>).</li>
+            <li><code>--inventory-only</code> — list hunks without critiquing (useful for previewing scope).</li>
+          </ul>
+          <code class="ex">/diff-walk --base origin/main</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/pr-autofix" data-keys="pr autofix lint format import order trailing whitespace backup branch deterministic">
+          <header><code class="cmd-name">/pr-autofix</code> <span class="cmd-syntax">&lt;pr#&gt; [--confirm]</span></header>
+          <p>Critic per hunk + apply deterministic patches (<code>lint</code> / <code>format</code> / <code>import-order</code> / <code>trailing-whitespace</code>) with backup branch + telemetry.</p>
+          <ul class="sub">
+            <li><code>&lt;pr#&gt;</code> — GitHub PR number (uses <code>gh</code>).</li>
+            <li><code>--confirm</code> — apply patches non-interactively.</li>
+            <li><code>--dry-run</code> — print the patch plan, do not write.</li>
+          </ul>
+          <code class="ex">/pr-autofix 1421 --confirm</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/pr-metrics" data-keys="pr metrics ai human cohort events writes cost tool calls">
+          <header><code class="cmd-name">/pr-metrics</code> <span class="cmd-syntax">[--since &lt;iso&gt;] [--json]</span></header>
+          <p>AI-vs-human cohort report from <code>events.jsonl</code> — writes / cost / tool calls / autofix activity.</p>
+          <ul class="sub">
+            <li><code>--since 2026-01-01</code> — filter window.</li>
+            <li><code>--json</code> — machine-readable output for dashboards.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- ─── Code search ─── -->
+      <section class="cat" data-cat="codedigest">
+        <h2 class="cat-title">Code search &amp; call graph</h2>
+
+        <article class="cmd-card" data-cmd="/codedigest index" data-keys="codedigest index bm25 build">
+          <header><code class="cmd-name">/codedigest index</code> <span class="cmd-syntax">&lt;path&gt;</span></header>
+          <p>Build the BM25 index for the given path. Stored as JSON under <code>memory/projects/&lt;name&gt;/codedigest_&lt;name&gt;.json</code> — no native deps, no embeddings download.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/codedigest search" data-keys="codedigest search query bm25 ranked graph dkb">
+          <header><code class="cmd-name">/codedigest search</code> <span class="cmd-syntax">&lt;query&gt; [--lang X] [--graph]</span></header>
+          <p>Top results, ranked. <code>--graph</code> attaches each hit's direct callers + callees (DKB-style retrieval).</p>
+          <ul class="sub">
+            <li><code>--lang c|ts|py|...</code> — filter by language.</li>
+            <li><code>--graph</code> — auto-inject callers + callees (needs <code>graph --use-lsp</code> first).</li>
+            <li><code>--limit N</code> — change the top-N (default 5).</li>
+          </ul>
+        </article>
+
+        <article class="cmd-card" data-cmd="/codedigest graph" data-keys="codedigest graph lsp clangd pyright rust-analyzer crabviz dot svg html callers callees">
+          <header><code class="cmd-name">/codedigest graph</code> <span class="cmd-syntax">--use-lsp [--export svg|dot|html]</span> <span class="cat-badge">NEW</span></header>
+          <p>Build the LSP-derived call graph (clangd / pyright / rust-analyzer; daemon-mode reuse). Render to Graphviz / SVG / interactive HTML.</p>
+          <code class="ex">/codedigest graph --use-lsp --export html</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/codedigest status" data-keys="codedigest status stats">
+          <header><code class="cmd-name">/codedigest status</code></header>
+          <p>Show index stats — file count, chunk count, last-built timestamp.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/codedigest clear" data-keys="codedigest clear drop reset">
+          <header><code class="cmd-name">/codedigest clear</code></header>
+          <p>Drop the index.</p>
+        </article>
+      </section>
+
+      <!-- ─── Hardware ─── -->
+      <section class="cat" data-cat="hardware">
+        <h2 class="cat-title">Hardware &amp; debug</h2>
+
+        <article class="cmd-card" data-cmd="/debug-hw" data-keys="debug ad-hoc jlink can lin saleae trace asc analyse">
+          <header><code class="cmd-name">/debug</code> <span class="cmd-syntax">&lt;query&gt;</span> <em>(ad-hoc)</em></header>
+          <p>Ad-hoc hardware dispatcher: JLink registers, CAN/LIN traces, Saleae captures, code search. Auto-routes to <code>hw-debugger</code> or related skills. (Distinct from <code>/debug on</code>, which toggles Debug Mode.)</p>
+          <code class="ex">/debug analyze trace.asc for CAN timeout errors</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/configure hardware" data-keys="configure hardware detect probe serial">
+          <header><code class="cmd-name">/configure hardware</code></header>
+          <p>Detect and configure JLink / Saleae probes. Persists serial numbers into <code>config/flow.toml</code>.</p>
+        </article>
+      </section>
+
+      <!-- ─── Marketplace ─── -->
+      <section class="cat" data-cat="marketplace">
+        <h2 class="cat-title">Marketplace &amp; plugins</h2>
+
+        <article class="cmd-card" data-cmd="/marketplace list" data-keys="marketplace list registry curated">
+          <header><code class="cmd-name">/marketplace list</code></header>
+          <p>List the curated AgenIT registry + the live Claude Code marketplace.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace search" data-keys="marketplace search query">
+          <header><code class="cmd-name">/marketplace search</code> <span class="cmd-syntax">&lt;q&gt;</span></header>
+          <p>Search across all sources.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace install" data-keys="marketplace install id cc claude code translate">
+          <header><code class="cmd-name">/marketplace install</code> <span class="cmd-syntax">&lt;id&gt;</span></header>
+          <p>Install by id. Use <code>cc/&lt;name&gt;</code> for Claude Code entries — skills, MCP servers, agents, slash commands, and hooks are translated into Gemini-compatible artefacts at install time.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace installed" data-keys="marketplace installed list artifacts">
+          <header><code class="cmd-name">/marketplace installed</code></header>
+          <p>List installed artifacts.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace remove" data-keys="marketplace remove uninstall">
+          <header><code class="cmd-name">/marketplace remove</code> <span class="cmd-syntax">&lt;id&gt;</span></header>
+          <p>Uninstall.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace update" data-keys="marketplace update refresh cache">
+          <header><code class="cmd-name">/marketplace update</code></header>
+          <p>Refresh registry caches.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace add" data-keys="marketplace add github url plugin">
+          <header><code class="cmd-name">/marketplace add</code> <span class="cmd-syntax">&lt;github-url&gt;</span></header>
+          <p>Install any Claude Code plugin directly from a GitHub URL.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace cc-browse" data-keys="marketplace claude code browse index owner repo">
+          <header><code class="cmd-name">/marketplace cc-browse</code> <span class="cmd-syntax">[&lt;owner&gt;/&lt;repo&gt;]</span></header>
+          <p>Browse a Claude Code marketplace index.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/marketplace mcp" data-keys="marketplace mcp registry servers tools call ping handshake">
+          <header><code class="cmd-name">/marketplace mcp</code> <span class="cmd-syntax">&lt;query&gt; | servers | ping &lt;srv&gt; | tools &lt;srv&gt; | call &lt;srv&gt;:&lt;tool&gt; &lt;json&gt;</span></header>
+          <p>Live MCP registry tools.</p>
+          <ul class="sub">
+            <li><code>mcp &lt;query&gt;</code> — search the live MCP registry API.</li>
+            <li><code>mcp servers</code> — list discovered MCP servers.</li>
+            <li><code>mcp ping &lt;server&gt;</code> — live MCP handshake.</li>
+            <li><code>mcp tools &lt;server&gt;</code> — list tools an MCP server advertises.</li>
+            <li><code>mcp call &lt;srv&gt;:&lt;tool&gt; &lt;json&gt;</code> — invoke an MCP tool directly.</li>
+          </ul>
+        </article>
+
+        <article class="cmd-card" data-cmd="/plugin" data-keys="plugin install list info remove claude code github">
+          <header><code class="cmd-name">/plugin</code> <span class="cmd-syntax">install &lt;github-url&gt; | list | info | remove</span></header>
+          <p>Manage Claude Code plugins installed into the active backend.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/skills" data-keys="skills list install remove manage">
+          <header><code class="cmd-name">/skills</code> <span class="cmd-syntax">list | install | remove</span></header>
+          <p>Manage <code>.gemini/skills/</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/mcp" data-keys="mcp install server github postgres filesystem">
+          <header><code class="cmd-name">/mcp</code> <span class="cmd-syntax">install &lt;server&gt;</span></header>
+          <p>Install any MCP server (GitHub, filesystem, Postgres, …) into the active backend.</p>
+        </article>
+      </section>
+
+      <!-- ─── LSP / modes ─── -->
+      <section class="cat" data-cat="lsp">
+        <h2 class="cat-title">Code intelligence &amp; modes</h2>
+
+        <article class="cmd-card" data-cmd="/lsp def" data-keys="lsp def goto definition clangd pyright rust-analyzer">
+          <header><code class="cmd-name">/lsp def</code> <span class="cmd-syntax">&lt;file&gt;:&lt;line&gt;:&lt;col&gt;</span></header>
+          <p>Goto definition (clangd / pyright / rust-analyzer).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/lsp refs" data-keys="lsp refs references find">
+          <header><code class="cmd-name">/lsp refs</code> <span class="cmd-syntax">&lt;file&gt;:&lt;line&gt;:&lt;col&gt;</span></header>
+          <p>Find references.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/lsp hover" data-keys="lsp hover type docs">
+          <header><code class="cmd-name">/lsp hover</code> <span class="cmd-syntax">&lt;file&gt;:&lt;line&gt;:&lt;col&gt;</span></header>
+          <p>Type / docs at point.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/lsp diag" data-keys="lsp diag diagnostics">
+          <header><code class="cmd-name">/lsp diag</code> <span class="cmd-syntax">[&lt;file&gt;]</span></header>
+          <p>Diagnostics from the language server.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/plan" data-keys="plan mode advisory approval">
+          <header><code class="cmd-name">/plan</code></header>
+          <p>Plan mode — every tool call requires approval. Useful before risky multi-file edits.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/build" data-keys="build execute default mode">
+          <header><code class="cmd-name">/build</code></header>
+          <p>Switch back to the default execute mode.</p>
+        </article>
+      </section>
+
+      <!-- ─── Shortcuts ─── -->
+      <section class="cat" data-cat="shortcut">
+        <h2 class="cat-title">Input shortcuts &amp; keys</h2>
+
+        <article class="cmd-card" data-cmd="@file" data-keys="at file inline content code block">
+          <header><code class="cmd-name">@src/file.ts</code></header>
+          <p>Insert file content as a code block at the cursor.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="@dir" data-keys="at directory listing tree">
+          <header><code class="cmd-name">@src/</code></header>
+          <p>Insert directory listing at the cursor.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Tab" data-keys="tab complete autocomplete fuzzy slash">
+          <header><code class="cmd-name">/cmd</code> + <kbd>Tab</kbd></header>
+          <p>Fuzzy autocomplete for slash commands. <code>@</code> + <kbd>Tab</kbd> opens a file / folder picker.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Ctrl+C" data-keys="ctrl c cancel turn squad goal">
+          <header><kbd>Ctrl+C</kbd></header>
+          <p>Cancel the current turn / squad / goal tick. Safe — leaves state consistent.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Ctrl+U" data-keys="ctrl u scroll back history">
+          <header><kbd>Ctrl+U</kbd> · <kbd>Ctrl+D</kbd></header>
+          <p>Scroll backlog up / down. <kbd>PgUp</kbd> / <kbd>PgDn</kbd> work too.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Ctrl+R" data-keys="ctrl r history search">
+          <header><kbd>Ctrl+R</kbd></header>
+          <p>Search prompt history.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Ctrl+T" data-keys="ctrl t thinking fold toggle">
+          <header><kbd>Ctrl+T</kbd></header>
+          <p>Fold / unfold thinking blocks.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Ctrl+B" data-keys="ctrl b rail toggle">
+          <header><kbd>Ctrl+B</kbd> · <kbd>Ctrl+]</kbd></header>
+          <p>Toggle / widen the rail.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="Ctrl+G" data-keys="ctrl g expand minimise job">
+          <header><kbd>Ctrl+G</kbd> · <kbd>Ctrl+J</kbd></header>
+          <p>Expand / minimise the active job. <kbd>Ctrl+J</kbd> cycles through jobs.</p>
+        </article>
+      </section>
+
+      <!-- ─── CLI / Env ─── -->
+      <section class="cat" data-cat="cli">
+        <h2 class="cat-title">CLI flags &amp; environment</h2>
+
+        <article class="cmd-card" data-cmd="agenit init" data-keys="agenit init cli profile name no-agents no-skills no-verify">
+          <header><code class="cmd-name">agenit init</code> <span class="cmd-syntax">[--name] [--profile X] [--no-agents] [--no-skills] [--no-verify]</span></header>
+          <p>Initialise a project from the shell (same flags as the slash form).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="agenit serve" data-keys="agenit serve standalone control spa external process">
+          <header><code class="cmd-name">agenit serve</code> <span class="cmd-syntax">[--port N]</span></header>
+          <p>Launch the control SPA as a standalone process. Prefer <code>/serve</code> from inside the REPL when you want a shared run-registry.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="agenit --air-gapped" data-keys="air gapped offline no network security runtime">
+          <header><code class="cmd-name">agenit --air-gapped</code> <span class="cat-badge">NEW</span></header>
+          <p>Runtime mode that blocks all outbound network calls (except the OAuth-refresh handshake). Useful for sensitive repos and audit demos.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="agenit --token-cap" data-keys="token cap ceiling budget per session per command security limit">
+          <header><code class="cmd-name">agenit --token-cap</code> <span class="cmd-syntax">&lt;N&gt; [--per command]</span> <span class="cat-badge">NEW</span></header>
+          <p>Per-session (default) or per-command token ceiling. Hard-stops the loop once exceeded.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="agenit --help" data-keys="help cli top-level">
+          <header><code class="cmd-name">agenit --help</code></header>
+          <p>Top-level CLI help.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="FLOW_GOAL_TEST_CMD" data-keys="env flow goal test cmd verify command runner">
+          <header><code class="cmd-name">FLOW_GOAL_TEST_CMD</code></header>
+          <p>Verify command run after each <code>/goal</code> turn (e.g. <code>pnpm test</code>). Drives the auditor's Continue/Complete/Block decision.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="FLOW_GOAL_WORKSPACE" data-keys="env flow goal workspace override directory auditor">
+          <header><code class="cmd-name">FLOW_GOAL_WORKSPACE</code></header>
+          <p>Override the workspace the auditor inspects (defaults to the active project).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="AGENIT_ALT_SCREEN" data-keys="env alt screen terminal scrollback modal no-alt-screen">
+          <header><code class="cmd-name">AGENIT_ALT_SCREEN=0</code></header>
+          <p>Disable the terminal's alternate screen so native scrollback works during modals. Same as <code>--no-alt-screen</code>.</p>
+        </article>
+      </section>
+
+      <div id="no-results" class="no-results" hidden>
+        <p>No commands matched. <button class="ghost-mini" id="reset-btn">Reset filter</button></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>
+      <strong>AgenIT Wiki</strong> &mdash; searchable command reference.
+      <span>MIT © muhammed-eldabea</span>
+    </div>
+    <div class="links">
+      <a href="index.html">← Back to landing</a>
+      <a href="https://github.com/muhammed-eldabea/AgenIT" target="_blank" rel="noopener">Repository</a>
+      <a href="https://github.com/muhammed-eldabea/AgenIT/blob/main/README.md" target="_blank" rel="noopener">README</a>
+    </div>
+  </footer>
+
+  <script src="wiki.js" defer></script>
+</body>
+</html>

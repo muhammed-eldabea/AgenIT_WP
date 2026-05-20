@@ -1,0 +1,278 @@
+/* ─────────────────────────────────────────────────────────────
+   AgenIT wiki — searchable command reference
+   ───────────────────────────────────────────────────────────── */
+
+.wiki-body { min-height: 100vh; }
+.brand-sub {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-left: 6px;
+}
+.nav nav a.active { color: var(--cyan); }
+
+.wiki-main {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px 90px;
+}
+
+.wiki-hero {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 40px 0 28px;
+  border-bottom: 1px solid var(--line);
+}
+.wiki-hero h1 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  letter-spacing: 0.04em;
+  margin: 0 0 14px;
+  background: linear-gradient(90deg, var(--cyan), var(--orange));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.wiki-tag {
+  max-width: 680px;
+  margin: 0 auto 26px;
+  color: var(--fg-dim);
+  font-size: 1rem;
+}
+
+/* search shell */
+.search-shell {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  background: #050709;
+  border: 1px solid var(--cyan-dim);
+  border-radius: 10px;
+  padding: 4px 14px;
+  box-shadow: 0 0 0 0 var(--cyan-dim), 0 10px 40px rgba(42, 214, 255, 0.08);
+  transition: border-color .15s, box-shadow .15s;
+}
+.search-shell:focus-within {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(42, 214, 255, 0.15), 0 10px 50px rgba(42, 214, 255, 0.18);
+}
+.search-icon { flex-shrink: 0; color: var(--cyan); margin-right: 10px; }
+#wiki-search {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 14px 0;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 1rem;
+}
+#wiki-search::placeholder { color: #5a6678; }
+.search-hint kbd {
+  font-family: var(--mono);
+  background: var(--card-hi);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  color: var(--fg-dim);
+}
+
+/* category filter chips */
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 980px;
+  margin: 16px auto 14px;
+}
+.chip {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--fg-dim);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s, transform .1s;
+}
+.chip:hover {
+  border-color: var(--cyan-dim);
+  color: var(--cyan);
+}
+.chip.active {
+  background: var(--cyan-dim);
+  border-color: var(--cyan);
+  color: #fff;
+}
+
+.search-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--fg-dim);
+  margin-top: 6px;
+}
+.search-meta-sep { opacity: 0.5; }
+.ghost-mini {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  background: transparent;
+  border: 1px solid var(--cyan-dim);
+  color: var(--cyan);
+  border-radius: 999px;
+  padding: 3px 12px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.ghost-mini:hover { background: var(--cyan-dim); color: #fff; }
+
+/* command list */
+.cmd-list { margin-top: 12px; }
+.cat {
+  margin: 36px 0 24px;
+  scroll-margin-top: 90px;
+}
+.cat[hidden] { display: none; }
+.cat-title {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cat-badge {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  background: rgba(255, 122, 24, 0.16);
+  border: 1px solid rgba(255, 122, 24, 0.4);
+  color: var(--orange);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* command card */
+.cmd-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 22px 16px;
+  margin-bottom: 12px;
+  transition: border-color .2s, background .2s, transform .15s;
+}
+.cmd-card:hover {
+  border-color: var(--cyan-dim);
+  background: var(--card-hi);
+  transform: translateX(2px);
+}
+.cmd-card[hidden] { display: none; }
+.cmd-card header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.cmd-name {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 1rem;
+  background: rgba(42, 214, 255, 0.1);
+  border: 1px solid var(--cyan-dim);
+  color: #b9ecff;
+  padding: 3px 10px;
+  border-radius: 5px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.cmd-syntax {
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  color: var(--fg-dim);
+}
+.cmd-card p {
+  margin: 0 0 8px;
+  color: var(--fg-dim);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.cmd-card .sub {
+  list-style: none;
+  margin: 8px 0 8px;
+  padding: 10px 14px;
+  background: rgba(42, 214, 255, 0.04);
+  border-left: 2px solid var(--cyan-dim);
+  border-radius: 4px;
+}
+.cmd-card .sub li {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: var(--fg-dim);
+  line-height: 1.55;
+}
+.cmd-card .sub li code {
+  font-size: 0.84rem;
+  background: transparent;
+  border: none;
+  padding: 0 4px 0 0;
+  color: #b9ecff;
+}
+.cmd-card .ex {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 5px 10px;
+  background: rgba(255, 122, 24, 0.08);
+  border: 1px solid rgba(255, 122, 24, 0.25);
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: #ffd0a8;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* highlight (search match) */
+mark {
+  background: rgba(255, 122, 24, 0.25);
+  color: #ffd9b3;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--fg-dim);
+  font-family: var(--mono);
+}
+.no-results p { display: flex; align-items: center; justify-content: center; gap: 14px; }
+
+/* responsive */
+@media (max-width: 640px) {
+  .wiki-main { padding: 30px 14px 60px; }
+  .wiki-hero { padding: 20px 0 18px; }
+  .filter-row { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
+  .chip { flex-shrink: 0; }
+  .cmd-card { padding: 14px 16px 12px; }
+  .cmd-card header { gap: 6px; }
+  .cmd-name { font-size: 0.92rem; }
+}
