@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="AgenIT mark">
+  <title>AgenIT mark</title>
+  <desc>Squad mesh on top — three connected nodes representing the Mission Squad of parallel helper agents. V-Model triangle below — the Requirements → Architecture → Implementation → Testing → Audit lifecycle. Cyan stroke on transparent background.</desc>
+
+  <defs>
+    <!-- Soft cyan glow used on the squad nodes + V-Model apex. -->
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.4" />
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g stroke="#00d4ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- ───── V-Model triangle (the "A" silhouette) ─────────────────── -->
+    <!-- Outer V opening downward: apex at (64,32), feet at (20,108) and (108,108). -->
+    <path d="M64 32 L20 108 L108 108 Z" stroke-width="4" filter="url(#softGlow)"/>
+
+    <!-- Inner crossbar — the V-Model junction. Mid-height across the
+         triangle, sized to leave the apex cone open above.
+         At y=78, the triangle's x-range is (64 - 44*(78-32)/76, 64 + 44*(78-32)/76)
+         = (64 - 26.6, 64 + 26.6) → (37.4, 90.6). We shave to fit inside the
+         stroke. -->
+    <line x1="40" y1="78" x2="88" y2="78" stroke-width="3.5" />
+
+    <!-- ───── Squad mesh (3 nodes connected) ────────────────────────── -->
+    <!-- The mesh sits above the V-Model apex; the V's apex node is the
+         middle-bottom of the mesh so the orchestrator-to-squad link
+         is implicit in the geometry. -->
+    <line x1="34" y1="18" x2="64" y2="32" stroke-width="2.4" />
+    <line x1="94" y1="18" x2="64" y2="32" stroke-width="2.4" />
+    <line x1="34" y1="18" x2="94" y2="18" stroke-width="2.4" />
+  </g>
+
+  <!-- Nodes: cyan-filled discs with the same glow. -->
+  <g fill="#00d4ff" filter="url(#softGlow)">
+    <circle cx="34" cy="18" r="5"/>
+    <circle cx="94" cy="18" r="5"/>
+    <circle cx="64" cy="32" r="5.5"/>
+  </g>
+
+  <!-- Embedded-accent ports at the V-Model feet (the orange echoes the
+       existing brand palette + signals the embedded-engineering vibe:
+       the V terminates in hardware probes). -->
+  <g fill="#f97316">
+    <circle cx="20" cy="108" r="4"/>
+    <circle cx="108" cy="108" r="4"/>
+  </g>
+</svg>

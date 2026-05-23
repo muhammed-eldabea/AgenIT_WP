@@ -63,6 +63,10 @@
         <button class="chip" data-cat="hardware">Hardware</button>
         <button class="chip" data-cat="marketplace">Marketplace</button>
         <button class="chip" data-cat="lsp">LSP</button>
+        <button class="chip" data-cat="teach">Teach Mode</button>
+        <button class="chip" data-cat="identity">Identity / Cost</button>
+        <button class="chip" data-cat="trackers">Trackers</button>
+        <button class="chip" data-cat="pref">Preferences</button>
         <button class="chip" data-cat="shortcut">Shortcuts</button>
         <button class="chip" data-cat="cli">CLI / Env</button>
       </div>
@@ -904,6 +908,137 @@
         <article class="cmd-card" data-cmd="Ctrl+G" data-keys="ctrl g expand minimise job">
           <header><kbd>Ctrl+G</kbd> · <kbd>Ctrl+J</kbd></header>
           <p>Expand / minimise the active job. <kbd>Ctrl+J</kbd> cycles through jobs.</p>
+        </article>
+      </section>
+
+      <!-- ─── Teach Mode (v3.1.0) ─── -->
+      <section class="cat" data-cat="teach">
+        <h2 class="cat-title">Teach Mode</h2>
+        <p class="cat-blurb">End-of-task code + architecture + Component Detailed Design walkthroughs. Manual via <code>/teach explain</code>; auto-offer at task completion; opt-in per-diff annotator and SDK-backend blocking gate.</p>
+
+        <article class="cmd-card" data-cmd="/teach explain" data-keys="teach explain walkthrough architecture cdd component detailed design learning bundle">
+          <header><code class="cmd-name">/teach explain</code> <span class="cmd-syntax">[--no-save] [--out &lt;path&gt;]</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Generate a three-section learning bundle (code walkthrough + architecture + Component Detailed Design) from the prompt-forge transaction store. Auto-saves to <code>docs/learning/&lt;task-id&gt;.md</code>.</p>
+          <ul class="sub">
+            <li><code>--no-save</code> — render only; don't save to disk.</li>
+            <li><code>--out &lt;path&gt;</code> — save to a specific path (absolute or cwd-relative).</li>
+          </ul>
+          <code class="ex">/teach explain</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/teach show" data-keys="teach show last bundle redisplay re-render">
+          <header><code class="cmd-name">/teach show</code> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Re-display the last bundle this session without burning another LLM call.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/teach history" data-keys="teach history list saved bundles docs learning">
+          <header><code class="cmd-name">/teach history</code> <span class="cmd-syntax">[N]</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>List the last N saved bundles in <code>docs/learning/</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="[learning] auto_offer" data-keys="learning auto offer config teach mode profile gate apply_to_profiles">
+          <header><code class="cmd-name">[learning] auto_offer</code> <span class="cmd-syntax">true | false</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>When true (and profile in <code>apply_to_profiles</code>), <code>/run</code>, <code>/goal</code>, <code>/squad</code> auto-ask "want a walkthrough?" at completion via an inline question. Default false; default profiles <code>["embedded", "automotive"]</code>.</p>
+          <code class="ex">[learning]
+auto_offer = true
+apply_to_profiles = ["embedded", "automotive"]</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="[learning] gate" data-keys="learning gate annotate block diff per write file hook teach mode acknowledge">
+          <header><code class="cmd-name">[learning] gate</code> <span class="cmd-syntax">"off" | "annotate" | "block"</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Per-diff gate on <code>write_file</code>. <code>annotate</code> wires a Python hook that emits a structured diff summary as a <code>systemMessage</code> on every write (all backends). <code>block</code> additionally intercepts every write on the <code>anthropic-sdk</code> backend and waits for the user to pick Accept or Reject. Default <code>off</code>.</p>
+          <code class="ex">[learning]
+gate = "annotate"
+min_diff_lines = 3</code>
+        </article>
+      </section>
+
+      <!-- ─── Identity / Cost (v3.1.0 M7) ─── -->
+      <section class="cat" data-cat="identity">
+        <h2 class="cat-title">Identity &amp; cost</h2>
+        <p class="cat-blurb">OIDC SSO + per-user cost caps + RBAC + hash-chain audit log. Off by default; turn on with <code>[auth] mode = "oidc"</code>.</p>
+
+        <article class="cmd-card" data-cmd="/login" data-keys="login oidc sso okta azure ad google workspace auth0 keycloak pkce">
+          <header><code class="cmd-name">/login</code> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Authenticate against the configured OIDC issuer via the auth-code-with-PKCE flow. Tokens cache at <code>~/.agenit/auth/tokens.json</code> (chmod 600). Works with Okta, Azure AD, Google Workspace, Auth0, Keycloak — anything with <code>/.well-known/openid-configuration</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/whoami" data-keys="whoami identity user oidc sub email session">
+          <header><code class="cmd-name">/whoami</code> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Show the current authenticated identity (OIDC <code>sub</code> + email + token expiry).</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/logout" data-keys="logout clear tokens session sign out">
+          <header><code class="cmd-name">/logout</code> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Clear cached tokens and revert RBAC overrides to the global per-mode allowlists.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/cost" data-keys="cost usd spend today month per user budget">
+          <header><code class="cmd-name">/cost</code> <span class="cmd-syntax">today | month [--by-user]</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>USD spent in the current day or month. <code>--by-user</code> breaks the total down by OIDC identity. Per-user enforcement runs alongside the global daily cap in <code>[routing] max_cost_per_day_usd</code>; both must pass.</p>
+          <code class="ex">/cost today --by-user</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="[auth] mode" data-keys="auth oidc mode config sso enable provider">
+          <header><code class="cmd-name">[auth] mode</code> <span class="cmd-syntax">"off" | "oidc"</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>SSO master switch. Set to <code>"oidc"</code> + provide <code>issuer</code> and <code>client_id</code>. AgenIT hits <code>&lt;issuer&gt;/.well-known/openid-configuration</code> to auto-discover the rest. Optional <code>client_secret</code> (confidential client), <code>scopes</code>, <code>redirect_uri</code>, <code>audience</code>.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="[cost.per_user]" data-keys="cost per user cap daily usd identity oidc sub email default">
+          <header><code class="cmd-name">[cost.per_user]</code> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Per-OIDC-identity USD daily caps. Keys are <code>email</code>, OIDC <code>sub</code>, or the literal <code>"default"</code>. Composes with the global <code>[routing] max_cost_per_day_usd</code>; both must pass.</p>
+          <code class="ex">[cost.per_user]
+"alice@example.com" = 5.00
+"bob@example.com" = 10.00
+default = 2.00</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="[modes.allowed_tools_per_user]" data-keys="rbac role based access control per user tools allowlist mode plan build identity override">
+          <header><code class="cmd-name">[modes.&lt;mode&gt;.allowed_tools_per_user]</code> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Per-OIDC-identity tool allowlist overrides. Same key precedence as <code>[cost.per_user]</code>. Empty array as an override is honoured (zero-tools lockdown). Effective list flows into the BeforeTool hook via <code>.flow/.guard.json</code> on every <code>/login</code>/<code>/logout</code>.</p>
+        </article>
+      </section>
+
+      <!-- ─── Trackers (v3.1.0 M6) ─── -->
+      <section class="cat" data-cat="trackers">
+        <h2 class="cat-title">External trackers</h2>
+        <p class="cat-blurb">Unified MCP dispatchers that route to GitHub, Linear, or Jira based on each backend's availability in the marketplace registry.</p>
+
+        <article class="cmd-card" data-cmd="/issue" data-keys="issue github linear jira tracker create list close mcp">
+          <header><code class="cmd-name">/issue</code> <span class="cmd-syntax">create &lt;title&gt; | list | close &lt;id&gt;</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Open / list / close issues. Routes to GitHub / Linear / Jira based on which MCP backend is registered.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/pr" data-keys="pr pull request github open list review">
+          <header><code class="cmd-name">/pr</code> <span class="cmd-syntax">open | list | review &lt;n&gt;</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Open or list pull requests for the current branch. <code>/pr review &lt;n&gt;</code> fetches the diff + comments for an existing PR.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/ticket" data-keys="ticket jira linear move done state assignee transition">
+          <header><code class="cmd-name">/ticket</code> <span class="cmd-syntax">move-to-done &lt;id&gt; | list --mine</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Transition tickets (Jira / Linear) between states; <code>list --mine</code> shows tickets assigned to the current OIDC identity.</p>
+        </article>
+      </section>
+
+      <!-- ─── Preferences (v3.1.0 M4) ─── -->
+      <section class="cat" data-cat="pref">
+        <h2 class="cat-title">Preferences</h2>
+        <p class="cat-blurb">Adaptive preference learner. Captures decisions you make mid-session and writes them to <code>preferences.md</code> tagged with <code>[#tooling|testing|build]</code> so future sessions inherit the steer.</p>
+
+        <article class="cmd-card" data-cmd="/pref add" data-keys="pref add preference learning record tooling testing build tag">
+          <header><code class="cmd-name">/pref add</code> <span class="cmd-syntax">"&lt;preference&gt;"</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Record a preference. Auto-tags from the body — mentions of "test", "vitest", "pytest" tag <code>[#testing]</code>; "build", "bundler", "esbuild" tag <code>[#build]</code>; everything else <code>[#tooling]</code>.</p>
+          <code class="ex">/pref add "use vitest for new tests"</code>
+        </article>
+
+        <article class="cmd-card" data-cmd="/pref list" data-keys="pref list filter tag preferences md">
+          <header><code class="cmd-name">/pref list</code> <span class="cmd-syntax">[--tag &lt;tag&gt;]</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Show preferences. <code>--tag &lt;tag&gt;</code> filters by tag.</p>
+        </article>
+
+        <article class="cmd-card" data-cmd="/pref remove" data-keys="pref remove drop delete index">
+          <header><code class="cmd-name">/pref remove</code> <span class="cmd-syntax">&lt;index&gt;</span> <span class="cat-badge">NEW v3.1.0</span></header>
+          <p>Drop a preference by its line index (as shown by <code>/pref list</code>).</p>
         </article>
       </section>
 

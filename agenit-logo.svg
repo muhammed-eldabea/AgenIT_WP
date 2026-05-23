@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-label="AgenIT — Embedded co-pilot — V-Model · MISRA">
+  <title>AgenIT — Embedded co-pilot — V-Model · MISRA</title>
+  <desc>AgenIT horizontal logo lockup. Left: the brand mark — squad mesh on top, V-Model triangle below. Right: AgenIT wordmark and the tagline "Embedded co-pilot — V-Model · MISRA".</desc>
+
+  <defs>
+    <filter id="lockupGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.4" />
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Wordmark colour switches with the renderer's theme. GitHub
+         renders SVGs via <img>, which doesn't inherit page color via
+         `currentColor` — but it DOES honour @media inside the SVG's
+         own <style>. Default = dark text (light theme); overrides to
+         white when the user agent reports prefers-color-scheme: dark.
+         The mark stays cyan/orange (brand) in both themes. -->
+    <style>
+      .wordmark {
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+                     Roboto, "Helvetica Neue", Arial, "Inter", sans-serif;
+        font-weight: 700;
+        font-size: 78px;
+        letter-spacing: -1.5px;
+        fill: #0f172a;
+      }
+      .wordmark-accent {
+        fill: #00d4ff;
+      }
+      .tagline {
+        font-family: ui-monospace, SFMono-Regular, "Menlo", Monaco, Consolas,
+                     "Liberation Mono", "Courier New", monospace;
+        font-weight: 500;
+        font-size: 16px;
+        letter-spacing: 1.2px;
+        fill: #0f172a;
+        opacity: 0.7;
+      }
+      @media (prefers-color-scheme: dark) {
+        .wordmark { fill: #f8fafc; }
+        .tagline  { fill: #f8fafc; opacity: 0.7; }
+      }
+    </style>
+  </defs>
+
+  <!-- ─── The mark (re-rendered inline at 160×160 so it lockups with the
+        wordmark baseline). Geometry mirrors assets/agenit-mark.svg
+        scaled 1.25× and positioned with a 20-px left margin. -->
+  <g transform="translate(20,20)">
+    <g stroke="#00d4ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M80 40 L25 135 L135 135 Z" stroke-width="5" filter="url(#lockupGlow)"/>
+      <line x1="50" y1="97.5" x2="110" y2="97.5" stroke-width="4.4"/>
+      <line x1="42.5" y1="22.5" x2="80" y2="40" stroke-width="3"/>
+      <line x1="117.5" y1="22.5" x2="80" y2="40" stroke-width="3"/>
+      <line x1="42.5" y1="22.5" x2="117.5" y2="22.5" stroke-width="3"/>
+    </g>
+    <g fill="#00d4ff" filter="url(#lockupGlow)">
+      <circle cx="42.5" cy="22.5" r="6.25"/>
+      <circle cx="117.5" cy="22.5" r="6.25"/>
+      <circle cx="80" cy="40" r="6.9"/>
+    </g>
+    <g fill="#f97316">
+      <circle cx="25" cy="135" r="5"/>
+      <circle cx="135" cy="135" r="5"/>
+    </g>
+  </g>
+
+  <!-- ─── Wordmark + tagline ──────────────────────────────────────── -->
+  <g transform="translate(210,0)">
+    <!-- The "IT" portion is cyan so the brand stays visible on either
+         a light or dark page. "Agen" inherits currentColor (black on
+         GitHub's light theme, white on its dark theme). -->
+    <text x="0" y="115" class="wordmark">Agen<tspan class="wordmark-accent">IT</tspan></text>
+    <text x="3" y="150" class="tagline">EMBEDDED CO-PILOT &#xB7; V-MODEL &#xB7; MISRA</text>
+  </g>
+</svg>

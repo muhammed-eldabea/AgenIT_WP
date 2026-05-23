@@ -337,7 +337,99 @@
 
       <article class="announce">
         <header class="announce-head">
-          <span class="announce-tag">JUST SHIPPED · MAY 2026</span>
+          <span class="announce-tag">JUST SHIPPED · v3.1.0 · MAY 23 2026</span>
+          <h3 class="announce-title">Teach Mode · Hardware-in-the-Loop · Eight new milestones · Enterprise SSO</h3>
+        </header>
+        <p>
+          The biggest release since v3.0. Eight milestones (M1–M8) closed
+          end-to-end, the complete <strong>Teach Mode</strong> experience
+          (four phases, opt-in at each level of friction), a full
+          <strong>Hardware-in-the-Loop</strong> story for Arduino-class
+          stimulators paired with JLink observers, <strong>enterprise
+          identity</strong> via OIDC with per-user cost caps and RBAC,
+          and a refreshed brand. Every new surface ships off-by-default
+          so existing users see no behavioural change until they opt in.
+        </p>
+        <ul class="announce-list">
+          <li><strong>Teach Mode &mdash; stop being a rubber-stamper.</strong>
+            Four phases: <code>/teach explain</code> produces a
+            walkthrough + architecture + Component Detailed Design after
+            any task; auto-offer asks "want a walkthrough?" at the end
+            of <code>/run</code>, <code>/goal</code>, <code>/squad</code>;
+            an annotator hook surfaces a diff summary on every
+            <code>write_file</code>; and on the <code>anthropic-sdk</code>
+            backend, <code>gate = "block"</code> makes the agent wait
+            for explicit Accept / Reject on every write.</li>
+          <li><strong>M1 &mdash; V-Model auto-approval.</strong>
+            <code>[state_machine] auto_approve</code> with profile-aware
+            defaults: <code>automotive → none</code>,
+            <code>embedded → low_risk</code>, others → <code>all</code>.
+            <code>/run</code> walks end-to-end again.</li>
+          <li><strong>M2 &mdash; Pre-decision teach surface.</strong>
+            Short context summary before each V-Model gate so the
+            decision isn't blind.</li>
+          <li><strong>M3 &mdash; GDB driver + <code>/debug</code> step
+            verbs.</strong> Python sidecar plus <code>step | next |
+            continue | print | break | watch | bt</code>. New MCP tool
+            <code>gdb</code> exposes the same surface to other agents.</li>
+          <li><strong>M4 &mdash; Adaptive preference learner.</strong>
+            <code>/pref add | list | remove</code> captures decisions
+            you make mid-session and writes them to <code>preferences.md</code>
+            so future sessions inherit the steer.</li>
+          <li><strong>M5 &mdash; Git bisect driver.</strong> Autonomous
+            bisect loop with repro-assertion checking, integrated into
+            the audit pipeline for regression-hunting goals.</li>
+          <li><strong>M6 &mdash; <code>/issue</code>, <code>/pr</code>,
+            <code>/ticket</code>.</strong> Unified MCP dispatchers that
+            route to GitHub / Linear / Jira based on each backend's
+            availability in the marketplace registry.</li>
+          <li><strong>M7 &mdash; Enterprise identity.</strong>
+            Phase 1 OIDC SSO bridge (<code>/login</code>,
+            <code>/logout</code>, <code>/whoami</code> against Okta /
+            Azure AD / Google Workspace / Auth0 / Keycloak); Phase 2
+            per-user cost caps (<code>[cost.per_user]</code>,
+            <code>/cost today --by-user</code>); Phase 3 RBAC
+            (<code>[modes.&lt;mode&gt;.allowed_tools_per_user]</code>)
+            plus user-scoped global memory and a SHA-256 hash-chain
+            audit log that detects tamper.</li>
+          <li><strong>M8 &mdash; Shell-policy DSL.</strong>
+            <code>before_shell_command.py</code> moved from hand-rolled
+            destructive-verb lists to a declarative
+            <code>config/security/default.toml</code> with a parity
+            harness ensuring behavioural equivalence.</li>
+          <li><strong>Hardware-in-the-Loop &mdash; Arduino stimulator
+            + JLink observer pattern.</strong> <code>arduino_tool.py</code>
+            Python sidecar with pyserial monitor (regex-match early
+            return), USB re-enumeration handling after upload reset,
+            <code>--dry-run</code>, <code>AGENIT_HIL_SIMULATE=1</code>.
+            New <code>embedded-hil-arduino</code> skill, <code>.ino</code>
+            traceability enforcement, V-Model tester promotion
+            (<code>[testing] hil_command</code> + <code>swe5_7_hil</code>
+            artifact), and an Arduino row in the HW Status side panel.</li>
+          <li><strong>Brand refresh.</strong> New lightweight SVG logo
+            and horizontal lockup. Old PNG preserved for social-card
+            compatibility.</li>
+          <li><strong>Release infrastructure fix &mdash; load-bearing.</strong>
+            Pre-v3.1.0 the npm tarball shipped only <code>cli.js</code> &mdash;
+            no skills, no hooks, no tool sidecars. Behavior testing
+            against a clean <code>npm install -g @agenit/cli</code>
+            uncovered this and we fixed the bundle. v3.1.0 is the
+            first release where the published artefact actually works
+            for end users out of the box.</li>
+        </ul>
+        <p class="announce-meta">
+          PRs:
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/257" target="_blank" rel="noopener">#257</a> (Teach Mode end-to-end) ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/269" target="_blank" rel="noopener">#269</a> (M7 OIDC) ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/270" target="_blank" rel="noopener">#270</a> (M8 shell DSL) ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/271" target="_blank" rel="noopener">#271</a> (brand) ·
+          <a href="https://github.com/muhammed-eldabea/AgenIT/pull/273" target="_blank" rel="noopener">#273</a> (release prep + bundle fix).
+        </p>
+      </article>
+
+      <article class="announce">
+        <header class="announce-head">
+          <span class="announce-tag">MAY 2026</span>
           <h3 class="announce-title">Agile ceremonies · Pixel-character sprites · REPL polish · Goal checkpoints</h3>
         </header>
         <figure class="agent-squad-figure">
@@ -1309,6 +1401,39 @@
         <div class="feat star"><span class="num">33</span><h4>Cross-backend failover · NEW</h4>
           <p>Router auto-falls-back Gemini → Claude → OpenAI on tier exhaustion or hard error. <code>/backend</code> shows what's detected, installed, and currently active; the status bar surfaces the live backend + model.</p>
           <code class="ex">/backend &nbsp;·&nbsp; /backend chain pro</code></div>
+        <div class="feat star"><span class="num">34</span><h4>Teach Mode &mdash; learn what shipped · NEW v3.1.0</h4>
+          <p>Stop being a rubber-stamper. <code>/teach explain</code> produces a code walkthrough + architecture + Component Detailed Design after any task, saved to <code>docs/learning/</code>. Auto-offer at <code>/run</code>/<code>/goal</code>/<code>/squad</code> completion; opt-in diff annotator on every <code>write_file</code>; on the SDK backend, <code>gate = "block"</code> waits for explicit Accept / Reject.</p>
+          <code class="ex">/teach explain &nbsp;·&nbsp; [learning] gate = "annotate"</code></div>
+        <div class="feat star"><span class="num">35</span><h4>V-Model auto-approval · NEW v3.1.0 (M1)</h4>
+          <p>Profile-aware defaults: <code>automotive → none</code>, <code>embedded → low_risk</code>, others → <code>all</code>. <code>/run</code> walks the full pipeline end-to-end again instead of pausing after Requirements.</p>
+          <code class="ex">[state_machine] auto_approve = "auto"</code></div>
+        <div class="feat star"><span class="num">36</span><h4>GDB step verbs · NEW v3.1.0 (M3)</h4>
+          <p><code>/debug step | next | continue | print | break | watch | bt</code> against a real GDB session. Python sidecar at <code>.flow/tools/gdb_tool.py</code>; new <code>gdb</code> MCP tool exposes the same surface to other agents.</p>
+          <code class="ex">/debug step &nbsp;·&nbsp; /debug print x</code></div>
+        <div class="feat star"><span class="num">37</span><h4>Preference learner · NEW v3.1.0 (M4)</h4>
+          <p>Captures decisions you make mid-session and writes them to <code>preferences.md</code> tagged with <code>[#tooling|testing|build]</code> so future sessions inherit the steer. No more re-explaining your conventions every Monday.</p>
+          <code class="ex">/pref add "use vitest for new tests"</code></div>
+        <div class="feat star"><span class="num">38</span><h4>Git bisect driver · NEW v3.1.0 (M5)</h4>
+          <p>Autonomous bisect loop with repro-assertion checking, integrated into <code>/goal</code>'s audit pipeline. Hand it a "this was working last Tuesday" and the loop walks the history.</p>
+          <code class="ex">/goal Find when CAN timeout regressed</code></div>
+        <div class="feat star"><span class="num">39</span><h4>/issue · /pr · /ticket · NEW v3.1.0 (M6)</h4>
+          <p>Unified MCP dispatchers that route to GitHub, Linear, or Jira based on each backend's availability in the marketplace registry. One slash command, three trackers, zero context switching.</p>
+          <code class="ex">/issue create &nbsp;·&nbsp; /ticket move-to-done JIRA-123</code></div>
+        <div class="feat star"><span class="num">40</span><h4>Enterprise SSO &mdash; OIDC · NEW v3.1.0 (M7 P1)</h4>
+          <p>OIDC auth-code-with-PKCE flow against Okta, Azure AD, Google Workspace, Auth0, Keycloak — anything with a <code>/.well-known/openid-configuration</code>. Sessions cache at <code>~/.agenit/auth/tokens.json</code> (chmod 600).</p>
+          <code class="ex">/login &nbsp;·&nbsp; /whoami &nbsp;·&nbsp; /logout</code></div>
+        <div class="feat star"><span class="num">41</span><h4>Per-user cost caps · NEW v3.1.0 (M7 P2)</h4>
+          <p><code>/cost today --by-user</code> shows spend per OIDC identity. <code>[cost.per_user]</code> table sets per-user USD caps that compose with the global daily cap. Both must pass before a tool call lands.</p>
+          <code class="ex">/cost today --by-user</code></div>
+        <div class="feat star"><span class="num">42</span><h4>RBAC + tamper-evident audit · NEW v3.1.0 (M7 P3)</h4>
+          <p>Per-user tool allowlists override the per-mode global. SHA-256 hash-chain audit log at <code>memory/audit.log</code> &mdash; each entry references the previous entry's hash, so any tamper anywhere in the log breaks the chain. User-scoped global memory under <code>~/.agenit/global/&lt;user_sub&gt;/</code>.</p>
+          <code class="ex">[modes.plan.allowed_tools_per_user]</code></div>
+        <div class="feat star"><span class="num">43</span><h4>Shell-policy DSL · NEW v3.1.0 (M8)</h4>
+          <p><code>before_shell_command.py</code> migrated from hand-rolled destructive-verb lists to a declarative <code>config/security/default.toml</code>. Parity harness ensures behavioural equivalence with the legacy code path while making the policy maintainable.</p>
+          <code class="ex">config/security/default.toml</code></div>
+        <div class="feat star"><span class="num">44</span><h4>Hardware-in-the-Loop · NEW v3.1.0</h4>
+          <p>Arduino stimulator + JLink observer pattern. <code>arduino_tool.py</code> sidecar with pyserial monitor (regex early-return), USB re-enumeration after upload reset, <code>--dry-run</code>, <code>AGENIT_HIL_SIMULATE=1</code>. New <code>embedded-hil-arduino</code> skill, <code>.ino</code> traceability enforcement, V-Model tester promotion (<code>[testing] hil_command</code> → <code>swe5_7_hil</code> artifact), Arduino row in the HW Status panel.</p>
+          <code class="ex">[testing] hil_command = ".venv/bin/python3 tests/hil/run.py"</code></div>
       </div>
     </section>
 
@@ -2068,6 +2193,73 @@ Requirements ──► Architecture ──► Code ──► Testing ──► C
             <tr><td><code>agenit --help</code></td><td>Top-level help.</td></tr>
             <tr><td><code>FLOW_GOAL_TEST_CMD=…</code></td><td>Verify command run after each <code>/goal</code> turn.</td></tr>
             <tr><td><code>FLOW_GOAL_WORKSPACE=…</code></td><td>Override the workspace the auditor inspects.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Teach Mode <span class="badge">NEW v3.1.0</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/teach explain</code></td><td>Generate code walkthrough + architecture + Component Detailed Design for the most recent task. Saves to <code>docs/learning/&lt;task-id&gt;.md</code>.</td></tr>
+            <tr><td><code>/teach explain --no-save</code></td><td>Render only; don't save.</td></tr>
+            <tr><td><code>/teach explain --out &lt;path&gt;</code></td><td>Save to a specific path.</td></tr>
+            <tr><td><code>/teach show</code></td><td>Re-display the last bundle this session.</td></tr>
+            <tr><td><code>/teach history [N]</code></td><td>List saved bundles in <code>docs/learning/</code>.</td></tr>
+            <tr><td><code>[learning] auto_offer = true</code></td><td>Auto-ask "want a walkthrough?" at the end of <code>/run</code>, <code>/goal</code>, <code>/squad</code>.</td></tr>
+            <tr><td><code>[learning] gate = "annotate"</code></td><td>Per-diff annotator: every <code>write_file</code> emits a structured diff summary as a <code>systemMessage</code>.</td></tr>
+            <tr><td><code>[learning] gate = "block"</code></td><td>True blocking gate (anthropic-sdk backend only): agent waits for Accept / Reject on every write.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Identity &amp; cost <span class="badge">NEW v3.1.0 · M7</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/login</code></td><td>OIDC auth-code-with-PKCE flow against the configured issuer. Caches tokens at <code>~/.agenit/auth/tokens.json</code>.</td></tr>
+            <tr><td><code>/whoami</code></td><td>Show the current authenticated identity (sub + email).</td></tr>
+            <tr><td><code>/logout</code></td><td>Clear cached tokens.</td></tr>
+            <tr><td><code>/cost today</code></td><td>USD spent today (running total).</td></tr>
+            <tr><td><code>/cost today --by-user</code></td><td>Per-OIDC-identity cost breakdown for today.</td></tr>
+            <tr><td><code>/cost month</code></td><td>USD spent this month.</td></tr>
+            <tr><td><code>[auth] mode = "oidc"</code></td><td>Enable SSO. Works with Okta, Azure AD, Google Workspace, Auth0, Keycloak.</td></tr>
+            <tr><td><code>[cost.per_user]</code></td><td>Per-identity USD daily caps. Compose with the global cap; both must pass.</td></tr>
+            <tr><td><code>[modes.&lt;mode&gt;.allowed_tools_per_user]</code></td><td>Per-identity tool allowlist override. Empty array = zero-tools lockdown.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>External trackers <span class="badge">NEW v3.1.0 · M6</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/issue create &lt;title&gt;</code></td><td>Open an issue. Routes to GitHub / Linear / Jira based on which backend is registered in the marketplace.</td></tr>
+            <tr><td><code>/issue list</code></td><td>List open issues across registered trackers.</td></tr>
+            <tr><td><code>/issue close &lt;id&gt;</code></td><td>Close an issue by tracker-specific ID.</td></tr>
+            <tr><td><code>/pr open</code></td><td>Open a pull request for the current branch.</td></tr>
+            <tr><td><code>/pr list</code></td><td>List open PRs.</td></tr>
+            <tr><td><code>/ticket move-to-done &lt;id&gt;</code></td><td>Transition a ticket (Jira / Linear) to its done state.</td></tr>
+            <tr><td><code>/ticket list --mine</code></td><td>Tickets assigned to you.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Preferences <span class="badge">NEW v3.1.0 · M4</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/pref add "&lt;preference&gt;"</code></td><td>Record a preference; tagged automatically with <code>[#tooling|testing|build]</code> from the body.</td></tr>
+            <tr><td><code>/pref list</code></td><td>Show preferences in <code>preferences.md</code>.</td></tr>
+            <tr><td><code>/pref list --tag &lt;tag&gt;</code></td><td>Filter by tag.</td></tr>
+            <tr><td><code>/pref remove &lt;index&gt;</code></td><td>Drop a preference by line index.</td></tr>
+          </table>
+        </div>
+
+        <div class="cmd-block highlight">
+          <h3>Debug — GDB step verbs <span class="badge">NEW v3.1.0 · M3</span></h3>
+          <table class="cmd-table">
+            <tr><td><code>/debug step</code></td><td>Step one instruction into the call.</td></tr>
+            <tr><td><code>/debug next</code></td><td>Step over the call.</td></tr>
+            <tr><td><code>/debug continue</code></td><td>Continue execution.</td></tr>
+            <tr><td><code>/debug print &lt;expr&gt;</code></td><td>Evaluate an expression.</td></tr>
+            <tr><td><code>/debug break &lt;location&gt;</code></td><td>Set a breakpoint.</td></tr>
+            <tr><td><code>/debug watch &lt;expr&gt;</code></td><td>Set a watchpoint.</td></tr>
+            <tr><td><code>/debug bt</code></td><td>Stack backtrace.</td></tr>
+            <tr><td><code>/debug info threads</code></td><td>Thread state.</td></tr>
+            <tr><td><code>gdb</code> MCP tool</td><td>Same surface available to other agents via MCP.</td></tr>
           </table>
         </div>
       </div>
